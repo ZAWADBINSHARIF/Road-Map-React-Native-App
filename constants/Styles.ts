@@ -4,6 +4,9 @@ import Colors from "./Colors";
 
 
 export const defaultStyles = StyleSheet.create({
+    errorText: {
+        color: 'red'
+    },
     seperator: {
         color: "gray"
     },
