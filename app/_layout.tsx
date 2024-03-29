@@ -7,6 +7,10 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { ClerkProvider } from "@clerk/clerk-expo";
 import axios from 'axios';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import store from '@/store';
+import useSecureStore from '@/hooks/useSecureStore';
+import { removeLocalStorageThunk, setLocalStorageThunk } from '@/store/slices/userSlice';
 
 
 axios.defaults.baseURL = process.env.EXPO_PUBLIC_API_BASE_URL;
@@ -48,30 +52,67 @@ export default function RootLayout() {
   }
 
   return (
-    <RootSiblingParent>
-      <RootLayoutNav />
-    </RootSiblingParent>
+    <Provider store={store}>
+      <RootSiblingParent>
+        <RootLayoutNav />
+      </RootSiblingParent >
+    </Provider>
   );
 }
 
 function RootLayoutNav() {
 
+  const dispatch = useDispatch();
+  const { getToken } = useSecureStore();
+  const token = async () => await getToken('token');
+
+
+  axios.interceptors.request.use(async config => {
+
+    if (await token()) {
+      config.headers.Authorization = `Bearer ${await token()}`;
+    }
+
+    return config;
+  });
+
 
   useEffect(() => {
-    router.push("/login");
+    const fetchUserInfo = async () => {
+      if (await token()) {
+        try {
+          const response = await axios.get('/verify');
+
+          dispatch(removeLocalStorageThunk() as any);
+          dispatch(setLocalStorageThunk('name', response.data?.userInfo.name) as any);
+          dispatch(setLocalStorageThunk('email', response.data?.userInfo.email) as any);
+          dispatch(setLocalStorageThunk('rule', response.data?.userInfo.rule) as any);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+
+    fetchUserInfo();
+
+  }, []);
+
+  useEffect(() => {
+    router.push("/register");
+
   });
 
   return (
     <ThemeProvider value={DefaultTheme} >
-
-      <Stack>
-        <Stack.Screen name='(tabs)' options={{
-          "headerShown": false
-        }} />
-        <Stack.Screen name='(auth)/login' options={{
-          "headerShown": false
-        }} />
+      <Stack
+        screenOptions={{
+          'animation': 'slide_from_right',
+          'headerShown': false
+        }}
+      >
+        <Stack.Screen name='(tabs)' />
       </Stack>
     </ThemeProvider>
   );
 }
+

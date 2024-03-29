@@ -3,27 +3,27 @@ import Checkbox from 'expo-checkbox';
 import React, { useState } from 'react';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import Toast from 'react-native-root-toast';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
 // internal import
 import { defaultStyles } from '@/constants/Styles';
 import Colors from '@/constants/Colors';
 import useSecureStore from '@/hooks/useSecureStore';
+import BackBtn from '@/components/BackBtn';
+import { removeLocalStorageThunk, setLocalStorageThunk } from '@/store/slices/userSlice';
 
 
 const login = () => {
 
     const [secureTextEntry] = useState(true);
-    const [isRemember, setIsRemember] = useState(false);
+    const [isRemember, setIsRemember] = useState(true);
     const [errorMsg, setErrorMsg] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('zawad@gmail.com');
+    const [password, setPassword] = useState('zawad');
     const { saveToken } = useSecureStore();
+    const dispatch = useDispatch();
 
-
-    const backStack = () => router.back();
 
     const handleLogin = async () => {
 
@@ -41,6 +41,10 @@ const login = () => {
 
             if (isRemember) {
                 await saveToken("token", response.data.token);
+                dispatch(removeLocalStorageThunk() as any);
+                dispatch(setLocalStorageThunk('name', response.data?.userInfo.name) as any);
+                dispatch(setLocalStorageThunk('email', response.data?.userInfo.email) as any);
+                dispatch(setLocalStorageThunk('rule', response.data?.userInfo.rule) as any);
             }
 
             router.back();
@@ -56,18 +60,13 @@ const login = () => {
         <SafeAreaView style={{ backgroundColor: '#ffffff' }}>
 
 
+            <View style={defaultStyles.container}>
 
-            <View style={styles.container}>
-
-                <View>
-                    <TouchableOpacity style={defaultStyles.backBtn} onPress={backStack}>
-                        <Ionicons name='chevron-back-outline' size={24} color={'white'} />
-                    </TouchableOpacity>
-                </View>
+                <BackBtn />
 
                 <View style={{ paddingHorizontal: "12%" }}>
 
-                    <View style={{ marginBottom: 50, marginTop: 25 }}>
+                    <View style={{ marginBottom: 50 }}>
                         <Text style={styles.text1}>Have an account log in</Text>
                         <Text style={styles.text2}>Enter your email to log in for the Road map app</Text>
                     </View>
@@ -81,6 +80,7 @@ const login = () => {
                                 <TextInput
                                     autoCapitalize='none'
                                     placeholder='email@domain.com'
+                                    keyboardType='email-address'
                                     value={email}
                                     onChangeText={setEmail}
                                     style={[defaultStyles.inputField]}
@@ -117,14 +117,14 @@ const login = () => {
                         </View>
 
 
-                        <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: '#004A7B' }]} onPress={handleLogin}>
+                        <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.focusBackground }]} onPress={handleLogin}>
                             <Text style={{ color: 'white' }}>
                                 Log in
                             </Text>
                         </TouchableOpacity>
 
 
-                        <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.CommonBackground }]}>
+                        <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.CommonBackground }]} onPress={() => router.push('/(auth)/register')}>
                             <Text style={{ color: 'white' }}>
                                 Sign up
                             </Text>
@@ -171,11 +171,6 @@ export default login;
 
 
 const styles = StyleSheet.create({
-    container: {
-        "backgroundColor": "#ffffff",
-        "height": "100%",
-        "flexDirection": "column"
-    },
     text1: {
         "textAlign": "center",
         "fontSize": 20,

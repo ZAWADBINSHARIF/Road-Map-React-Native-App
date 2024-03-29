@@ -4,6 +4,11 @@ import Colors from "./Colors";
 
 
 export const defaultStyles = StyleSheet.create({
+    container: {
+        "backgroundColor": "#ffffff",
+        "height": "100%",
+        "flexDirection": "column"
+    },
     errorText: {
         color: 'red'
     },
@@ -14,7 +19,7 @@ export const defaultStyles = StyleSheet.create({
         flexDirection: 'row',
         gap: 10,
         alignItems: 'center',
-        marginVertical: 30,
+        marginVertical: 20,
         marginHorizontal: "12%"
     },
     inputField: {

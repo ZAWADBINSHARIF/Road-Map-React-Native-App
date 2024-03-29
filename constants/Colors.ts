@@ -16,5 +16,6 @@ export default {
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorDark,
   },
-  CommonBackground: "#BBDEFA"
+  CommonBackground: "#BBDEFA",
+  focusBackground: "#004A7B"
 };
