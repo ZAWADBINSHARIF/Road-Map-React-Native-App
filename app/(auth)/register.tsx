@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import BackBtn from '@/components/BackBtn';
 import { defaultStyles } from '@/constants/Styles';
 import Colors from '@/constants/Colors';
+import { router } from 'expo-router';
 
 const register = () => {
 
@@ -15,6 +16,41 @@ const register = () => {
     const [password, setPassword] = useState('');
     const [recomfirmPassword, setRecomfirmPassword] = useState('');
 
+
+    const checkFormValidation = () => {
+
+        if (!name) {
+            setErrorMsg('Name is required.');
+            return false;
+        } else if (!email) {
+            setErrorMsg('Email is required.');
+            return false;
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            setErrorMsg('Email is invalid.');
+            return false;
+        } else if (!number) {
+            setErrorMsg('Phone number is required.');
+            return false;
+        } else if (!password) {
+            setErrorMsg('Password is required.');
+            return false;
+        } else if (password.length < 6) {
+            setErrorMsg('Password must be at least 6 characters.');
+            return false;
+        } else if (password !== recomfirmPassword) {
+            setErrorMsg('Recomfirm password not match.');
+            return false;
+        } else {
+            setErrorMsg('');
+            return true;
+        }
+
+    };
+
+
+    const handleOTP = () => {
+        console.log(checkFormValidation());
+    };
 
 
     return (
@@ -78,10 +114,10 @@ const register = () => {
 
                         <View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 30 }}>
-                                <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.focusBackground, flex: 1 }]}>
+                                <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.focusBackground, flex: 1 }]} onPress={handleOTP}>
                                     <Text style={{ color: 'white' }}>Send OTP</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.CommonBackground, flex: 1 }]}>
+                                <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.CommonBackground, flex: 1 }]} onPress={() => router.push('/(auth)/login')}>
                                     <Text style={{ color: 'white' }}>Cancel</Text>
                                 </TouchableOpacity>
                             </View>

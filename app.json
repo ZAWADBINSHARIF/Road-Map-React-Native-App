@@ -17,7 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-       "config": {
+      "config": {
         "usesNonExemptEncryption": false
       }
     },
@@ -25,7 +25,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.zawadbinsharif.RoadMap"
     },
     "web": {
       "bundler": "metro",
@@ -38,6 +39,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "722de296-c634-4e63-8b70-fb3f6d42924d"
+      }
     }
   }
 }
