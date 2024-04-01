@@ -49,7 +49,7 @@ const register = () => {
 
 
     const handleOTP = () => {
-        console.log(checkFormValidation());
+        checkFormValidation();
     };
 
 

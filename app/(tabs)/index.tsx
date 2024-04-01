@@ -12,17 +12,17 @@ const index = () => {
     const { userInfo } = useSelector((state: any) => state.userInfo);
     const { removeToken } = useSecureStore();
 
+
     const handleLogout = async () => {
         await removeToken('token');
-        dispatch(removeLocalStorageThunk() as any);
-
+        dispatch(removeLocalStorageThunk('@userInfo') as any);
     };
 
     return (
         <View>
             <StatusBar style='dark' />
 
-            <Text>{userInfo?.email}</Text>
+            <Text style={{ fontSize: 32 }}>{userInfo?.email}</Text>
 
             {userInfo?.email ?
                 <TouchableOpacity onPress={handleLogout} >

@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 const UserInfo = {
-    async getData() {
+    async getData(key: string) {
         try {
-            const keys: readonly string[] = await AsyncStorage.getAllKeys();
-            const values = await AsyncStorage.multiGet(keys);
+            const stringValue: string | null = await AsyncStorage.getItem(key);
+            const values = JSON.parse(stringValue!);
             return values;
         } catch (error) {
             console.log(error);
@@ -31,7 +32,7 @@ const UserInfo = {
 };
 
 const initialState = {
-    userInfo: []
+    userInfo: null
 };
 
 const userSlice = createSlice({
@@ -52,10 +53,9 @@ export default userSlice.reducer;
 export function setLocalStorageThunk(key: string, value: string) {
     return async function (dispatch: any) {
         try {
+
             await UserInfo.saveData(key, value);
-            const values = await UserInfo.getData();
-            const convertedObject = Object.fromEntries(values as any);
-
+            const convertedObject = JSON.parse(value);
             dispatch(setUserInfo(convertedObject));
 
         } catch (error) {
@@ -64,13 +64,11 @@ export function setLocalStorageThunk(key: string, value: string) {
     };
 }
 
-export function getLocalStorageThunk() {
+export function getLocalStorageThunk(key: string) {
     return async function (dispatch: any) {
         try {
-            const values = await UserInfo.getData();
-            const convertedObject = Object.fromEntries(values as any);
-
-            dispatch(setUserInfo(convertedObject));
+            const values = await UserInfo.getData(key);
+            dispatch(setUserInfo(values));
 
         } catch (error) {
             console.log(error);
@@ -78,10 +76,10 @@ export function getLocalStorageThunk() {
     };
 }
 
-export function removeLocalStorageThunk() {
+export function removeLocalStorageThunk(key: string) {
     return async function (dispatch: any) {
         try {
-            await AsyncStorage.clear();
+            await UserInfo.removeData(key);
             dispatch(setUserInfo([]));
 
         } catch (error) {

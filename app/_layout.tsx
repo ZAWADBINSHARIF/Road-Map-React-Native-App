@@ -82,11 +82,11 @@ function RootLayoutNav() {
       if (await token()) {
         try {
           const response = await axios.get('/verify');
+          const userInfoString = JSON.stringify(response.data?.userInfo);
 
-          dispatch(removeLocalStorageThunk() as any);
-          dispatch(setLocalStorageThunk('name', response.data?.userInfo.name) as any);
-          dispatch(setLocalStorageThunk('email', response.data?.userInfo.email) as any);
-          dispatch(setLocalStorageThunk('rule', response.data?.userInfo.rule) as any);
+          dispatch(removeLocalStorageThunk('@userInfo') as any);
+          dispatch(setLocalStorageThunk('@userInfo', userInfoString) as any);
+
         } catch (error) {
           console.log(error);
         }

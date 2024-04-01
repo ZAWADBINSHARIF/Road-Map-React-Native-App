@@ -40,11 +40,12 @@ const login = () => {
             });
 
             if (isRemember) {
+                const userInfoString = JSON.stringify(response.data?.userInfo);
+
                 await saveToken("token", response.data.token);
-                dispatch(removeLocalStorageThunk() as any);
-                dispatch(setLocalStorageThunk('name', response.data?.userInfo.name) as any);
-                dispatch(setLocalStorageThunk('email', response.data?.userInfo.email) as any);
-                dispatch(setLocalStorageThunk('rule', response.data?.userInfo.rule) as any);
+                dispatch(removeLocalStorageThunk('@userInfo') as any);
+
+                dispatch(setLocalStorageThunk('@userInfo', userInfoString) as any);
             }
 
             router.back();
