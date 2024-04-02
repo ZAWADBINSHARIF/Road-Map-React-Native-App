@@ -1,10 +1,14 @@
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image } from 'react-native';
+// external import
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
+import axios from 'axios';
+
+// internal import
 import BackBtn from '@/components/BackBtn';
 import { defaultStyles } from '@/constants/Styles';
 import Colors from '@/constants/Colors';
-import { router } from 'expo-router';
 
 const register = () => {
 
@@ -15,7 +19,9 @@ const register = () => {
     const [number, setNumber] = useState('');
     const [password, setPassword] = useState('');
     const [recomfirmPassword, setRecomfirmPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
+    const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
 
     const checkFormValidation = () => {
 
@@ -48,8 +54,36 @@ const register = () => {
     };
 
 
-    const handleOTP = () => {
-        checkFormValidation();
+    const handleOTP = async () => {
+        if (!checkFormValidation())
+            return;
+        console.log(API_BASE_URL);
+        try {
+
+            setIsLoading(true);
+
+            await axios.post(`${API_BASE_URL!}/otp`, {
+                name: name.trim(),
+                email: email.trim(),
+                number,
+                password
+            });
+
+            router.push({
+                pathname: "/(auth)/otp_submit",
+                params: {
+                    name,
+                    email,
+                    number,
+                    password
+                }
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
+
+        setIsLoading(false);
     };
 
 
@@ -115,7 +149,11 @@ const register = () => {
                         <View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 30 }}>
                                 <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.focusBackground, flex: 1 }]} onPress={handleOTP}>
-                                    <Text style={{ color: 'white' }}>Send OTP</Text>
+                                    {isLoading ?
+                                        <ActivityIndicator size="small" />
+                                        :
+                                        <Text style={{ color: 'white' }}>Send OTP</Text>
+                                    }
                                 </TouchableOpacity>
                                 <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.CommonBackground, flex: 1 }]} onPress={() => router.push('/(auth)/login')}>
                                     <Text style={{ color: 'white' }}>Cancel</Text>

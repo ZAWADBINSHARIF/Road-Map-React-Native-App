@@ -97,10 +97,10 @@ function RootLayoutNav() {
 
   }, []);
 
-  useEffect(() => {
-    router.push("/register");
+  // useEffect(() => {
+  //   router.push("/otp_submit");
 
-  });
+  // });
 
   return (
     <ThemeProvider value={DefaultTheme} >

@@ -17,10 +17,10 @@ import { removeLocalStorageThunk, setLocalStorageThunk } from '@/store/slices/us
 const login = () => {
 
     const [secureTextEntry] = useState(true);
-    const [isRemember, setIsRemember] = useState(true);
+    const [isRemember, setIsRemember] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
-    const [email, setEmail] = useState('zawad@gmail.com');
-    const [password, setPassword] = useState('zawad');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const { saveToken } = useSecureStore();
     const dispatch = useDispatch();
 
@@ -48,7 +48,7 @@ const login = () => {
                 dispatch(setLocalStorageThunk('@userInfo', userInfoString) as any);
             }
 
-            router.back();
+            router.push('/(tabs)/');
 
         } catch (error) {
             setErrorMsg('Email and Password are wrong');
