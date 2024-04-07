@@ -55,7 +55,7 @@ const register = () => {
 
 
     const handleOTP = async () => {
-        if (!checkFormValidation())
+        if (!checkFormValidation() || isLoading === true)
             return;
         console.log(API_BASE_URL);
         try {

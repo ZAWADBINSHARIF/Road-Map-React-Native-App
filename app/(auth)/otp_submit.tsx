@@ -22,6 +22,10 @@ const otp_submit = () => {
     const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
 
     const handleSubmitOTP = async () => {
+
+        if (isLoading === true)
+            return;
+
         if (!OTP || OTP.length != 6 || !name || !email || !number || !password) {
             return setErrorMsg('Input 6 digit OTP code');
         }

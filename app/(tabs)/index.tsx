@@ -6,7 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import useSecureStore from '@/hooks/useSecureStore';
 import { removeLocalStorageThunk } from '@/store/slices/userSlice';
 
+
 const index = () => {
+
 
     const dispatch = useDispatch();
     const { userInfo } = useSelector((state: any) => state.userInfo);
@@ -35,8 +37,8 @@ const index = () => {
                 </Link>
             }
 
-
         </View>
+
     );
 };
 

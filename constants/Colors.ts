@@ -17,5 +17,8 @@ export default {
     tabIconSelected: tintColorDark,
   },
   CommonBackground: "#BBDEFA",
-  focusBackground: "#004A7B"
+  focusBackground: "#004A7B",
+  inputBackgroundColor: '#BBDEFA',
+  SecondBackground: '#0F69A8',
+  RoundBtnText: '#628193'
 };

@@ -23,13 +23,20 @@ export const defaultStyles = StyleSheet.create({
         marginHorizontal: "12%"
     },
     inputField: {
-        // height: 44,
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: "gray",
         borderRadius: 8,
         padding: 5,
         paddingHorizontal: 12,
         backgroundColor: '#fff',
+    },
+    defaultInputField: {
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: "gray",
+        borderRadius: 8,
+        padding: 5,
+        paddingHorizontal: 12,
+        backgroundColor: Colors.inputBackgroundColor,
     },
     btn: {
         padding: 10,

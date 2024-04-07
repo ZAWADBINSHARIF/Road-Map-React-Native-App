@@ -4,13 +4,18 @@ import { RootSiblingParent } from 'react-native-root-siblings';
 import { useFonts } from 'expo-font';
 import { router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ClerkProvider } from "@clerk/clerk-expo";
 import axios from 'axios';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import store from '@/store';
 import useSecureStore from '@/hooks/useSecureStore';
 import { removeLocalStorageThunk, setLocalStorageThunk } from '@/store/slices/userSlice';
+import { PaperProvider, MD3LightTheme } from 'react-native-paper';
+import InternetConnectionError from '@/components/InternetConnectionError';
+import { StatusBar } from 'expo-status-bar';
+import { useNetInfo } from '@react-native-community/netinfo';
+import { ActivityIndicator } from 'react-native';
 
 
 axios.defaults.baseURL = process.env.EXPO_PUBLIC_API_BASE_URL;
@@ -41,11 +46,6 @@ export default function RootLayout() {
     if (error) throw error;
   }, [error]);
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
 
   if (!loaded) {
     return null;
@@ -53,9 +53,11 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
-      <RootSiblingParent>
-        <RootLayoutNav />
-      </RootSiblingParent >
+      <PaperProvider theme={MD3LightTheme}>
+        <RootSiblingParent>
+          <RootLayoutNav />
+        </RootSiblingParent >
+      </PaperProvider>
     </Provider>
   );
 }
@@ -65,6 +67,9 @@ function RootLayoutNav() {
   const dispatch = useDispatch();
   const { getToken } = useSecureStore();
   const token = async () => await getToken('token');
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { isConnected } = useNetInfo();
 
 
   axios.interceptors.request.use(async config => {
@@ -76,18 +81,45 @@ function RootLayoutNav() {
     return config;
   });
 
+  const handleReload = async () => {
+
+    if (await token()) {
+      console.log('reload');
+      try {
+        setIsLoading(true);
+        const response = await axios.get('/verify');
+        const userInfoString = JSON.stringify(response.data?.userInfo);
+
+        dispatch(removeLocalStorageThunk('@userInfo') as any);
+        dispatch(setLocalStorageThunk('@userInfo', userInfoString) as any);
+
+        setIsLoading(false);
+        setIsError(false);
+
+      } catch (error) {
+        setIsError(true);
+        setIsLoading(false);
+        console.log(error);
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       if (await token()) {
         try {
+          setIsLoading(true);
           const response = await axios.get('/verify');
           const userInfoString = JSON.stringify(response.data?.userInfo);
 
           dispatch(removeLocalStorageThunk('@userInfo') as any);
           dispatch(setLocalStorageThunk('@userInfo', userInfoString) as any);
 
+          setIsLoading(false);
+
         } catch (error) {
+          setIsError(true);
+          setIsLoading(false);
           console.log(error);
         }
       }
@@ -97,21 +129,34 @@ function RootLayoutNav() {
 
   }, []);
 
-  // useEffect(() => {
-  //   router.push("/otp_submit");
+  useEffect(() => {
+    if (!isLoading) {
+      SplashScreen.hideAsync();
+    }
+  }, [isLoading]);
 
-  // });
+  useEffect(() => {
+    router.push("/cases");
+  });
 
   return (
     <ThemeProvider value={DefaultTheme} >
-      <Stack
-        screenOptions={{
-          'animation': 'slide_from_right',
-          'headerShown': false
-        }}
-      >
-        <Stack.Screen name='(tabs)' />
-      </Stack>
+
+      {
+        !isError ? (
+          <Stack
+            screenOptions={{
+              'animation': 'slide_from_right',
+              'headerShown': false
+            }}
+          >
+
+            <Stack.Screen name='(tabs)' />
+          </Stack>)
+          :
+          <InternetConnectionError handleReload={handleReload} />
+      }
+
     </ThemeProvider>
   );
 }

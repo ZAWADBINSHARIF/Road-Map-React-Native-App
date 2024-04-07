@@ -1,38 +1,18 @@
+// external import
 import { createSlice } from "@reduxjs/toolkit";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const UserInfo = {
-    async getData(key: string) {
-        try {
-            const stringValue: string | null = await AsyncStorage.getItem(key);
-            const values = JSON.parse(stringValue!);
-            return values;
-        } catch (error) {
-            console.log(error);
-            return null;
-        }
-    },
-    async saveData(key: string, value: string): Promise<void> {
-        try {
-            await AsyncStorage.setItem(key, value);
-        } catch (error) {
-            console.log(error);
-            return;
-        }
-    },
-    async removeData(key: string): Promise<void> {
-        try {
-            await AsyncStorage.removeItem(key);
-        } catch (error) {
-            console.log(error);
-            return;
-        }
-    }
-};
+// internal import
+import LocalStorage from "@/app/utilities/LocalStorage";
+
 
 const initialState = {
-    userInfo: null
+    userInfo: {
+        email: '',
+        name: '',
+        rule: '',
+        number: ''
+    }
 };
 
 const userSlice = createSlice({
@@ -54,7 +34,7 @@ export function setLocalStorageThunk(key: string, value: string) {
     return async function (dispatch: any) {
         try {
 
-            await UserInfo.saveData(key, value);
+            await LocalStorage.saveData(key, value);
             const convertedObject = JSON.parse(value);
             dispatch(setUserInfo(convertedObject));
 
@@ -67,7 +47,7 @@ export function setLocalStorageThunk(key: string, value: string) {
 export function getLocalStorageThunk(key: string) {
     return async function (dispatch: any) {
         try {
-            const values = await UserInfo.getData(key);
+            const values = await LocalStorage.getData(key);
             dispatch(setUserInfo(values));
 
         } catch (error) {
@@ -79,7 +59,7 @@ export function getLocalStorageThunk(key: string) {
 export function removeLocalStorageThunk(key: string) {
     return async function (dispatch: any) {
         try {
-            await UserInfo.removeData(key);
+            await LocalStorage.removeData(key);
             dispatch(setUserInfo([]));
 
         } catch (error) {
