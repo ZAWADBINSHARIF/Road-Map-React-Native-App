@@ -5,6 +5,7 @@ import { Link } from 'expo-router';
 import { useDispatch, useSelector } from 'react-redux';
 import useSecureStore from '@/hooks/useSecureStore';
 import { removeLocalStorageThunk } from '@/store/slices/userSlice';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 const index = () => {
@@ -21,23 +22,25 @@ const index = () => {
     };
 
     return (
-        <View>
-            <StatusBar style='dark' />
+        <SafeAreaView>
+            <View>
+                <StatusBar style='dark' />
 
-            <Text style={{ fontSize: 32 }}>{userInfo?.email}</Text>
+                <Text style={{ fontSize: 32 }}>{userInfo?.email}</Text>
 
-            {userInfo?.email ?
-                <TouchableOpacity onPress={handleLogout} >
-                    <Text>
-                        Logout
-                    </Text>
-                </TouchableOpacity> :
-                <Link href={'/(auth)/login'} >
-                    Login
-                </Link>
-            }
+                {userInfo?.email ?
+                    <TouchableOpacity onPress={handleLogout} >
+                        <Text>
+                            Logout
+                        </Text>
+                    </TouchableOpacity> :
+                    <Link href={'/(auth)/login'} >
+                        Login
+                    </Link>
+                }
 
-        </View>
+            </View>
+        </SafeAreaView>
 
     );
 };

@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 // internal import
 import AdminCases from '@/components/Cases/AdminCases';
 import UserCases from '@/components/Cases/UserCases';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
@@ -29,9 +30,11 @@ const cases = () => {
     };
 
     return (
-        <View style={styles.container}>
-            <CheckUserRule />
-        </View>
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={styles.container}>
+                <CheckUserRule />
+            </View>
+        </SafeAreaView>
     );
 };
 

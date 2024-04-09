@@ -10,7 +10,8 @@ const _layout = () => {
                 tabBarStyle: {
                     height: "7%",
                     paddingBottom: 10
-                }
+                },
+                headerShown: false
             }}
         >
 

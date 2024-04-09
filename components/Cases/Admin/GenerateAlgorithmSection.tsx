@@ -7,7 +7,6 @@ import React from 'react';
 import { defaultStyles } from '@/constants/Styles';
 import { AntDesign, Entypo, Fontisto, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
-import { Button } from 'react-native-paper';
 
 
 
@@ -15,12 +14,18 @@ const GenerateAlgorithmSection = () => {
     return (
         <View style={styles.generateAlgorithmSection}>
             <View style={{ flexDirection: 'row', gap: 10 }}>
-                <View style={{}}>
-                    <Fontisto name="save" size={15} color={Colors.focusBackground} />
-                    <AntDesign name="upsquare" size={20} color={Colors.focusBackground} />
-                    <Ionicons name="information-circle-outline" size={20} color={Colors.focusBackground} />
-                    <MaterialIcons name="attach-file" size={16} color={Colors.focusBackground} />
-                    <Text>Little Icons</Text>
+                <View style={{ gap: 10 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                        <Fontisto name="save" size={15} color={Colors.focusBackground} />
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 15 }}>
+                        <Text>4.</Text>
+                        <AntDesign name="upsquare" size={20} color={Colors.focusBackground} />
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 15 }}>
+                        <Ionicons name="information-circle-outline" size={20} color={Colors.focusBackground} />
+                        <MaterialIcons name="attach-file" size={16} color={Colors.focusBackground} />
+                    </View>
 
                 </View>
                 <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -52,12 +57,12 @@ const GenerateAlgorithmSection = () => {
                 </TouchableOpacity>
                 <TouchableOpacity>
                     <View style={styles.roundBtn}>
-                        <Text style={{ color: Colors.RoundBtnText }}>00.00.00</Text>
+                        <Text style={{ color: Colors.RoundBtnText }}>00.00</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity>
                     <View style={styles.roundBtn}>
-                        <Text style={{ color: Colors.RoundBtnText }}>00.00.00</Text>
+                        <Text style={{ color: Colors.RoundBtnText }}>00.00</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity>
