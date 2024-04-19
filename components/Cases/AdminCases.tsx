@@ -10,67 +10,77 @@ const adminCases = () => {
         <View style={styles.mainContainer}>
 
 
-            {/* <KeyboardAvoidingView
+            <KeyboardAvoidingView
                 style={{
                     flex: 1,
                 }}
-                keyboardVerticalOffset={60}
-            > */}
+                keyboardVerticalOffset={0}
+            >
 
-            
-            <View style={styles.createdAlgorithmListSection}>
-                <ScrollView>
+                <View style={styles.createdAlgorithmListSection}>
+                    <ScrollView>
 
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                    <Text>LIST</Text>
-                </ScrollView>
-            </View>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                        <Text>LIST</Text>
+                    </ScrollView>
+                </View>
 
-            <GenerateAlgorithmSection />
+                <View style={[defaultStyles.seperatorView, { marginHorizontal: 0, marginVertical: 10 }]}>
+                    <View
+                        style={{
+                            flex: 1,
+                            borderBottomColor: 'gray',
+                            borderBottomWidth: StyleSheet.hairlineWidth,
+                        }}
+                    />
+                </View>
 
-            <View style={{ flexDirection: "row", justifyContent: 'space-between', paddingBottom: 10 }}>
+                <GenerateAlgorithmSection />
+            </KeyboardAvoidingView>
+
+            <View style={{ flexDirection: "row", justifyContent: 'space-between', paddingBottom: 10, paddingTop: 10 }}>
                 <View style={{ flexDirection: "row" }}>
                     <AntDesign name="left" size={20} color={Colors.RoundBtnText} />
                     <Text style={{ color: Colors.RoundBtnText }}>Perceive</Text>
@@ -81,7 +91,6 @@ const adminCases = () => {
                 </View>
             </View>
 
-            {/* </KeyboardAvoidingView> */}
 
         </View>
     );
@@ -92,6 +101,7 @@ export default adminCases;
 
 const styles = StyleSheet.create({
     mainContainer: {
+        // top: "1%",
         'height': '100%',
     },
     createdAlgorithmListSection: {
