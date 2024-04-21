@@ -2,7 +2,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { useFonts } from 'expo-font';
-import { router, Stack } from 'expo-router';
+import { router, Slot, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { ClerkProvider } from "@clerk/clerk-expo";
@@ -139,22 +139,28 @@ function RootLayoutNav() {
     router.push("/cases");
   });
 
+
   return (
     <ThemeProvider value={DefaultTheme} >
 
       {
-        !isError ? (
-          <Stack
-            screenOptions={{
-              'animation': 'slide_from_right',
-              'headerShown': false
-            }}
-          >
+        isError ?
+          <>
+            <Slot />
+            <InternetConnectionError handleReload={handleReload} />
+          </>
 
-            <Stack.Screen name='(tabs)' />
-          </Stack>)
           :
-          <InternetConnectionError handleReload={handleReload} />
+          (
+            <Stack
+              screenOptions={{
+                'animation': 'slide_from_right',
+                'headerShown': false
+              }}
+            >
+
+              <Stack.Screen name='(tabs)' />
+            </Stack>)
       }
 
     </ThemeProvider>
