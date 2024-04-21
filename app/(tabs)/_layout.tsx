@@ -3,15 +3,17 @@ import { Tabs } from 'expo-router';
 import { Image } from 'react-native';
 import React from 'react';
 
+
 const _layout = () => {
     return (
         <Tabs
             screenOptions={{
                 tabBarStyle: {
                     height: "7%",
-                    paddingBottom: 10
+                    paddingBottom: 10,
+
                 },
-                headerShown: false
+                headerShown: false,
             }}
         >
 
@@ -19,7 +21,7 @@ const _layout = () => {
                 name='index'
                 options={{
                     tabBarLabel: "Dashboard",
-                    tabBarIcon: () => <MaterialCommunityIcons name="view-dashboard-outline" size={24} color="black" />
+                    tabBarIcon: () => <MaterialCommunityIcons name="view-dashboard-outline" size={24} color="black" />,
                 }}
             />
             <Tabs.Screen

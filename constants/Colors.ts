@@ -20,5 +20,6 @@ export default {
   focusBackground: "#004A7B",
   inputBackgroundColor: '#BBDEFA',
   SecondBackground: '#0F69A8',
-  RoundBtnText: '#628193'
+  RoundBtnText: '#628193',
+  RadioButtonCheck: '#61AADD'
 };

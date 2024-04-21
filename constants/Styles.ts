@@ -51,6 +51,20 @@ export const defaultStyles = StyleSheet.create({
         borderWidth: 0,
         borderColor: 'none'
     },
+    commonRadioBtn: {
+        borderRadius: 20,
+        backgroundColor: 'white',
+        borderWidth: 3,
+        borderColor: Colors.focusBackground,
+        width: 20
+    },
+    commonRadioBtnChecked: {
+        borderRadius: 20,
+        backgroundColor: Colors.focusBackground,
+        borderWidth: 3,
+        borderColor: 'white',
+        width: 20,
+    },
     backBtn: {
         marginTop: "3%",
         marginStart: "4%",
