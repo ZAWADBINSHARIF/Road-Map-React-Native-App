@@ -5,7 +5,7 @@ import Colors from '@/constants/Colors';
 
 
 
-const RadioButton = ({ title, value = false, onChangeValue = () => { } }) => {
+const RadioButton = ({ title = "No Title", value = false, onChangeValue = () => { } }) => {
     const styles = StyleSheet.create(
         {
             RadioButton: {

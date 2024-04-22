@@ -10,6 +10,7 @@ import { defaultStyles } from '@/constants/Styles';
 import { AntDesign, Entypo, Fontisto, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import RadioButton from '@/components/RadioButton/RadioButton';
+import SettingModal from './SettingModal/SettingModal';
 
 
 
@@ -20,6 +21,8 @@ const GenerateAlgorithmSection = () => {
     const [dialogVisible, setDialogVisible] = useState(false);
     const [dateTimeShow, setDateTimeShow] = useState(false);
     const [openDateTimeModal, setOpenDateTimeModal] = useState(false);
+    const [openSettingModal, setOpenSettingModal] = useState(false);
+
     const [dateTimeModalMode, setDateTimeModalMode] = useState<'date' | 'time'>('date');
 
     const [startTime, setStartTime] = useState(new Date());
@@ -114,6 +117,10 @@ const GenerateAlgorithmSection = () => {
                             />
                             <RadioButton
                                 title={'Setting'}
+                                onChangeValue={() => {
+                                    setOpenSettingModal(true);
+                                    setMenuVisible(false);
+                                }}
                             />
                             <RadioButton
                                 title={'String Header'}
@@ -137,39 +144,37 @@ const GenerateAlgorithmSection = () => {
                 </View>
             </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10 }}>
-                {dateTimeShow &&
-                    <>
-                        <TouchableOpacity onPress={() => showDateTimeModal('date')}>
-                            <View style={styles.roundBtn}>
-                                <Text style={{ color: Colors.RoundBtnText }}>{date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => showDateTimeModal('time', 'Start Time')}>
-                            <View style={styles.roundBtn}>
-                                <Text style={{ color: Colors.RoundBtnText }}>{startTime.getHours()}h:{startTime.getMinutes()}m</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => showDateTimeModal('time', 'Finish Time')}>
-                            <View style={styles.roundBtn}>
-                                <Text style={{ color: Colors.RoundBtnText }}>{finishTime.getHours()}h:{finishTime.getMinutes()}m</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <View style={styles.roundBtn}>
-                                <Text style={{ color: Colors.RoundBtnText }}>Frequency</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <View style={[styles.roundBtn, { backgroundColor: Colors.focusBackground }]}>
-                                <Text style={{ color: "white" }}>Severity</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </>
-                }
-            </View>
+            {dateTimeShow &&
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingTop: 10 }}>
+                    <TouchableOpacity onPress={() => showDateTimeModal('date')}>
+                        <View style={styles.roundBtn}>
+                            <Text style={{ color: Colors.RoundBtnText }}>{date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => showDateTimeModal('time', 'Start Time')}>
+                        <View style={styles.roundBtn}>
+                            <Text style={{ color: Colors.RoundBtnText }}>{startTime.getHours()}h:{startTime.getMinutes()}m</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => showDateTimeModal('time', 'Finish Time')}>
+                        <View style={styles.roundBtn}>
+                            <Text style={{ color: Colors.RoundBtnText }}>{finishTime.getHours()}h:{finishTime.getMinutes()}m</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <View style={styles.roundBtn}>
+                            <Text style={{ color: Colors.RoundBtnText }}>Frequency</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <View style={[styles.roundBtn, { backgroundColor: Colors.focusBackground }]}>
+                            <Text style={{ color: "white" }}>Severity</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            }
 
-            <View style={{ flexDirection: 'row', gap: 12 }}>
+            <View style={{ flexDirection: 'row', gap: 12, paddingTop: 10 }}>
 
                 <View style={{ justifyContent: 'flex-end' }}>
                     <TouchableOpacity>
@@ -225,6 +230,13 @@ const GenerateAlgorithmSection = () => {
                         </Dialog.Actions>
                     </Dialog>
                 </Portal>
+
+                {/* // Setting Modal  */}
+                <SettingModal
+                    visible={openSettingModal}
+                    setVisible={setOpenSettingModal}
+                />
+
 
             </View>
 
