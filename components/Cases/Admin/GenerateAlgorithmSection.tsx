@@ -3,11 +3,11 @@ import { View, TextInput, StyleSheet, TouchableOpacity, Platform } from 'react-n
 import React, { useState } from 'react';
 import { Dialog, Text, Menu, Button, Portal } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { AntDesign, Entypo, Fontisto, Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 
 // internal import
 import { defaultStyles } from '@/constants/Styles';
-import { AntDesign, Entypo, Fontisto, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import RadioButton from '@/components/RadioButton/RadioButton';
 import SettingModal from './SettingModal/SettingModal';
@@ -21,7 +21,7 @@ const GenerateAlgorithmSection = () => {
     const [dialogVisible, setDialogVisible] = useState(false);
     const [dateTimeShow, setDateTimeShow] = useState(false);
     const [openDateTimeModal, setOpenDateTimeModal] = useState(false);
-    const [openSettingModal, setOpenSettingModal] = useState(false);
+    const [openSettingModal, setOpenSettingModal] = useState(true);
 
     const [dateTimeModalMode, setDateTimeModalMode] = useState<'date' | 'time'>('date');
 
@@ -73,16 +73,16 @@ const GenerateAlgorithmSection = () => {
 
                             <TextInput
                                 multiline={true}
-                                style={[defaultStyles.defaultInputField, { maxHeight: 100, flex: 6 }]}
+                                style={[defaultStyles.defaultInputField, { maxHeight: 100, flex: 4 }]}
                                 placeholder='Info'
                             />
                         </View>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
 
-                            <View style={{ gap: 10, flex: 1 }}>
+                            <View style={{ gap: 10, flex: 1, }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 15 }}>
-                                    <Text>4.</Text>
+                                    <Text style={{ paddingLeft: 5 }}>4.</Text>
                                     <AntDesign name="upsquare" size={20} color={Colors.focusBackground} />
                                 </View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 10 }}>
@@ -94,7 +94,7 @@ const GenerateAlgorithmSection = () => {
 
                             <TextInput
                                 multiline={true}
-                                style={[defaultStyles.defaultInputField, { maxHeight: 100, flex: 6, height: "100%" }]}
+                                style={[defaultStyles.defaultInputField, { maxHeight: 100, flex: 4, height: "100%" }]}
                                 placeholder='Question'
                             />
 
@@ -146,6 +146,7 @@ const GenerateAlgorithmSection = () => {
 
             {dateTimeShow &&
                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingTop: 10 }}>
+
                     <TouchableOpacity onPress={() => showDateTimeModal('date')}>
                         <View style={styles.roundBtn}>
                             <Text style={{ color: Colors.RoundBtnText }}>{date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}</Text>
@@ -171,10 +172,11 @@ const GenerateAlgorithmSection = () => {
                             <Text style={{ color: "white" }}>Severity</Text>
                         </View>
                     </TouchableOpacity>
+
                 </View>
             }
 
-            <View style={{ flexDirection: 'row', gap: 12, paddingTop: 10 }}>
+            <View style={{ flexDirection: 'row', gap: 10, paddingTop: 10 }}>
 
                 <View style={{ justifyContent: 'flex-end' }}>
                     <TouchableOpacity>
@@ -184,17 +186,23 @@ const GenerateAlgorithmSection = () => {
                     </TouchableOpacity>
                 </View>
 
-                <View style={{ flex: 1, gap: 10 }}>
-                    <TextInput
-                        multiline={true}
-                        style={[defaultStyles.defaultInputField, { maxHeight: 100 }]}
-                        placeholder='Note'
-                    />
-                    <TextInput
-                        multiline={true}
-                        style={[defaultStyles.defaultInputField, { maxHeight: 100 }]}
-                        placeholder='Impression'
-                    />
+                <View style={{ flex: 1, gap: 10, flexDirection: 'row' }}>
+
+                    <View style={{ flex: 1, gap: 10 }}>
+                        <TextInput
+                            multiline={true}
+                            style={[defaultStyles.defaultInputField, { maxHeight: 100 }]}
+                            placeholder='Note'
+                        />
+                        <TextInput
+                            multiline={true}
+                            style={[defaultStyles.defaultInputField, { maxHeight: 100 }]}
+                            placeholder='Impression'
+                        />
+                    </View>
+
+                    <View style={{ width: 11 }} />
+
                 </View>
 
             </View>

@@ -103,7 +103,7 @@ const adminCases = () => {
                     <View style={{ flexDirection: "row", justifyContent: 'space-between', paddingBottom: 10, paddingTop: 10 }}>
                         <View style={{ flexDirection: "row" }}>
                             <AntDesign name="left" size={20} color={Colors.RoundBtnText} />
-                            <Text style={{ color: Colors.RoundBtnText }}>Perceive</Text>
+                            <Text style={{ color: Colors.RoundBtnText }}>Previous</Text>
                         </View>
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={{ color: Colors.RoundBtnText }}>Next</Text>

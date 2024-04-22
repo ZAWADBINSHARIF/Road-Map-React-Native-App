@@ -9,7 +9,6 @@ const _layout = () => {
         <Tabs
             screenOptions={{
                 tabBarStyle: {
-                    height: "7%",
                     paddingBottom: 10,
 
                 },
