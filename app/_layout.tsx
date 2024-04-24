@@ -135,9 +135,9 @@ function RootLayoutNav() {
     }
   }, [isLoading]);
 
-  useEffect(() => {
-    router.push("/cases");
-  });
+  // useEffect(() => {
+  //   router.push("/cases");
+  // });
 
 
   return (

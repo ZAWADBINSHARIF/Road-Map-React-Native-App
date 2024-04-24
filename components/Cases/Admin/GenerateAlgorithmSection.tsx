@@ -21,7 +21,11 @@ const GenerateAlgorithmSection = () => {
     const [dialogVisible, setDialogVisible] = useState(false);
     const [dateTimeShow, setDateTimeShow] = useState(false);
     const [openDateTimeModal, setOpenDateTimeModal] = useState(false);
-    const [openSettingModal, setOpenSettingModal] = useState(true);
+    const [openSettingModal, setOpenSettingModal] = useState(false);
+    const [showInfoInput, setShowInfoInput] = useState(false);
+    const [showNoteInput, setShowNoteInput] = useState(false);
+    const [showImpression, setShowImpression] = useState(false);
+    const [showResultBtn, setShowResultBtn] = useState(false);
 
     const [dateTimeModalMode, setDateTimeModalMode] = useState<'date' | 'time'>('date');
 
@@ -65,28 +69,34 @@ const GenerateAlgorithmSection = () => {
 
                 <View style={{ flex: 1, flexDirection: 'row' }}>
                     <View style={{ gap: 10, flex: 1 }}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
 
-                            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 1 }}>
-                                <Fontisto name="save" size={15} color={Colors.focusBackground} />
+                        {showInfoInput &&
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
+
+                                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 1 }}>
+                                    <Fontisto name="save" size={15} color={Colors.focusBackground} />
+                                </View>
+
+                                <TextInput
+                                    multiline={true}
+                                    style={[defaultStyles.defaultInputField, { maxHeight: 100, flex: 4 }]}
+                                    placeholder='Info'
+                                />
                             </View>
-
-                            <TextInput
-                                multiline={true}
-                                style={[defaultStyles.defaultInputField, { maxHeight: 100, flex: 4 }]}
-                                placeholder='Info'
-                            />
-                        </View>
+                        }
 
                         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
 
                             <View style={{ gap: 10, flex: 1, }}>
+
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 15 }}>
                                     <Text style={{ paddingLeft: 5 }}>4.</Text>
                                     <AntDesign name="upsquare" size={20} color={Colors.focusBackground} />
                                 </View>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 10 }}>
-                                    <Ionicons name="information-circle-outline" size={20} color={Colors.focusBackground} />
+                                <View style={{ flexDirection: showInfoInput ? 'row' : 'row-reverse', justifyContent: 'space-between', gap: 10 }}>
+                                    {showInfoInput &&
+                                        <Ionicons name="information-circle-outline" size={20} color={Colors.focusBackground} />
+                                    }
                                     <MaterialIcons name="attach-file" size={16} color={Colors.focusBackground} />
                                 </View>
 
@@ -178,27 +188,35 @@ const GenerateAlgorithmSection = () => {
 
             <View style={{ flexDirection: 'row', gap: 10, paddingTop: 10 }}>
 
-                <View style={{ justifyContent: 'flex-end' }}>
-                    <TouchableOpacity>
-                        <View style={styles.ResultBtn}>
-                            <Text style={{ color: 'white' }}>Results</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
+                {showResultBtn &&
+                    <View style={{ justifyContent: 'flex-end' }}>
+                        <TouchableOpacity>
+                            <View style={styles.ResultBtn}>
+                                <Text style={{ color: 'white' }}>Results</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                }
 
                 <View style={{ flex: 1, gap: 10, flexDirection: 'row' }}>
 
                     <View style={{ flex: 1, gap: 10 }}>
-                        <TextInput
-                            multiline={true}
-                            style={[defaultStyles.defaultInputField, { maxHeight: 100 }]}
-                            placeholder='Note'
-                        />
-                        <TextInput
-                            multiline={true}
-                            style={[defaultStyles.defaultInputField, { maxHeight: 100 }]}
-                            placeholder='Impression'
-                        />
+
+                        {showNoteInput &&
+                            <TextInput
+                                multiline={true}
+                                style={[defaultStyles.defaultInputField, { maxHeight: 100 }]}
+                                placeholder='Note'
+                            />
+                        }
+
+                        {showImpression &&
+                            <TextInput
+                                multiline={true}
+                                style={[defaultStyles.defaultInputField, { maxHeight: 100 }]}
+                                placeholder='Impression'
+                            />
+                        }
                     </View>
 
                     <View style={{ width: 11 }} />
@@ -243,6 +261,14 @@ const GenerateAlgorithmSection = () => {
                 <SettingModal
                     visible={openSettingModal}
                     setVisible={setOpenSettingModal}
+                    showInfoInput={showInfoInput}
+                    setShowInfoInput={setShowInfoInput}
+                    showNoteInput={showNoteInput}
+                    setShowNoteInput={setShowNoteInput}
+                    showImpression={showImpression}
+                    setShowImpression={setShowImpression}
+                    showResultBtn={showResultBtn}
+                    setShowResultBtn={setShowResultBtn}
                 />
 
 

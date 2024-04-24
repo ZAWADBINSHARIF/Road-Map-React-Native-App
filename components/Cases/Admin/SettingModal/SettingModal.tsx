@@ -11,11 +11,29 @@ import { defaultStyles } from '@/constants/Styles';
 
 interface Props {
     visible: boolean,
-    setVisible: (value: React.SetStateAction<boolean>) => void;
+    setVisible: (value: React.SetStateAction<boolean>) => void,
+    showInfoInput: boolean,
+    setShowInfoInput: (value: React.SetStateAction<boolean>) => void,
+    showNoteInput: boolean,
+    setShowNoteInput: (value: React.SetStateAction<boolean>) => void,
+    showImpression: boolean,
+    setShowImpression: (value: React.SetStateAction<boolean>) => void,
+    showResultBtn: boolean,
+    setShowResultBtn: (value: React.SetStateAction<boolean>) => void;
 }
 
 
-const SettingModal = ({ visible, setVisible }: Props) => {
+const SettingModal = ({
+    visible,
+    setVisible,
+    showInfoInput,
+    setShowInfoInput,
+    showNoteInput,
+    setShowNoteInput,
+    showImpression,
+    setShowImpression,
+    showResultBtn,
+    setShowResultBtn }: Props) => {
     return (
         <Portal>
             <Modal visible={visible} dismissableBackButton={true} onDismiss={() => setVisible(false)} contentContainerStyle={styles.ModalContainer}>
@@ -84,7 +102,7 @@ const SettingModal = ({ visible, setVisible }: Props) => {
                         <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
                             <Text>Add Info</Text>
                             <Ionicons name="information-circle-outline" size={20} color={Colors.focusBackground} />
-                            <Checkbox style={[defaultStyles.checkBox, { backgroundColor: 'white' }]} value={false} />
+                            <Checkbox style={[defaultStyles.checkBox, { backgroundColor: 'white' }]} value={showInfoInput} onValueChange={setShowInfoInput} />
                         </View>
                     </View>
 
@@ -92,7 +110,7 @@ const SettingModal = ({ visible, setVisible }: Props) => {
                         <Entypo name="dot-single" size={24} color="black" />
                         <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
                             <Text>Add Note</Text>
-                            <Checkbox style={[defaultStyles.checkBox, { backgroundColor: 'white' }]} value={false} />
+                            <Checkbox style={[defaultStyles.checkBox, { backgroundColor: 'white' }]} value={showNoteInput} onValueChange={setShowNoteInput} />
                         </View>
                     </View>
 
@@ -132,7 +150,7 @@ const SettingModal = ({ visible, setVisible }: Props) => {
                         <Entypo name="dot-single" size={24} color="black" />
                         <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
                             <Text>Impression</Text>
-                            <Checkbox style={[defaultStyles.checkBox, { backgroundColor: 'white' }]} value={false} />
+                            <Checkbox style={[defaultStyles.checkBox, { backgroundColor: 'white' }]} value={showImpression} onValueChange={setShowImpression} />
                         </View>
                     </View>
 
@@ -140,7 +158,7 @@ const SettingModal = ({ visible, setVisible }: Props) => {
                         <Entypo name="dot-single" size={24} color="black" />
                         <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
                             <Text>Result</Text>
-                            <Checkbox style={[defaultStyles.checkBox, { backgroundColor: 'white' }]} value={false} />
+                            <Checkbox style={[defaultStyles.checkBox, { backgroundColor: 'white' }]} value={showResultBtn} onValueChange={setShowResultBtn} />
                         </View>
                     </View>
 
