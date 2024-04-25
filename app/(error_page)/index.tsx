@@ -3,10 +3,12 @@ import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { Button } from 'react-native-paper';
+import { useGlobalContext } from '@/context/GlobalContext';
 
 
-const InternetConnectionError = ({ handleReload }) => {
+const InternetConnectionError = () => {
 
+    const { handleReload }: any = useGlobalContext();
 
     return (
         <View style={styles.container}>
