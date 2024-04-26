@@ -30,11 +30,9 @@ const cases = () => {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <View style={styles.container}>
-                <CheckUserRule />
-            </View>
-        </SafeAreaView>
+        <View style={styles.container}>
+            <CheckUserRule />
+        </View>
     );
 };
 

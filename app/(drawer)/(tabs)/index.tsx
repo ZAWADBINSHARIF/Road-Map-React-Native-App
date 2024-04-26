@@ -22,26 +22,23 @@ const index = () => {
     };
 
     return (
-        <SafeAreaView>
-            <View>
-                <StatusBar style='dark' />
+        <View>
+            <StatusBar style='dark' />
 
-                <Text style={{ fontSize: 32 }}>{userInfo?.email}</Text>
+            <Text style={{ fontSize: 32 }}>{userInfo?.email}</Text>
 
-                {userInfo?.email ?
-                    <TouchableOpacity onPress={handleLogout} >
-                        <Text>
-                            Logout
-                        </Text>
-                    </TouchableOpacity> :
-                    <Link href={'/(auth)/login'} >
-                        Login
-                    </Link>
-                }
+            {userInfo?.email ?
+                <TouchableOpacity onPress={handleLogout} >
+                    <Text>
+                        Logout
+                    </Text>
+                </TouchableOpacity> :
+                <Link href={'/(auth)/login'} >
+                    Login
+                </Link>
+            }
 
-            </View>
-        </SafeAreaView>
-
+        </View>
     );
 };
 

@@ -1,21 +1,15 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { useFonts } from 'expo-font';
-import { Redirect, router, Slot, Stack } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { ClerkProvider } from "@clerk/clerk-expo";
 import axios from 'axios';
-import { Provider, useDispatch, useSelector } from 'react-redux';
+import { Provider } from 'react-redux';
 import store from '@/store';
-import useSecureStore from '@/hooks/useSecureStore';
-import { removeLocalStorageThunk, setLocalStorageThunk } from '@/store/slices/userSlice';
 import { PaperProvider, MD3LightTheme } from 'react-native-paper';
-import InternetConnectionError from '@/app/(error_page)';
-import { StatusBar } from 'expo-status-bar';
-import { useNetInfo } from '@react-native-community/netinfo';
-import { ActivityIndicator } from 'react-native';
 import GlobalProvider, { useGlobalContext } from '@/context/GlobalContext';
 
 
@@ -114,9 +108,7 @@ function RootLayoutNav() {
         }}
       >
 
-
-        <Stack.Screen name='(tabs)' />
-
+        <Stack.Screen name='(drawer)' />
 
       </Stack>
 

@@ -10,7 +10,7 @@ const Layout = () => {
                 <Stack.Screen
                     name='login'
                     options={{
-                        'headerShown': true
+                        'headerShown': false
                     }
                     }
                 />
@@ -30,7 +30,7 @@ const Layout = () => {
                 />
             </Stack>
 
-            <StatusBar style='light' />
+            <StatusBar style='dark' />
         </>
     );
 };

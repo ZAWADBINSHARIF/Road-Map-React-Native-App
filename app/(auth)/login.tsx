@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import React, { useState } from 'react';
 import { router } from 'expo-router';
@@ -48,7 +48,7 @@ const login = () => {
                 dispatch(setLocalStorageThunk('@userInfo', userInfoString) as any);
             }
 
-            router.push('/(tabs)/');
+            router.push('/(drawer)/(tabs)/');
 
         } catch (error) {
             setErrorMsg('Email and Password are wrong');
@@ -60,109 +60,113 @@ const login = () => {
     return (
         <SafeAreaView style={{ backgroundColor: '#ffffff' }}>
 
+            <ScrollView>
 
-            <View style={defaultStyles.container}>
+                <View style={defaultStyles.container}>
 
-                <BackBtn />
+                    <BackBtn />
 
-                <View style={{ paddingHorizontal: "12%" }}>
+                    <View style={{ paddingHorizontal: "12%" }}>
 
-                    <View style={{ marginBottom: 50 }}>
-                        <Text style={styles.text1}>Have an account log in</Text>
-                        <Text style={styles.text2}>Enter your email to log in for the Road map app</Text>
-                    </View>
-
-                    <View style={{ gap: 15 }}>
-
-                        <View>
-
-                            <View style={{ gap: 10 }}>
-
-                                <TextInput
-                                    autoCapitalize='none'
-                                    placeholder='email@domain.com'
-                                    keyboardType='email-address'
-                                    value={email}
-                                    onChangeText={setEmail}
-                                    style={[defaultStyles.inputField]}
-                                />
-                                <TextInput
-                                    placeholder="password"
-                                    value={password}
-                                    onChangeText={setPassword}
-                                    secureTextEntry={secureTextEntry}
-                                    style={[defaultStyles.inputField]}
-                                />
-
-                                {errorMsg && <Text style={defaultStyles.errorText}>{errorMsg}</Text>}
-
-                            </View>
-
-                            <View style={{ marginTop: 5 }}>
-                                <TouchableOpacity>
-                                    <Text style={{ textAlign: 'right', color: '#A9A9A9' }}>Forget password?</Text>
-                                </TouchableOpacity>
-                            </View>
-
-                            <View style={{ flexDirection: 'row', gap: 8 }}>
-
-                                <Checkbox
-                                    style={[defaultStyles.checkBox]}
-                                    value={isRemember}
-                                    onValueChange={setIsRemember}
-                                />
-
-                                <Text style={{ color: 'gray' }}>Remember me</Text>
-                            </View>
-
+                        <View style={{ marginBottom: 50 }}>
+                            <Text style={styles.text1}>Have an account log in</Text>
+                            <Text style={styles.text2}>Enter your email to log in for the Road map app</Text>
                         </View>
 
+                        <View style={{ gap: 15 }}>
 
-                        <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.focusBackground }]} onPress={handleLogin}>
-                            <Text style={{ color: 'white' }}>
-                                Log in
-                            </Text>
-                        </TouchableOpacity>
+                            <View>
+
+                                <View style={{ gap: 10 }}>
+
+                                    <TextInput
+                                        autoCapitalize='none'
+                                        placeholder='email@domain.com'
+                                        keyboardType='email-address'
+                                        value={email}
+                                        onChangeText={setEmail}
+                                        style={[defaultStyles.inputField]}
+                                    />
+                                    <TextInput
+                                        placeholder="password"
+                                        value={password}
+                                        onChangeText={setPassword}
+                                        secureTextEntry={secureTextEntry}
+                                        style={[defaultStyles.inputField]}
+                                    />
+
+                                    {errorMsg && <Text style={defaultStyles.errorText}>{errorMsg}</Text>}
+
+                                </View>
+
+                                <View style={{ marginTop: 5 }}>
+                                    <TouchableOpacity>
+                                        <Text style={{ textAlign: 'right', color: '#A9A9A9' }}>Forget password?</Text>
+                                    </TouchableOpacity>
+                                </View>
+
+                                <View style={{ flexDirection: 'row', gap: 8 }}>
+
+                                    <Checkbox
+                                        id=''
+                                        style={[defaultStyles.checkBox]}
+                                        value={isRemember}
+                                        onValueChange={setIsRemember}
+                                    />
+
+                                    <Text onPress={() => setIsRemember(!isRemember)} style={{ color: 'gray' }}>Remember me</Text>
+                                </View>
+
+                            </View>
 
 
-                        <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.CommonBackground }]} onPress={() => router.push('/(auth)/register')}>
-                            <Text style={{ color: 'white' }}>
-                                Sign up
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+                            <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.focusBackground }]} onPress={handleLogin}>
+                                <Text style={{ color: 'white' }}>
+                                    Log in
+                                </Text>
+                            </TouchableOpacity>
 
-                    <View style={defaultStyles.seperatorView}>
-                        <View
-                            style={{
-                                flex: 1,
-                                borderBottomColor: 'gray',
-                                borderBottomWidth: StyleSheet.hairlineWidth,
-                            }}
-                        />
 
-                        <Text style={defaultStyles.seperator}>or</Text>
+                            <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.CommonBackground }]} onPress={() => router.push('/(auth)/register')}>
+                                <Text style={{ color: 'white' }}>
+                                    Sign up
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
 
-                        <View
-                            style={{
-                                flex: 1,
-                                borderBottomColor: 'gray',
-                                borderBottomWidth: StyleSheet.hairlineWidth,
-                            }}
-                        />
-                    </View>
+                        <View style={defaultStyles.seperatorView}>
+                            <View
+                                style={{
+                                    flex: 1,
+                                    borderBottomColor: 'gray',
+                                    borderBottomWidth: StyleSheet.hairlineWidth,
+                                }}
+                            />
 
-                    <View>
-                        <TouchableOpacity style={[defaultStyles.btn, { flexDirection: 'row', gap: 5 }]}>
-                            <Image source={require('@/assets/icons/google_logo.png')} style={{ width: 24, height: 24 }} />
-                            <Text style={{ fontWeight: 'bold' }}>Google</Text>
-                        </TouchableOpacity>
+                            <Text style={defaultStyles.seperator}>or</Text>
+
+                            <View
+                                style={{
+                                    flex: 1,
+                                    borderBottomColor: 'gray',
+                                    borderBottomWidth: StyleSheet.hairlineWidth,
+                                }}
+                            />
+                        </View>
+
+                        <View>
+                            <TouchableOpacity style={[defaultStyles.btn, { flexDirection: 'row', gap: 5 }]}>
+                                <Image source={require('@/assets/icons/google_logo.png')} style={{ width: 24, height: 24 }} />
+                                <Text style={{ fontWeight: 'bold' }}>Google</Text>
+                            </TouchableOpacity>
+                        </View>
+
                     </View>
 
                 </View>
 
-            </View>
 
+            </ScrollView>
 
         </SafeAreaView>
     );

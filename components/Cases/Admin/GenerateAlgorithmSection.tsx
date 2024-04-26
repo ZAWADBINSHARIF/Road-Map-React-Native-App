@@ -3,7 +3,8 @@ import { View, TextInput, StyleSheet, TouchableOpacity, Platform } from 'react-n
 import React, { useState } from 'react';
 import { Dialog, Text, Menu, Button, Portal } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { AntDesign, Entypo, Fontisto, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, Entypo, Fontisto, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 
 
 // internal import
@@ -28,6 +29,7 @@ const GenerateAlgorithmSection = () => {
     const [showResultBtn, setShowResultBtn] = useState(false);
 
     const [dateTimeModalMode, setDateTimeModalMode] = useState<'date' | 'time'>('date');
+    const [videoFile, setVideoFile] = useState("");
 
     const [startTime, setStartTime] = useState(new Date());
     const [finishTime, setFinishTime] = useState(new Date());
@@ -61,6 +63,26 @@ const GenerateAlgorithmSection = () => {
         setDateTimeModalMode(mode);
         set_state_of_picker(state);
     };
+
+
+
+    const pickVideo = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            setVideoFile(result?.assets[0]?.uri);
+        }
+    };
+
+
 
     return (
         <View style={styles.generateAlgorithmSection}>
@@ -97,7 +119,8 @@ const GenerateAlgorithmSection = () => {
                                     {showInfoInput &&
                                         <Ionicons name="information-circle-outline" size={20} color={Colors.focusBackground} />
                                     }
-                                    <MaterialIcons name="attach-file" size={16} color={Colors.focusBackground} />
+
+                                    <MaterialCommunityIcons name="video-vintage" size={20} color={Colors.focusBackground} onPress={pickVideo} />
                                 </View>
 
                             </View>
@@ -145,6 +168,10 @@ const GenerateAlgorithmSection = () => {
                             />
                             <RadioButton
                                 title={'Name'}
+                                onChangeValue={showDialog}
+                            />
+                            <RadioButton
+                                title={'Save'}
                                 onChangeValue={showDialog}
                             />
                         </Menu>

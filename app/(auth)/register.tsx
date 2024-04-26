@@ -1,5 +1,5 @@
 // external import
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ActivityIndicator, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -90,111 +90,118 @@ const register = () => {
     return (
         <SafeAreaView style={{ backgroundColor: '#ffffff' }}>
 
-            <View style={defaultStyles.container}>
-
-                <BackBtn />
-
-                <View style={{ paddingHorizontal: "12%" }}>
-
-                    <View style={{ marginBottom: 50 }}>
-                        <Text style={styles.text1}>Create an account</Text>
-                        <Text style={styles.text2}>Enter your email to sign up for the Road map app</Text>
-                    </View>
+            <ScrollView>
 
 
-                    <View style={{ gap: 15 }}>
+                <View style={defaultStyles.container}>
+
+                    <BackBtn />
+
+                    <View style={{ paddingHorizontal: "12%" }}>
+
+                        <View style={{ marginBottom: 50 }}>
+                            <Text style={styles.text1}>Create an account</Text>
+                            <Text style={styles.text2}>Enter your email to sign up for the Road map app</Text>
+                        </View>
+
 
                         <View style={{ gap: 15 }}>
 
-                            <TextInput
-                                placeholder='Full Name'
-                                value={name}
-                                onChangeText={setName}
-                                style={[defaultStyles.inputField]}
-                            />
-                            <TextInput
-                                autoCapitalize='none'
-                                placeholder='Email'
-                                keyboardType='email-address'
-                                value={email}
-                                onChangeText={setEmail}
-                                style={[defaultStyles.inputField]}
-                            />
-                            <TextInput
-                                placeholder='Phone Number'
-                                keyboardType='phone-pad'
-                                value={number}
-                                onChangeText={setNumber}
-                                style={[defaultStyles.inputField]}
-                            />
-                            <TextInput
-                                placeholder="password"
-                                value={password}
-                                onChangeText={setPassword}
-                                secureTextEntry={secureTextEntry}
-                                style={[defaultStyles.inputField]}
-                            />
-                            <TextInput
-                                placeholder="Recomfirm Password"
-                                value={recomfirmPassword}
-                                onChangeText={setRecomfirmPassword}
-                                secureTextEntry={secureTextEntry}
-                                style={[defaultStyles.inputField]}
-                            />
+                            <View style={{ gap: 15 }}>
 
-                            {errorMsg && <Text style={defaultStyles.errorText}>{errorMsg}</Text>}
-
-                        </View>
-
-                        <View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 30 }}>
-                                <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.focusBackground, flex: 1 }]} onPress={handleOTP}>
-                                    {isLoading ?
-                                        <ActivityIndicator size="small" />
-                                        :
-                                        <Text style={{ color: 'white' }}>Send OTP</Text>
-                                    }
-                                </TouchableOpacity>
-                                <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.CommonBackground, flex: 1 }]} onPress={() => router.push('/(auth)/login')}>
-                                    <Text style={{ color: 'white' }}>Cancel</Text>
-                                </TouchableOpacity>
-                            </View>
-
-                            <View style={defaultStyles.seperatorView}>
-                                <View
-                                    style={{
-                                        flex: 1,
-                                        borderBottomColor: 'gray',
-                                        borderBottomWidth: StyleSheet.hairlineWidth,
-                                    }}
+                                <TextInput
+                                    placeholder='Full Name'
+                                    value={name}
+                                    onChangeText={setName}
+                                    style={[defaultStyles.inputField]}
+                                />
+                                <TextInput
+                                    autoCapitalize='none'
+                                    placeholder='Email'
+                                    keyboardType='email-address'
+                                    value={email}
+                                    onChangeText={setEmail}
+                                    style={[defaultStyles.inputField]}
+                                />
+                                <TextInput
+                                    placeholder='Phone Number'
+                                    keyboardType='phone-pad'
+                                    value={number}
+                                    onChangeText={setNumber}
+                                    style={[defaultStyles.inputField]}
+                                />
+                                <TextInput
+                                    placeholder="password"
+                                    value={password}
+                                    onChangeText={setPassword}
+                                    secureTextEntry={secureTextEntry}
+                                    style={[defaultStyles.inputField]}
+                                />
+                                <TextInput
+                                    placeholder="Recomfirm Password"
+                                    value={recomfirmPassword}
+                                    onChangeText={setRecomfirmPassword}
+                                    secureTextEntry={secureTextEntry}
+                                    style={[defaultStyles.inputField]}
                                 />
 
-                                <Text style={defaultStyles.seperator}>or</Text>
+                                {errorMsg && <Text style={defaultStyles.errorText}>{errorMsg}</Text>}
 
-                                <View
-                                    style={{
-                                        flex: 1,
-                                        borderBottomColor: 'gray',
-                                        borderBottomWidth: StyleSheet.hairlineWidth,
-                                    }}
-                                />
                             </View>
 
                             <View>
-                                <TouchableOpacity style={[defaultStyles.btn, { flexDirection: 'row', gap: 5 }]}>
-                                    <Image source={require('@/assets/icons/google_logo.png')} style={{ width: 24, height: 24 }} />
-                                    <Text style={{ fontWeight: 'bold' }}>Google</Text>
-                                </TouchableOpacity>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 30 }}>
+                                    <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.focusBackground, flex: 1 }]} onPress={handleOTP}>
+                                        {isLoading ?
+                                            <ActivityIndicator size="small" />
+                                            :
+                                            <Text style={{ color: 'white' }}>Send OTP</Text>
+                                        }
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.CommonBackground, flex: 1 }]} onPress={() => router.push('/(auth)/login')}>
+                                        <Text style={{ color: 'white' }}>Cancel</Text>
+                                    </TouchableOpacity>
+                                </View>
+
+                                <View style={defaultStyles.seperatorView}>
+                                    <View
+                                        style={{
+                                            flex: 1,
+                                            borderBottomColor: 'gray',
+                                            borderBottomWidth: StyleSheet.hairlineWidth,
+                                        }}
+                                    />
+
+                                    <Text style={defaultStyles.seperator}>or</Text>
+
+                                    <View
+                                        style={{
+                                            flex: 1,
+                                            borderBottomColor: 'gray',
+                                            borderBottomWidth: StyleSheet.hairlineWidth,
+                                        }}
+                                    />
+                                </View>
+
+                                <View>
+                                    <TouchableOpacity style={[defaultStyles.btn, { flexDirection: 'row', gap: 5 }]}>
+                                        <Image source={require('@/assets/icons/google_logo.png')} style={{ width: 24, height: 24 }} />
+                                        <Text style={{ fontWeight: 'bold' }}>Google</Text>
+                                    </TouchableOpacity>
+                                </View>
+
                             </View>
 
                         </View>
 
-                    </View>
 
+                    </View>
 
                 </View>
 
-            </View>
+
+            </ScrollView>
+
         </SafeAreaView>
     );
 };
