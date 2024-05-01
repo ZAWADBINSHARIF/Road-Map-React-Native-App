@@ -5,6 +5,7 @@ import { Dialog, Text, Menu, Button, Portal } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AntDesign, Entypo, Fontisto, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import { Picker } from '@react-native-picker/picker';
 
 
 // internal import
@@ -19,7 +20,9 @@ const GenerateAlgorithmSection = () => {
 
 
     const [menuVisible, setMenuVisible] = useState(false);
-    const [dialogVisible, setDialogVisible] = useState(false);
+    const [nameDialogVisible, setNameDialogVisible] = useState(false);
+    const [frequencyDialogVisible, setFrequencyDialogVisible] = useState(false);
+    const [severityDialogVisible, setSeverityDialogVisible] = useState(false);
     const [dateTimeShow, setDateTimeShow] = useState(false);
     const [openDateTimeModal, setOpenDateTimeModal] = useState(false);
     const [openSettingModal, setOpenSettingModal] = useState(false);
@@ -35,16 +38,21 @@ const GenerateAlgorithmSection = () => {
     const [finishTime, setFinishTime] = useState(new Date());
     const [date, setDate] = useState(new Date());
     const [state_of_picker, set_state_of_picker] = useState<'Start Time' | 'Finish Time' | 'Date'>('Date');
+    const [frequency, setFrequency] = useState<'Hour' | 'Day' | 'Week' | 'Month' | 'Year'>('Hour');
 
     const openMenu = () => setMenuVisible(true);
     const closeMenu = () => setMenuVisible(false);
 
     const showDialog = () => {
-        setDialogVisible(true);
+        setNameDialogVisible(true);
         setMenuVisible(false);
     };
 
-    const hideDialog = () => setDialogVisible(false);
+    const hideDialog = () => {
+        setNameDialogVisible(false);
+        setFrequencyDialogVisible(false);
+        setSeverityDialogVisible(false);
+    };
 
     const handleOnChangeDateTime = (event: any, selectedDate: any) => {
         const currentDate = selectedDate || date;
@@ -156,7 +164,7 @@ const GenerateAlgorithmSection = () => {
                                 }}
                             />
                             <RadioButton
-                                title={'String Header'}
+                                title={'Diversion'}
                             />
                             <RadioButton
                                 title={'Link'}
@@ -199,12 +207,12 @@ const GenerateAlgorithmSection = () => {
                             <Text style={{ color: Colors.RoundBtnText }}>{finishTime.getHours()}h:{finishTime.getMinutes()}m</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => setFrequencyDialogVisible(true)}>
                         <View style={styles.roundBtn}>
                             <Text style={{ color: Colors.RoundBtnText }}>Frequency</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => setSeverityDialogVisible(true)}>
                         <View style={[styles.roundBtn, { backgroundColor: Colors.focusBackground }]}>
                             <Text style={{ color: "white" }}>Severity</Text>
                         </View>
@@ -269,8 +277,8 @@ const GenerateAlgorithmSection = () => {
 
 
                 <Portal>
-                    <Dialog visible={dialogVisible} onDismiss={hideDialog}>
-                        <Dialog.Title>Alert</Dialog.Title>
+                    <Dialog visible={nameDialogVisible} onDismiss={hideDialog}>
+                        <Dialog.Title>Name</Dialog.Title>
                         <Dialog.Content>
                             <TextInput
                                 style={defaultStyles.defaultInputField}
@@ -283,6 +291,62 @@ const GenerateAlgorithmSection = () => {
                         </Dialog.Actions>
                     </Dialog>
                 </Portal>
+
+                <Portal>
+                    <Dialog visible={frequencyDialogVisible} onDismiss={hideDialog}>
+                        <Dialog.Title>Frequency</Dialog.Title>
+                        <Dialog.Content>
+                            <View>
+
+                                <TextInput
+                                    style={defaultStyles.defaultInputField}
+                                    placeholder='Frequency'
+                                    keyboardType='numeric'
+                                />
+                                <Picker
+                                    selectedValue={frequency}
+                                    onValueChange={(itemValue, itemIndex) =>
+                                        setFrequency(itemValue)
+                                    }
+                                >
+                                    <Picker.Item label="Hour" value="Hour" />
+                                    <Picker.Item label="Day" value="Day" />
+                                    <Picker.Item label="Week" value="Week" />
+                                    <Picker.Item label="Month" value="Month" />
+                                    <Picker.Item label="Year" value="Year" />
+                                </Picker>
+
+                            </View>
+                        </Dialog.Content>
+                        <Dialog.Actions>
+                            <Button onPress={hideDialog}>
+                                <Text style={{ color: Colors.SecondBackground }}>Done</Text>
+                            </Button>
+                        </Dialog.Actions>
+                    </Dialog>
+                </Portal>
+
+                <Portal>
+                    <Dialog visible={severityDialogVisible} onDismiss={hideDialog}>
+                        <Dialog.Title>Severity</Dialog.Title>
+                        <Dialog.Content>
+                            <View>
+
+                                <TextInput
+                                    style={defaultStyles.defaultInputField}
+                                    placeholder='Severity'
+                                />
+
+                            </View>
+                        </Dialog.Content>
+                        <Dialog.Actions>
+                            <Button onPress={hideDialog}>
+                                <Text style={{ color: Colors.SecondBackground }}>Done</Text>
+                            </Button>
+                        </Dialog.Actions>
+                    </Dialog>
+                </Portal>
+
 
                 {/* // Setting Modal  */}
                 <SettingModal
@@ -301,7 +365,7 @@ const GenerateAlgorithmSection = () => {
 
             </View>
 
-        </View>
+        </View >
     );
 };
 

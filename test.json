@@ -1,0 +1,39 @@
+problemList: {
+    1.
+    to 
+    10
+}
+
+
+1. {
+    info: "Important info",z
+    inof_img: "image_url"
+   ** question: "what is your name?", **
+    note: "not me",
+    impression: {
+        1. "Zawad",
+        2. "Sharif"
+    },
+    result: {
+        problem lsit
+    },
+    video: { "video file uri"; },
+    section: "fisrt MCQ",
+    title: "Math problem"
+    heading: "",
+    sub Heading: "",
+    case: ""
+    name: "salkdf",
+    dropdowns_user: "",
+    date_and_time:{
+        date:"04/06/24",
+        start: 3:30,
+        end: 18:25,
+    },
+    frequency:[
+        number: 2,
+        hour/day/week/month/year
+    ],
+    severity:"1 to 10/10" example: 2-4/20,
+    Diversion:"",
+}
