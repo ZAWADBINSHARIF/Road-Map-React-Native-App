@@ -307,8 +307,7 @@ const GenerateAlgorithmSection = () => {
                                     selectedValue={frequency}
                                     onValueChange={(itemValue, itemIndex) =>
                                         setFrequency(itemValue)
-                                    }
-                                >
+                                    }>
                                     <Picker.Item label="Hour" value="Hour" />
                                     <Picker.Item label="Day" value="Day" />
                                     <Picker.Item label="Week" value="Week" />

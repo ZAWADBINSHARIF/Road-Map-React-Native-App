@@ -87,14 +87,14 @@ function RootLayoutNav() {
     }
 
     if (!isError) {
-      router.push("/(tabs)");
+      router.push("/(drawer)/(tabs)");
     }
 
   }, [isError, isLoading]);
 
 
   useEffect(() => {
-    router.push("/cases");
+    router.push("/(drawer)/all_sections");
   });
 
 

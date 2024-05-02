@@ -34,7 +34,6 @@ const adminCases = () => {
                         style={{
                             flex: 1,
                         }}
-                        keyboardVerticalOffset={0}
                     >
 
                         <View style={styles.createdAlgorithmListSection}>
@@ -97,7 +96,9 @@ const adminCases = () => {
                             />
                         </View>
 
+
                         <GenerateAlgorithmSection />
+
                     </KeyboardAvoidingView>
 
                     <View style={{ flexDirection: "row", justifyContent: 'space-between', paddingBottom: 10, paddingTop: 10 }}>
@@ -116,7 +117,7 @@ const adminCases = () => {
             }
 
 
-        </View>
+        </View >
     );
 };
 
@@ -125,7 +126,6 @@ export default adminCases;
 
 const styles = StyleSheet.create({
     mainContainer: {
-        // top: "1%",
         'height': '100%',
     },
     createdAlgorithmListSection: {
