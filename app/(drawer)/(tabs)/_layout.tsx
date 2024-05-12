@@ -10,7 +10,7 @@ const _layout = () => {
             screenOptions={{
                 tabBarStyle: {
                     paddingBottom: 10,
-
+                    minHeight: "8%"
                 },
                 headerShown: false,
             }}

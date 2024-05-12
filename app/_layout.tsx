@@ -93,9 +93,9 @@ function RootLayoutNav() {
   }, [isError, isLoading]);
 
 
-  useEffect(() => {
-    router.push("/(drawer)/all_sections");
-  });
+  // useEffect(() => {
+  //   router.push("/(drawer)/all_sections");
+  // });
 
 
   return (

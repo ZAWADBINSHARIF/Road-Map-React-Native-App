@@ -7,7 +7,8 @@ import { useSelector } from 'react-redux';
 import { FlashList } from '@shopify/flash-list';
 import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
-import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
 
 
 interface Branches {
@@ -59,7 +60,7 @@ const All_Sections = () => {
 
         setSectionName("");
         setOpenAddNewSectionModal(false);
-        await fetchBranch(current_location_id);
+        fetchBranch(current_location_id);
     };
 
     const fetchBranch = async (location_id: String = '/') => {
@@ -89,13 +90,13 @@ const All_Sections = () => {
         setIsLoading(false);
     };
 
-    async function backPreviousBranch() {
+    function backPreviousBranch() {
 
         const location_id_array = [...backLocationId.values()];
         const current_location_id = location_id_array[backLocationId.size - 1];
         const previous_lacation_id = location_id_array[backLocationId.size - 2];
 
-        await fetchBranch(previous_lacation_id);
+        fetchBranch(previous_lacation_id);
 
         setBackLocationId(prev => {
             if (current_location_id !== '/') {
@@ -107,6 +108,10 @@ const All_Sections = () => {
 
     }
 
+    function backToRoot() {
+        fetchBranch();
+        setBackLocationId(new Set());
+    }
 
     useEffect(() => {
         if (backLocationId.size <= 1)
@@ -116,13 +121,16 @@ const All_Sections = () => {
     return (
         <View style={styles.mainContainer}>
 
-            <View>
-                {backLocationId.size > 1 &&
+            {backLocationId.size > 1 && !isLoading &&
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 8 }}>
                     <TouchableOpacity onPress={() => backPreviousBranch()}>
                         <Ionicons name="arrow-back-outline" size={24} color="black" />
                     </TouchableOpacity>
-                }
-            </View>
+                    <TouchableOpacity onPress={() => backToRoot()}>
+                        <AntDesign name="home" size={24} color="black" />
+                    </TouchableOpacity>
+                </View>
+            }
 
 
             {branches.length > 0 && !isLoading && !fetchError &&
@@ -237,7 +245,7 @@ const All_Sections = () => {
 
             </View>
 
-
+            <StatusBar style='dark' />
         </View>
     );
 };
