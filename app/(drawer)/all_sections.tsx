@@ -34,10 +34,14 @@ const All_Sections = () => {
 
     const handleNewSectionModal = async () => {
 
+
         const location_id_array = [...backLocationId.values()];
         const current_location_id = location_id_array[backLocationId.size - 1];
 
-        console.log(current_location_id);
+        if (!sectionName || sectionName.trim() === '' || !current_location_id) {
+            ToastAndroid.show("Write a proper section", ToastAndroid.SHORT);
+            return;
+        }
 
         try {
             await axios("branch/create_new_branch", {

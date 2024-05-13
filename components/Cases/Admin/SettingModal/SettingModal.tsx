@@ -57,27 +57,6 @@ const SettingModal = ({
 
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Entypo name="dot-single" size={24} color="black" />
-                        <Text>Tag Admin</Text>
-                        <View style={{
-                            backgroundColor: 'white',
-                            marginLeft: 10,
-                            padding: 5,
-                            borderRadius: 8,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            width: "45%",
-                            paddingHorizontal: 10,
-                        }}>
-                            <Text>Type</Text>
-                            <TouchableOpacity style={{ borderRadius: 10, overflow: 'hidden' }}>
-                                <AntDesign name="plussquare" size={24} color={Colors.focusBackground} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Entypo name="dot-single" size={24} color="black" />
                         <Text>Dropdowns Users</Text>
                         <View style={{
                             backgroundColor: 'white',
@@ -178,7 +157,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         backgroundColor: Colors.CommonBackground,
         marginHorizontal: '5%',
-        // height: "75%",
         padding: 16,
         borderRadius: 8
     }

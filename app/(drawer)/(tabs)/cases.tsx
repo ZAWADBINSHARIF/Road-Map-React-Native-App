@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 // internal import
 import AdminCases from '@/components/Cases/AdminCases';
 import UserCases from '@/components/Cases/UserCases';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 

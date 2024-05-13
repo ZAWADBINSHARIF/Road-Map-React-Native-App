@@ -13,35 +13,44 @@ import { defaultStyles } from '@/constants/Styles';
 import Colors from '@/constants/Colors';
 import RadioButton from '@/components/RadioButton/RadioButton';
 import SettingModal from './SettingModal/SettingModal';
+import SelectBranchFromMenu from './SelectBranchFromMenu';
 
 
 
 const GenerateAlgorithmSection = () => {
 
 
-    const [menuVisible, setMenuVisible] = useState(false);
-    const [nameDialogVisible, setNameDialogVisible] = useState(false);
-    const [frequencyDialogVisible, setFrequencyDialogVisible] = useState(false);
-    const [severityDialogVisible, setSeverityDialogVisible] = useState(false);
-    const [dateTimeShow, setDateTimeShow] = useState(false);
-    const [openDateTimeModal, setOpenDateTimeModal] = useState(false);
-    const [openSettingModal, setOpenSettingModal] = useState(false);
-    const [showInfoInput, setShowInfoInput] = useState(false);
-    const [showNoteInput, setShowNoteInput] = useState(false);
-    const [showImpression, setShowImpression] = useState(false);
-    const [showResultBtn, setShowResultBtn] = useState(false);
+    const [menuVisible, setMenuVisible] = useState<boolean>(false);
+    const [nameDialogVisible, setNameDialogVisible] = useState<boolean>(false);
+    const [frequencyDialogVisible, setFrequencyDialogVisible] = useState<boolean>(false);
+    const [severityDialogVisible, setSeverityDialogVisible] = useState<boolean>(false);
+    const [dateTimeShow, setDateTimeShow] = useState<boolean>(false);
+    const [openDateTimeModal, setOpenDateTimeModal] = useState<boolean>(false);
+    const [openSettingModal, setOpenSettingModal] = useState<boolean>(false);
+    const [showInfoInput, setShowInfoInput] = useState<boolean>(false);
+    const [showNoteInput, setShowNoteInput] = useState<boolean>(false);
+    const [showImpression, setShowImpression] = useState<boolean>(false);
+    const [showResultBtn, setShowResultBtn] = useState<boolean>(false);
+    const [BranchModalVisible, setBranchModalVisible] = useState<boolean>(false);
 
     const [dateTimeModalMode, setDateTimeModalMode] = useState<'date' | 'time'>('date');
     const [videoFile, setVideoFile] = useState("");
 
-    const [startTime, setStartTime] = useState(new Date());
-    const [finishTime, setFinishTime] = useState(new Date());
-    const [date, setDate] = useState(new Date());
+    const [startTime, setStartTime] = useState<Date>(new Date());
+    const [finishTime, setFinishTime] = useState<Date>(new Date());
+    const [date, setDate] = useState<Date>(new Date());
     const [state_of_picker, set_state_of_picker] = useState<'Start Time' | 'Finish Time' | 'Date'>('Date');
     const [frequency, setFrequency] = useState<'Hour' | 'Day' | 'Week' | 'Month' | 'Year'>('Hour');
+    const [caseLocation, setCaseLocation] = useState<String>('');
+
 
     const openMenu = () => setMenuVisible(true);
-    const closeMenu = () => setMenuVisible(false);
+    const openBranchModal = () => setBranchModalVisible(true);
+
+    const closeMenu = () => {
+        setMenuVisible(false);
+        setBranchModalVisible(false);
+    };
 
     const showDialog = () => {
         setNameDialogVisible(true);
@@ -121,7 +130,7 @@ const GenerateAlgorithmSection = () => {
 
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 15 }}>
                                     <Text style={{ paddingLeft: 5 }}>4.</Text>
-                                    <AntDesign name="upsquare" size={20} color={Colors.focusBackground} />
+                                    <AntDesign name="upsquare" size={20} color={Colors.focusBackground} onPress={openBranchModal} />
                                 </View>
                                 <View style={{ flexDirection: showInfoInput ? 'row' : 'row-reverse', justifyContent: 'space-between', gap: 10 }}>
                                     {showInfoInput &&
@@ -263,6 +272,8 @@ const GenerateAlgorithmSection = () => {
             {/* // ** All type of Modals and Dialogs */}
             <View>
 
+                <SelectBranchFromMenu visible={BranchModalVisible} closeModal={setBranchModalVisible} setCaseLocation={setCaseLocation} />
+
                 {
                     openDateTimeModal &&
                     <DateTimePicker
@@ -386,4 +397,4 @@ const styles = StyleSheet.create({
         padding: 8,
         borderRadius: 5
     }
-});
+});;
