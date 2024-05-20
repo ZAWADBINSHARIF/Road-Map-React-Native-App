@@ -304,7 +304,7 @@ const GenerateAlgorithmSection = () => {
                 <Portal>
                     <Dialog visible={infoPreviewDialogVisible} onDismiss={hideDialog}>
                         <Dialog.Content>
-                            <Text variant="bodyMedium">This is simple dialog</Text>
+                            <Text variant="bodyMedium">{information}</Text>
                         </Dialog.Content>
                     </Dialog>
                 </Portal>
