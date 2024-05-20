@@ -1,5 +1,5 @@
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, Portal } from 'react-native-paper';
 import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons';
 
@@ -20,6 +20,8 @@ interface Props {
     setShowImpression: (value: React.SetStateAction<boolean>) => void,
     showResultBtn: boolean,
     setShowResultBtn: (value: React.SetStateAction<boolean>) => void;
+    setAddItemListMenuVisible: (value: React.SetStateAction<boolean>) => void;
+    setAddItemListMenuName: (value: React.SetStateAction<'Problem List' | 'Dropdowns Users'>) => void;
 }
 
 
@@ -33,7 +35,17 @@ const SettingModal = ({
     showImpression,
     setShowImpression,
     showResultBtn,
-    setShowResultBtn }: Props) => {
+    setShowResultBtn,
+    setAddItemListMenuVisible,
+    setAddItemListMenuName }: Props) => {
+
+
+    const openDropdownUserItemList = () => {
+        setAddItemListMenuVisible(true);
+        setVisible(false);
+        setAddItemListMenuName('Dropdowns Users');
+    };
+
     return (
         <Portal>
             <Modal visible={visible} dismissableBackButton={true} onDismiss={() => setVisible(false)} contentContainerStyle={styles.ModalContainer}>
@@ -70,7 +82,7 @@ const SettingModal = ({
                             paddingHorizontal: 10,
                         }}>
                             <Text>Type</Text>
-                            <TouchableOpacity style={{ borderRadius: 10, overflow: 'hidden' }}>
+                            <TouchableOpacity style={{ borderRadius: 10, overflow: 'hidden' }} onPress={openDropdownUserItemList}>
                                 <AntDesign name="plussquare" size={24} color={Colors.focusBackground} />
                             </TouchableOpacity>
                         </View>

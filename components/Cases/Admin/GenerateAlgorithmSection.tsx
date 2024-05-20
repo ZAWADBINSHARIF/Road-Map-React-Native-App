@@ -14,6 +14,7 @@ import Colors from '@/constants/Colors';
 import RadioButton from '@/components/RadioButton/RadioButton';
 import SettingModal from './SettingModal/SettingModal';
 import SelectBranchFromMenu from './SelectBranchFromMenu';
+import AddItemListMenu from './AddItemListMenu';
 
 
 
@@ -26,12 +27,14 @@ const GenerateAlgorithmSection = () => {
     const [severityDialogVisible, setSeverityDialogVisible] = useState<boolean>(false);
     const [dateTimeShow, setDateTimeShow] = useState<boolean>(false);
     const [openDateTimeModal, setOpenDateTimeModal] = useState<boolean>(false);
-    const [openSettingModal, setOpenSettingModal] = useState<boolean>(false);
+    const [openSettingModal, setOpenSettingModal] = useState<boolean>(true);
     const [showInfoInput, setShowInfoInput] = useState<boolean>(false);
     const [showNoteInput, setShowNoteInput] = useState<boolean>(false);
     const [showImpression, setShowImpression] = useState<boolean>(false);
     const [showResultBtn, setShowResultBtn] = useState<boolean>(false);
     const [BranchModalVisible, setBranchModalVisible] = useState<boolean>(false);
+    const [AddItemListMenuVisible, setAddItemListMenuVisible] = useState<boolean>(false);
+    const [AddItemListMenuName, setAddItemListMenuName] = useState<'Problem List' | 'Dropdowns Users'>('Problem List');
 
     const [dateTimeModalMode, setDateTimeModalMode] = useState<'date' | 'time'>('date');
     const [videoFile, setVideoFile] = useState("");
@@ -50,6 +53,7 @@ const GenerateAlgorithmSection = () => {
     const closeMenu = () => {
         setMenuVisible(false);
         setBranchModalVisible(false);
+        setAddItemListMenuVisible(false);
     };
 
     const showDialog = () => {
@@ -164,6 +168,11 @@ const GenerateAlgorithmSection = () => {
                         >
                             <RadioButton
                                 title={'Problem List'}
+                                onChangeValue={() => {
+                                    setAddItemListMenuVisible(true);
+                                    setMenuVisible(false);
+                                    setAddItemListMenuName('Problem List');
+                                }}
                             />
                             <RadioButton
                                 title={'Setting'}
@@ -272,6 +281,8 @@ const GenerateAlgorithmSection = () => {
             {/* // ** All type of Modals and Dialogs */}
             <View>
 
+                <AddItemListMenu visible={AddItemListMenuVisible} closeModal={closeMenu} AddItemListMenuName={AddItemListMenuName} />
+
                 <SelectBranchFromMenu visible={BranchModalVisible} closeModal={setBranchModalVisible} setCaseLocation={setCaseLocation} />
 
                 {
@@ -370,6 +381,8 @@ const GenerateAlgorithmSection = () => {
                     setShowImpression={setShowImpression}
                     showResultBtn={showResultBtn}
                     setShowResultBtn={setShowResultBtn}
+                    setAddItemListMenuVisible={setAddItemListMenuVisible}
+                    setAddItemListMenuName={setAddItemListMenuName}
                 />
 
 
