@@ -58,7 +58,7 @@ const login = () => {
     };
 
     return (
-        <SafeAreaView style={{ backgroundColor: '#ffffff' }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#ffffff' }}>
 
             <ScrollView>
 
