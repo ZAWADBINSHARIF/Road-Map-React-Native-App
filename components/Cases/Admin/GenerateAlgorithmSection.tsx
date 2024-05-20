@@ -25,9 +25,10 @@ const GenerateAlgorithmSection = () => {
     const [nameDialogVisible, setNameDialogVisible] = useState<boolean>(false);
     const [frequencyDialogVisible, setFrequencyDialogVisible] = useState<boolean>(false);
     const [severityDialogVisible, setSeverityDialogVisible] = useState<boolean>(false);
+    const [infoPreviewDialogVisible, setInfoPreviewDialogVisible] = useState<boolean>(false);
     const [dateTimeShow, setDateTimeShow] = useState<boolean>(false);
     const [openDateTimeModal, setOpenDateTimeModal] = useState<boolean>(false);
-    const [openSettingModal, setOpenSettingModal] = useState<boolean>(true);
+    const [openSettingModal, setOpenSettingModal] = useState<boolean>(false);
     const [showInfoInput, setShowInfoInput] = useState<boolean>(false);
     const [showNoteInput, setShowNoteInput] = useState<boolean>(false);
     const [showImpression, setShowImpression] = useState<boolean>(false);
@@ -45,6 +46,9 @@ const GenerateAlgorithmSection = () => {
     const [state_of_picker, set_state_of_picker] = useState<'Start Time' | 'Finish Time' | 'Date'>('Date');
     const [frequency, setFrequency] = useState<'Hour' | 'Day' | 'Week' | 'Month' | 'Year'>('Hour');
     const [caseLocation, setCaseLocation] = useState<String>('');
+
+    const [information, setInformation] = useState<string>("");
+
 
 
     const openMenu = () => setMenuVisible(true);
@@ -65,6 +69,7 @@ const GenerateAlgorithmSection = () => {
         setNameDialogVisible(false);
         setFrequencyDialogVisible(false);
         setSeverityDialogVisible(false);
+        setInfoPreviewDialogVisible(false);
     };
 
     const handleOnChangeDateTime = (event: any, selectedDate: any) => {
@@ -86,6 +91,12 @@ const GenerateAlgorithmSection = () => {
     };
 
 
+    const onSaveInfo = () => {
+        if (!information)
+            return;
+
+        setShowInfoInput(false);
+    };
 
     const pickVideo = async () => {
         // No permissions request is necessary for launching the image library
@@ -116,14 +127,19 @@ const GenerateAlgorithmSection = () => {
                         {showInfoInput &&
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
 
-                                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 1 }}>
+                                <TouchableOpacity
+                                    style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 1 }}
+                                    onPress={onSaveInfo}
+                                >
                                     <Fontisto name="save" size={15} color={Colors.focusBackground} />
-                                </View>
+                                </TouchableOpacity>
 
                                 <TextInput
                                     multiline={true}
                                     style={[defaultStyles.defaultInputField, { maxHeight: 100, flex: 4 }]}
                                     placeholder='Info'
+                                    value={information}
+                                    onChangeText={setInformation}
                                 />
                             </View>
                         }
@@ -136,9 +152,9 @@ const GenerateAlgorithmSection = () => {
                                     <Text style={{ paddingLeft: 5 }}>4.</Text>
                                     <AntDesign name="upsquare" size={20} color={Colors.focusBackground} onPress={openBranchModal} />
                                 </View>
-                                <View style={{ flexDirection: showInfoInput ? 'row' : 'row-reverse', justifyContent: 'space-between', gap: 10 }}>
-                                    {showInfoInput &&
-                                        <Ionicons name="information-circle-outline" size={20} color={Colors.focusBackground} />
+                                <View style={{ flexDirection: (!showInfoInput && information) ? 'row' : 'row-reverse', justifyContent: 'space-between', gap: 10 }}>
+                                    {(!showInfoInput && information) &&
+                                        <Ionicons name="information-circle-outline" size={20} color={Colors.focusBackground} onPress={() => setInfoPreviewDialogVisible(true)} />
                                     }
 
                                     <MaterialCommunityIcons name="video-vintage" size={20} color={Colors.focusBackground} onPress={pickVideo} />
@@ -284,6 +300,14 @@ const GenerateAlgorithmSection = () => {
                 <AddItemListMenu visible={AddItemListMenuVisible} closeModal={closeMenu} AddItemListMenuName={AddItemListMenuName} />
 
                 <SelectBranchFromMenu visible={BranchModalVisible} closeModal={setBranchModalVisible} setCaseLocation={setCaseLocation} />
+
+                <Portal>
+                    <Dialog visible={infoPreviewDialogVisible} onDismiss={hideDialog}>
+                        <Dialog.Content>
+                            <Text variant="bodyMedium">This is simple dialog</Text>
+                        </Dialog.Content>
+                    </Dialog>
+                </Portal>
 
                 {
                     openDateTimeModal &&
