@@ -3,9 +3,10 @@ import { View, TextInput, StyleSheet, TouchableOpacity, Platform } from 'react-n
 import React, { useState } from 'react';
 import { Dialog, Text, Menu, Button, Portal } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { AntDesign, Entypo, Fontisto, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, Entypo, Fontisto, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 
 // internal import
@@ -15,6 +16,7 @@ import RadioButton from '@/components/RadioButton/RadioButton';
 import SettingModal from './SettingModal/SettingModal';
 import SelectBranchFromMenu from './SelectBranchFromMenu';
 import AddItemListMenu from './AddItemListMenu';
+import ImpressionSelectMenu from './ImpressionSelectMenu';
 
 
 
@@ -25,6 +27,7 @@ const GenerateAlgorithmSection = () => {
     const [nameDialogVisible, setNameDialogVisible] = useState<boolean>(false);
     const [frequencyDialogVisible, setFrequencyDialogVisible] = useState<boolean>(false);
     const [severityDialogVisible, setSeverityDialogVisible] = useState<boolean>(false);
+    const [ImpressionSelectMenuVisible, setImpressionSelectMenuVisible] = useState<boolean>(false);
     const [infoPreviewDialogVisible, setInfoPreviewDialogVisible] = useState<boolean>(false);
     const [dateTimeShow, setDateTimeShow] = useState<boolean>(false);
     const [openDateTimeModal, setOpenDateTimeModal] = useState<boolean>(false);
@@ -58,6 +61,7 @@ const GenerateAlgorithmSection = () => {
         setMenuVisible(false);
         setBranchModalVisible(false);
         setAddItemListMenuVisible(false);
+        setImpressionSelectMenuVisible(false);
     };
 
     const showDialog = () => {
@@ -280,11 +284,13 @@ const GenerateAlgorithmSection = () => {
                         }
 
                         {showImpression &&
-                            <TextInput
-                                multiline={true}
-                                style={[defaultStyles.defaultInputField, { maxHeight: 100 }]}
-                                placeholder='Impression'
-                            />
+                            <TouchableOpacity
+                                style={[defaultStyles.defaultInputField, { height: hp(4), flexDirection: 'row', alignItems: 'center' }]}
+                                onPress={() => setImpressionSelectMenuVisible(true)}
+                            >
+                                <Text style={{ flex: 1, color: Colors.SecondBackground }}>Impression</Text>
+                                <AntDesign name="arrowright" size={24} color={Colors.SecondBackground} />
+                            </TouchableOpacity>
                         }
                     </View>
 
@@ -300,6 +306,8 @@ const GenerateAlgorithmSection = () => {
                 <AddItemListMenu visible={AddItemListMenuVisible} closeModal={closeMenu} AddItemListMenuName={AddItemListMenuName} />
 
                 <SelectBranchFromMenu visible={BranchModalVisible} closeModal={setBranchModalVisible} setCaseLocation={setCaseLocation} />
+
+                <ImpressionSelectMenu visible={ImpressionSelectMenuVisible} closeModal={closeMenu} />
 
                 <Portal>
                     <Dialog visible={infoPreviewDialogVisible} onDismiss={hideDialog}>
