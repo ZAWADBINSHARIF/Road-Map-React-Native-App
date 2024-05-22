@@ -27,7 +27,7 @@ const _layout = () => {
                 name='cases'
                 options={{
                     tabBarLabel: "Cases",
-                    tabBarIcon: () => <Ionicons name="briefcase-outline" size={24} color="black" />
+                    tabBarIcon: () => <Ionicons name="briefcase-outline" size={24} color="black" />,
                 }}
             />
             <Tabs.Screen

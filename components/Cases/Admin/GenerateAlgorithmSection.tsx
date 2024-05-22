@@ -17,6 +17,7 @@ import SettingModal from './SettingModal/SettingModal';
 import SelectBranchFromMenu from './SelectBranchFromMenu';
 import AddItemListMenu from './AddItemListMenu';
 import ImpressionSelectMenu from './ImpressionSelectMenu';
+import { useSelector } from 'react-redux';
 
 
 
@@ -51,8 +52,10 @@ const GenerateAlgorithmSection = () => {
     const [caseLocation, setCaseLocation] = useState<String>('');
 
     const [information, setInformation] = useState<string>("");
+    const [impression, setImpression] = useState<String[]>([]);
+    const [dropdowns_users, setDropdowns_users] = useState<String[]>([]);
 
-
+    const problemList = useSelector((state: any) => state?.problemList);
 
     const openMenu = () => setMenuVisible(true);
     const openBranchModal = () => setBranchModalVisible(true);
@@ -303,11 +306,24 @@ const GenerateAlgorithmSection = () => {
             {/* // ** All type of Modals and Dialogs */}
             <View>
 
-                <AddItemListMenu visible={AddItemListMenuVisible} closeModal={closeMenu} AddItemListMenuName={AddItemListMenuName} />
+                <AddItemListMenu
+                    visible={AddItemListMenuVisible}
+                    closeModal={closeMenu}
+                    AddItemListMenuName={AddItemListMenuName}
+                    ListData={AddItemListMenuName === 'Problem List' ? problemList :
+                        AddItemListMenuName === 'Dropdowns Users' ? dropdowns_users : []}
+                    setDropdowns_users={setDropdowns_users}
+                />
 
                 <SelectBranchFromMenu visible={BranchModalVisible} closeModal={setBranchModalVisible} setCaseLocation={setCaseLocation} />
 
-                <ImpressionSelectMenu visible={ImpressionSelectMenuVisible} closeModal={closeMenu} />
+                <ImpressionSelectMenu
+                    visible={ImpressionSelectMenuVisible}
+                    closeModal={closeMenu}
+                    ListData={problemList}
+                    impression={impression}
+                    setImpression={setImpression}
+                />
 
                 <Portal>
                     <Dialog visible={infoPreviewDialogVisible} onDismiss={hideDialog}>
