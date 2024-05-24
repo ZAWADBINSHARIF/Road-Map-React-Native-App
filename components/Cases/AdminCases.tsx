@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { defaultStyles } from '@/constants/Styles';
 import GenerateAlgorithmSection from './Admin/GenerateAlgorithmSection';
 import { AntDesign } from '@expo/vector-icons';
@@ -11,6 +12,9 @@ import SavedCase from './Admin/SavedCase';
 const adminCases = () => {
 
     const [topBtnState, setTopBtnState] = useState<'Cases' | 'List'>('Cases');
+    const savedCases = useSelector((state: any) => state?.savedCase);
+
+    console.log(savedCases);
 
     return (
         <View style={styles.mainContainer}>
@@ -39,8 +43,16 @@ const adminCases = () => {
 
                         <View style={styles.createdAlgorithmListSection}>
                             <ScrollView>
+                                {
+                                    savedCases.length <= 0 &&
+                                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                        <Text style={{ color: '#808080dd' }}>No case created</Text>
+                                    </View>
+                                }
 
-                                <SavedCase />
+                                {
+                                    savedCases.map((item: any, index: number) => <SavedCase {...item} index={index} key={index} />)
+                                }
 
                             </ScrollView>
                         </View>

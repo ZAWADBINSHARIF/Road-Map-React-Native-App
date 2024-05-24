@@ -1,9 +1,9 @@
 // external import
 import { View, TextInput, StyleSheet, TouchableOpacity, Platform, ToastAndroid } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dialog, Text, Menu, Button, Portal } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { AntDesign, Entypo, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign, Entypo, Fontisto, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -17,13 +17,34 @@ import SettingModal from './SettingModal/SettingModal';
 import SelectBranchFromMenu from './SelectBranchFromMenu';
 import AddItemListMenu from './AddItemListMenu';
 import ImpressionSelectMenu from './ImpressionSelectMenu';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
+interface SavedCase {
+    id: string,
+    index: number,
+    information?: string,
+    question: string,
+    date?: Date | null,
+    note?: string,
+    impression?: String[],
+    videoFile?: any,
+    name?: string,
+    frequency?: {
+        number: Number;
+        time: "Hour" | "Day" | "Week" | "Month" | "Year";
+    } | undefined,
+    severity?: string,
+    startTime?: Date | null,
+    finishTime?: Date | null,
+    dropdowns_users?: String[];
+    caseLocation: string,
+}
 
 
+const SavedCaseComponent = (props: SavedCase) => {
 
-const GenerateAlgorithmSection = () => {
 
-
+    const [editable, setEditable] = useState<boolean>(false);
     const [menuVisible, setMenuVisible] = useState<boolean>(false);
     const [nameDialogVisible, setNameDialogVisible] = useState<boolean>(false);
     const [frequencyDialogVisible, setFrequencyDialogVisible] = useState<boolean>(false);
@@ -34,46 +55,51 @@ const GenerateAlgorithmSection = () => {
     const [openDateTimeModal, setOpenDateTimeModal] = useState<boolean>(false);
     const [openSettingModal, setOpenSettingModal] = useState<boolean>(false);
     const [showInfoInput, setShowInfoInput] = useState<boolean>(false);
-    const [showNoteInput, setShowNoteInput] = useState<boolean>(true);
-    const [showImpression, setShowImpression] = useState<boolean>(true);
-    const [showResultBtn, setShowResultBtn] = useState<boolean>(true);
+    const [showNoteInput, setShowNoteInput] = useState<boolean>(false);
+    const [showImpression, setShowImpression] = useState<boolean>(false);
+    const [showResultBtn, setShowResultBtn] = useState<boolean>(false);
     const [BranchModalVisible, setBranchModalVisible] = useState<boolean>(false);
     const [AddItemListMenuVisible, setAddItemListMenuVisible] = useState<boolean>(false);
     const [AddItemListMenuName, setAddItemListMenuName] = useState<'Problem List' | 'Dropdowns Users'>('Problem List');
 
     const [dateTimeModalMode, setDateTimeModalMode] = useState<'date' | 'time'>('date');
 
-    const [date, setDate] = useState<Date | null>(new Date());
+    const [date, setDate] = useState<Date>(new Date());
     const [state_of_picker, set_state_of_picker] = useState<'Start Time' | 'Finish Time' | 'Date'>('Date');
     const [frequencyTime, setFrequencyTime] = useState<'Hour' | 'Day' | 'Week' | 'Month' | 'Year'>('Hour');
 
 
     // ** Generate Algorithm Section admin import values
 
-    const [information, setInformation] = useState<string>("Most important case");
-    const [question, setQuestion] = useState<string>("");
-    const [note, setNote] = useState<string>("");
-    const [impression, setImpression] = useState<String[]>([]);
-    const [caseLocation, setCaseLocation] = useState<String>('');
-    const [videoFile, setVideoFile] = useState("");
-    const [name, setName] = useState("");
+    const [information, setInformation] = useState<string | undefined>(props.information);
+    const [question, setQuestion] = useState<string>(props.question);
+    const [note, setNote] = useState<string | undefined>(props.note);
+    const [impression, setImpression] = useState<String[]>(props.impression || []);
+    const [caseLocation, setCaseLocation] = useState<string>(props.caseLocation);
+    const [videoFile, setVideoFile] = useState<any>(props.videoFile);
+    const [name, setName] = useState<string | undefined>(props.name);
     const [frequency, setFrequency] = useState<{
         number: Number,
         time: 'Hour' | 'Day' | 'Week' | 'Month' | 'Year';
-    } | null>({
-        number: 0,
-        time: frequencyTime
-    });
-    const [severity, setSeverity] = useState<string>();
-    const [startTime, setStartTime] = useState<Date | null>(new Date());
-    const [finishTime, setFinishTime] = useState<Date | null>(new Date());
-    const [dropdowns_users, setDropdowns_users] = useState<String[]>([]);
+    } | undefined>(props.frequency);
+    const [severity, setSeverity] = useState<string | undefined>(props.severity);
+    const [startTime, setStartTime] = useState<Date>(props.startTime || new Date());
+    const [finishTime, setFinishTime] = useState<Date>(props.finishTime || new Date());
+    const [dropdowns_users, setDropdowns_users] = useState<String[]>(props.dropdowns_users || []);
 
     //  ** ==========================================================================
 
 
+    const dispatch = useDispatch();
+    const problemList = useSelector((state: any) => state?.problemList);
+
     const openMenu = () => setMenuVisible(true);
-    const openBranchModal = () => setBranchModalVisible(true);
+
+    const openBranchModal = () => {
+        if (!editable)
+            return;
+        setBranchModalVisible(true);
+    };
 
     const closeMenu = () => {
         setMenuVisible(false);
@@ -83,11 +109,21 @@ const GenerateAlgorithmSection = () => {
     };
 
     const showDialog = () => {
+
+
+        if (!editable)
+            return;
+
+
         setNameDialogVisible(true);
         setMenuVisible(false);
     };
 
     const hideDialog = () => {
+
+        if (!editable)
+            return;
+
         setNameDialogVisible(false);
         setFrequencyDialogVisible(false);
         setSeverityDialogVisible(false);
@@ -95,6 +131,10 @@ const GenerateAlgorithmSection = () => {
     };
 
     const handleOnChangeDateTime = (event: any, selectedDate: any) => {
+
+        if (!editable)
+            return;
+
         const currentDate = selectedDate || date;
         setOpenDateTimeModal(Platform.OS === 'ios');
 
@@ -107,82 +147,184 @@ const GenerateAlgorithmSection = () => {
     };
 
     const showDateTimeModal = (mode: 'date' | 'time', state: 'Start Time' | 'Finish Time' | 'Date' = 'Date') => {
+
+        if (!editable)
+            return;
+
         setOpenDateTimeModal(true);
         setDateTimeModalMode(mode);
         set_state_of_picker(state);
     };
 
 
-    const handleSaveCase = () => {
+    const onSaveInfo = () => {
 
-        if (!question && !caseLocation) {
-            ToastAndroid.show("Fill the Question input and set case location", ToastAndroid.LONG);
+        if (!information && !editable)
             return;
-        }
 
-        if (!dateTimeShow) {
-            setStartTime(null);
-            setFinishTime(null);
-            setDate(null);
-            setFrequency(null);
-        }
-
-        console.log({
-            date,
-            information,
-            question,
-            note,
-            impression,
-            caseLocation,
-            videoFile,
-            name,
-            frequency,
-            severity,
-            startTime,
-            finishTime,
-            dropdowns_users
-        });
-
-
-        setStartTime(new Date());
-        setFinishTime(new Date());
-        setDate(new Date());
-        setFrequency({ number: 0, time: 'Hour' });
-        setInformation("");
-        setQuestion("");
-        setNote("");
-        setImpression([]);
-        setCaseLocation('');
-        setVideoFile("");
-        setName("");
-        setSeverity("");
-        setDropdowns_users([]);
-
-
-
+        setShowInfoInput(false);
     };
 
+    const pickVideo = async () => {
+
+        if (!editable)
+            return;
+
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            setVideoFile(result?.assets[0]?.uri);
+        }
+    };
+
+    // const handleSaveCase = () => {
+
+    //     if (!question && !caseLocation) {
+    //         ToastAndroid.show("Fill the Question input and set case location", ToastAndroid.LONG);
+    //         return;
+    //     }
+
+    //     const id = Crypto.randomUUID();
+    //     console.log(id);
+
+    //     if (!dateTimeShow) {
+    //         dispatch(addNewCase({
+    //             id,
+    //             information: showInfoInput ? information : '',
+    //             question,
+    //             note,
+    //             impression,
+    //             caseLocation,
+    //             videoFile,
+    //             name,
+    //             dropdowns_users
+    //         }));
+    //     } else {
+    //         dispatch(addNewCase({
+    //             id,
+    //             date,
+    //             information: showInfoInput ? information : '',
+    //             question,
+    //             note,
+    //             impression,
+    //             caseLocation,
+    //             videoFile,
+    //             name,
+    //             frequency,
+    //             severity,
+    //             startTime,
+    //             finishTime,
+    //             dropdowns_users
+    //         }));
+    //     }
+
+
+    //     console.log({
+    //         id,
+    //         date,
+    //         information,
+    //         question,
+    //         note,
+    //         impression,
+    //         caseLocation,
+    //         videoFile,
+    //         name,
+    //         frequency,
+    //         severity,
+    //         startTime,
+    //         finishTime,
+    //         dropdowns_users
+    //     });
+
+
+    //     setStartTime(new Date());
+    //     setFinishTime(new Date());
+    //     setDate(new Date());
+    //     setFrequency({ number: 0, time: 'Hour' });
+    //     setInformation("");
+    //     setQuestion("");
+    //     setNote("");
+    //     setImpression([]);
+    //     setCaseLocation('');
+    //     setVideoFile("");
+    //     setName("");
+    //     setSeverity("");
+    //     setDropdowns_users([]);
+    //     setStartTime(new Date());
+    //     setFinishTime(new Date());
+    //     setDate(new Date());
+    //     setFrequency({
+    //         number: 0,
+    //         time: frequencyTime
+    //     });
+
+
+    // };
+
+    useEffect(() => {
+
+        if (
+            frequency &&
+            severity &&
+            startTime &&
+            finishTime
+        ) {
+            setDateTimeShow(true);
+        }
+
+    }, []);
+
     return (
-        <View style={styles.generateAlgorithmSection}>
+        <View style={styles.SavedCaseComponent}>
 
             <View style={{ flexDirection: 'row', gap: 10 }}>
 
                 <View style={{ flex: 1, flexDirection: 'row' }}>
                     <View style={{ gap: 10, flex: 1 }}>
 
+                        {showInfoInput && editable &&
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
+
+                                <TouchableOpacity
+                                    style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 1 }}
+                                    onPress={onSaveInfo}
+                                >
+                                    <Fontisto name="save" size={15} color={Colors.focusBackground} />
+                                </TouchableOpacity>
+
+                                <TextInput
+                                    multiline={true}
+                                    style={[defaultStyles.defaultInputField, { maxHeight: 100, flex: 4 }]}
+                                    placeholder='Info'
+                                    value={information}
+                                    onChangeText={setInformation}
+                                    editable={editable}
+                                />
+                            </View>
+                        }
+
                         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
 
                             <View style={{ gap: 10, flex: 1, }}>
 
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 15 }}>
-                                    <Text style={{ paddingLeft: 5 }}>4.</Text>
+                                    <Text style={{ paddingLeft: 5 }}>{props.index + 1}.</Text>
+                                    <AntDesign name="upsquare" size={20} color={Colors.focusBackground} onPress={openBranchModal} />
                                 </View>
-                                <View style={{ flexDirection: information ? 'row' : 'row-reverse', justifyContent: 'space-between', gap: 10 }}>
-                                    {information &&
+                                <View style={{ flexDirection: (!showInfoInput && information) ? 'row' : 'row-reverse', justifyContent: 'space-between', gap: 10 }}>
+                                    {(!showInfoInput && information) &&
                                         <Ionicons name="information-circle-outline" size={20} color={Colors.focusBackground} onPress={() => setInfoPreviewDialogVisible(true)} />
                                     }
 
-                                    <MaterialCommunityIcons name="video-vintage" size={20} color={Colors.focusBackground} />
+                                    <MaterialCommunityIcons name="video-vintage" size={20} color={Colors.focusBackground} onPress={pickVideo} />
                                 </View>
 
                             </View>
@@ -193,7 +335,7 @@ const GenerateAlgorithmSection = () => {
                                 placeholder='Question'
                                 value={question}
                                 onChangeText={setQuestion}
-                                editable={false}
+                                editable={editable}
                             />
 
                         </View>
@@ -211,15 +353,54 @@ const GenerateAlgorithmSection = () => {
                             }}
                         >
                             <RadioButton
-                                title={'Name'}
-                                onChangeValue={showDialog}
-                            />
-                            <RadioButton
                                 title={'Edit'}
+                                value={editable}
+                                onChangeValue={() => setEditable(!editable)}
                             />
                             <RadioButton
                                 title={'Remove'}
                             />
+                            {editable &&
+                                <RadioButton
+                                    title={'Problem List'}
+                                    onChangeValue={() => {
+                                        setAddItemListMenuVisible(true);
+                                        setMenuVisible(false);
+                                        setAddItemListMenuName('Problem List');
+                                    }}
+                                />}
+                            {editable &&
+                                <RadioButton
+                                    title={'Setting'}
+                                    onChangeValue={() => {
+                                        setOpenSettingModal(true);
+                                        setMenuVisible(false);
+                                    }}
+                                />}
+                            {editable &&
+                                <RadioButton
+                                    title={'Diversion'}
+                                />}
+                            {editable &&
+                                <RadioButton
+                                    title={'Link'}
+                                />}
+                            {editable &&
+                                <RadioButton
+                                    title={'Date/Time'}
+                                    value={dateTimeShow}
+                                    onChangeValue={() => setDateTimeShow(!dateTimeShow)}
+                                />}
+                            {editable &&
+                                <RadioButton
+                                    title={'Name'}
+                                    onChangeValue={showDialog}
+                                />}
+                            {editable &&
+                                <RadioButton
+                                    title={'Save'}
+                                // onChangeValue={handleSaveCase}
+                                />}
                         </Menu>
 
                     </View>
@@ -230,27 +411,52 @@ const GenerateAlgorithmSection = () => {
             {dateTimeShow &&
                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingTop: 10 }}>
 
-                    <TouchableOpacity onPress={() => showDateTimeModal('date')}>
+                    <TouchableOpacity onPress={() => {
+                        if (!editable) {
+                            return;
+                        }
+                        showDateTimeModal('date');
+                    }}>
                         <View style={styles.roundBtn}>
                             <Text style={{ color: Colors.RoundBtnText }}>{date?.getDate()}/{date?.getMonth() as number + 1}/{date?.getFullYear()}</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => showDateTimeModal('time', 'Start Time')}>
+                    <TouchableOpacity onPress={() => {
+                        if (!editable) {
+                            return;
+                        }
+                        showDateTimeModal('time', 'Start Time');
+                    }}>
                         <View style={styles.roundBtn}>
                             <Text style={{ color: Colors.RoundBtnText }}>{startTime?.getHours()}h:{startTime?.getMinutes()}m</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => showDateTimeModal('time', 'Finish Time')}>
+                    <TouchableOpacity onPress={() => {
+                        if (!editable) {
+                            return;
+                        }
+                        showDateTimeModal('time', 'Finish Time');
+                    }}>
                         <View style={styles.roundBtn}>
                             <Text style={{ color: Colors.RoundBtnText }}>{finishTime?.getHours()}h:{finishTime?.getMinutes()}m</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setFrequencyDialogVisible(true)}>
+                    <TouchableOpacity onPress={() => {
+                        if (!editable) {
+                            return;
+                        }
+                        setFrequencyDialogVisible(true);
+                    }}>
                         <View style={styles.roundBtn}>
                             <Text style={{ color: Colors.RoundBtnText }}>Frequency</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setSeverityDialogVisible(true)}>
+                    <TouchableOpacity onPress={() => {
+                        if (!editable) {
+                            return;
+                        }
+                        setSeverityDialogVisible(true);
+                    }}>
                         <View style={[styles.roundBtn, { backgroundColor: Colors.focusBackground }]}>
                             <Text style={{ color: "white" }}>Severity</Text>
                         </View>
@@ -275,20 +481,25 @@ const GenerateAlgorithmSection = () => {
 
                     <View style={{ flex: 1, gap: 10 }}>
 
-                        {showNoteInput &&
+                        {(showNoteInput || note) &&
                             <TextInput
                                 multiline={true}
                                 style={[defaultStyles.defaultInputField, { maxHeight: 100 }]}
                                 placeholder='Note'
                                 value={note}
                                 onChangeText={setNote}
+                                editable={editable}
                             />
                         }
 
-                        {showImpression &&
+                        {(showImpression || impression.length > 0) &&
                             <TouchableOpacity
                                 style={[defaultStyles.defaultInputField, { height: hp(5), flexDirection: 'row', alignItems: 'center' }]}
-                                onPress={() => setImpressionSelectMenuVisible(true)}
+                                onPress={() => {
+                                    if (!editable)
+                                        return;
+                                    setImpressionSelectMenuVisible(true);
+                                }}
                             >
                                 <Text style={{ flex: 1, color: Colors.SecondBackground }}>Impression</Text>
                                 <AntDesign name="arrowright" size={24} color={Colors.SecondBackground} />
@@ -305,6 +516,24 @@ const GenerateAlgorithmSection = () => {
             {/* // ** All type of Modals and Dialogs */}
             <View>
 
+                <AddItemListMenu
+                    visible={AddItemListMenuVisible}
+                    closeModal={closeMenu}
+                    AddItemListMenuName={AddItemListMenuName}
+                    ListData={AddItemListMenuName === 'Problem List' ? problemList :
+                        AddItemListMenuName === 'Dropdowns Users' ? dropdowns_users : []}
+                    setDropdowns_users={setDropdowns_users}
+                />
+
+                <SelectBranchFromMenu visible={BranchModalVisible} closeModal={setBranchModalVisible} setCaseLocation={setCaseLocation} />
+
+                <ImpressionSelectMenu
+                    visible={ImpressionSelectMenuVisible}
+                    closeModal={closeMenu}
+                    ListData={problemList}
+                    impression={impression}
+                    setImpression={setImpression}
+                />
 
                 <Portal>
                     <Dialog visible={infoPreviewDialogVisible} onDismiss={hideDialog}>
@@ -404,18 +633,39 @@ const GenerateAlgorithmSection = () => {
                     </Dialog>
                 </Portal>
 
+
+                {/* // Setting Modal  */}
+                <SettingModal
+                    visible={openSettingModal}
+                    setVisible={setOpenSettingModal}
+                    showInfoInput={showInfoInput}
+                    setShowInfoInput={setShowInfoInput}
+                    showNoteInput={showNoteInput}
+                    setShowNoteInput={setShowNoteInput}
+                    showImpression={showImpression}
+                    setShowImpression={setShowImpression}
+                    showResultBtn={showResultBtn}
+                    setShowResultBtn={setShowResultBtn}
+                    setAddItemListMenuVisible={setAddItemListMenuVisible}
+                    setAddItemListMenuName={setAddItemListMenuName}
+                />
+
+
             </View>
 
         </View >
     );
 };
 
-export default GenerateAlgorithmSection;
+export default SavedCaseComponent;
 
 
 const styles = StyleSheet.create({
-    generateAlgorithmSection: {
-        paddingVertical: 0
+    SavedCaseComponent: {
+        paddingVertical: 18,
+        borderColor: Colors.SecondBackground,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+
     },
     roundBtn: {
         padding: 5,

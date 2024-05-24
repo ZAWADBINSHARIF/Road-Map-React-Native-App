@@ -10,11 +10,11 @@ import axios from 'axios';
 interface Props {
     visible: boolean,
     closeModal: (value: React.SetStateAction<boolean>) => void;
-    setCaseLocation: (value: React.SetStateAction<String>) => void;
+    setCaseLocation: (value: React.SetStateAction<string>) => void;
 }
 
 interface Branches {
-    _id: String,
+    _id: string,
     name: String,
     branches: String[] | Branches[],
     cases: String[],
@@ -26,10 +26,10 @@ const SelectBranchFromMenu = ({ visible, closeModal, setCaseLocation }: Props) =
     const [branches, setBranches] = useState<Branches[]>([]);
     const [fetchError, setFetchError] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [backLocationId, setBackLocationId] = useState<Set<String>>(new Set(["/"]));
+    const [backLocationId, setBackLocationId] = useState<Set<string>>(new Set(["/"]));
 
 
-    const fetchBranch = async (location_id: String = '/') => {
+    const fetchBranch = async (location_id: string = '/') => {
 
         setIsLoading(true);
         setFetchError(false);

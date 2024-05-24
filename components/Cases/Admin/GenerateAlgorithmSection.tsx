@@ -7,6 +7,7 @@ import { AntDesign, Entypo, Fontisto, Ionicons, MaterialCommunityIcons } from '@
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import * as Crypto from 'expo-crypto';
 
 
 // internal import
@@ -17,7 +18,8 @@ import SettingModal from './SettingModal/SettingModal';
 import SelectBranchFromMenu from './SelectBranchFromMenu';
 import AddItemListMenu from './AddItemListMenu';
 import ImpressionSelectMenu from './ImpressionSelectMenu';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addNewCase } from '@/store/slices/savedCaseSlice';
 
 
 
@@ -43,7 +45,7 @@ const GenerateAlgorithmSection = () => {
 
     const [dateTimeModalMode, setDateTimeModalMode] = useState<'date' | 'time'>('date');
 
-    const [date, setDate] = useState<Date | null>(new Date());
+    const [date, setDate] = useState<Date>(new Date());
     const [state_of_picker, set_state_of_picker] = useState<'Start Time' | 'Finish Time' | 'Date'>('Date');
     const [frequencyTime, setFrequencyTime] = useState<'Hour' | 'Day' | 'Week' | 'Month' | 'Year'>('Hour');
 
@@ -54,24 +56,25 @@ const GenerateAlgorithmSection = () => {
     const [question, setQuestion] = useState<string>("");
     const [note, setNote] = useState<string>("");
     const [impression, setImpression] = useState<String[]>([]);
-    const [caseLocation, setCaseLocation] = useState<String>('');
+    const [caseLocation, setCaseLocation] = useState<string>('');
     const [videoFile, setVideoFile] = useState("");
     const [name, setName] = useState("");
     const [frequency, setFrequency] = useState<{
         number: Number,
         time: 'Hour' | 'Day' | 'Week' | 'Month' | 'Year';
-    } | null>({
+    }>({
         number: 0,
         time: frequencyTime
     });
     const [severity, setSeverity] = useState<string>();
-    const [startTime, setStartTime] = useState<Date | null>(new Date());
-    const [finishTime, setFinishTime] = useState<Date | null>(new Date());
+    const [startTime, setStartTime] = useState<Date>(new Date());
+    const [finishTime, setFinishTime] = useState<Date>(new Date());
     const [dropdowns_users, setDropdowns_users] = useState<String[]>([]);
 
     //  ** ==========================================================================
 
 
+    const dispatch = useDispatch();
     const problemList = useSelector((state: any) => state?.problemList);
 
     const openMenu = () => setMenuVisible(true);
@@ -145,14 +148,43 @@ const GenerateAlgorithmSection = () => {
             return;
         }
 
+        const id = Crypto.randomUUID();
+        console.log(id);
+
         if (!dateTimeShow) {
-            setStartTime(null);
-            setFinishTime(null);
-            setDate(null);
-            setFrequency(null);
+            dispatch(addNewCase({
+                id,
+                information: showInfoInput ? information : '',
+                question,
+                note,
+                impression,
+                caseLocation,
+                videoFile,
+                name,
+                dropdowns_users
+            }));
+        } else {
+            dispatch(addNewCase({
+                id,
+                date,
+                information: showInfoInput ? information : '',
+                question,
+                note,
+                impression,
+                caseLocation,
+                videoFile,
+                name,
+                frequency,
+                severity,
+                startTime,
+                finishTime,
+                dropdowns_users
+            }));
         }
 
+
         console.log({
+            id,
             date,
             information,
             question,
@@ -182,7 +214,13 @@ const GenerateAlgorithmSection = () => {
         setName("");
         setSeverity("");
         setDropdowns_users([]);
-
+        setStartTime(new Date());
+        setFinishTime(new Date());
+        setDate(new Date());
+        setFrequency({
+            number: 0,
+            time: frequencyTime
+        });
 
 
     };
