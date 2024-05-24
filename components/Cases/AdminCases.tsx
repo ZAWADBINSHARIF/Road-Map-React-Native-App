@@ -6,6 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import TopButtoms from './Admin/TopButtons/TopButtoms';
 import AdminList from './Admin/List/AdminList';
+import SavedCase from './Admin/SavedCase';
 
 const adminCases = () => {
 
@@ -39,50 +40,8 @@ const adminCases = () => {
                         <View style={styles.createdAlgorithmListSection}>
                             <ScrollView>
 
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
-                                <Text>LIST</Text>
+                                <SavedCase />
+
                             </ScrollView>
                         </View>
 

@@ -3,7 +3,7 @@ import { View, TextInput, StyleSheet, TouchableOpacity, Platform, ToastAndroid }
 import React, { useState } from 'react';
 import { Dialog, Text, Menu, Button, Portal } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { AntDesign, Entypo, Fontisto, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign, Entypo, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -34,9 +34,9 @@ const GenerateAlgorithmSection = () => {
     const [openDateTimeModal, setOpenDateTimeModal] = useState<boolean>(false);
     const [openSettingModal, setOpenSettingModal] = useState<boolean>(false);
     const [showInfoInput, setShowInfoInput] = useState<boolean>(false);
-    const [showNoteInput, setShowNoteInput] = useState<boolean>(false);
-    const [showImpression, setShowImpression] = useState<boolean>(false);
-    const [showResultBtn, setShowResultBtn] = useState<boolean>(false);
+    const [showNoteInput, setShowNoteInput] = useState<boolean>(true);
+    const [showImpression, setShowImpression] = useState<boolean>(true);
+    const [showResultBtn, setShowResultBtn] = useState<boolean>(true);
     const [BranchModalVisible, setBranchModalVisible] = useState<boolean>(false);
     const [AddItemListMenuVisible, setAddItemListMenuVisible] = useState<boolean>(false);
     const [AddItemListMenuName, setAddItemListMenuName] = useState<'Problem List' | 'Dropdowns Users'>('Problem List');
@@ -50,7 +50,7 @@ const GenerateAlgorithmSection = () => {
 
     // ** Generate Algorithm Section admin import values
 
-    const [information, setInformation] = useState<string>("");
+    const [information, setInformation] = useState<string>("Most important case");
     const [question, setQuestion] = useState<string>("");
     const [note, setNote] = useState<string>("");
     const [impression, setImpression] = useState<String[]>([]);
@@ -71,8 +71,6 @@ const GenerateAlgorithmSection = () => {
 
     //  ** ==========================================================================
 
-
-    const problemList = useSelector((state: any) => state?.problemList);
 
     const openMenu = () => setMenuVisible(true);
     const openBranchModal = () => setBranchModalVisible(true);
@@ -114,29 +112,6 @@ const GenerateAlgorithmSection = () => {
         set_state_of_picker(state);
     };
 
-
-    const onSaveInfo = () => {
-        if (!information)
-            return;
-
-        setShowInfoInput(false);
-    };
-
-    const pickVideo = async () => {
-        // No permissions request is necessary for launching the image library
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        console.log(result);
-
-        if (!result.canceled) {
-            setVideoFile(result?.assets[0]?.uri);
-        }
-    };
 
     const handleSaveCase = () => {
 
@@ -195,40 +170,19 @@ const GenerateAlgorithmSection = () => {
                 <View style={{ flex: 1, flexDirection: 'row' }}>
                     <View style={{ gap: 10, flex: 1 }}>
 
-                        {showInfoInput &&
-                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
-
-                                <TouchableOpacity
-                                    style={{ flexDirection: 'row', justifyContent: 'flex-end', flex: 1 }}
-                                    onPress={onSaveInfo}
-                                >
-                                    <Fontisto name="save" size={15} color={Colors.focusBackground} />
-                                </TouchableOpacity>
-
-                                <TextInput
-                                    multiline={true}
-                                    style={[defaultStyles.defaultInputField, { maxHeight: 100, flex: 4 }]}
-                                    placeholder='Info'
-                                    value={information}
-                                    onChangeText={setInformation}
-                                />
-                            </View>
-                        }
-
                         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
 
                             <View style={{ gap: 10, flex: 1, }}>
 
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 15 }}>
                                     <Text style={{ paddingLeft: 5 }}>4.</Text>
-                                    <AntDesign name="upsquare" size={20} color={Colors.focusBackground} onPress={openBranchModal} />
                                 </View>
-                                <View style={{ flexDirection: (!showInfoInput && information) ? 'row' : 'row-reverse', justifyContent: 'space-between', gap: 10 }}>
-                                    {(!showInfoInput && information) &&
+                                <View style={{ flexDirection: information ? 'row' : 'row-reverse', justifyContent: 'space-between', gap: 10 }}>
+                                    {information &&
                                         <Ionicons name="information-circle-outline" size={20} color={Colors.focusBackground} onPress={() => setInfoPreviewDialogVisible(true)} />
                                     }
 
-                                    <MaterialCommunityIcons name="video-vintage" size={20} color={Colors.focusBackground} onPress={pickVideo} />
+                                    <MaterialCommunityIcons name="video-vintage" size={20} color={Colors.focusBackground} />
                                 </View>
 
                             </View>
@@ -239,6 +193,7 @@ const GenerateAlgorithmSection = () => {
                                 placeholder='Question'
                                 value={question}
                                 onChangeText={setQuestion}
+                                editable={false}
                             />
 
                         </View>
@@ -256,38 +211,14 @@ const GenerateAlgorithmSection = () => {
                             }}
                         >
                             <RadioButton
-                                title={'Problem List'}
-                                onChangeValue={() => {
-                                    setAddItemListMenuVisible(true);
-                                    setMenuVisible(false);
-                                    setAddItemListMenuName('Problem List');
-                                }}
-                            />
-                            <RadioButton
-                                title={'Setting'}
-                                onChangeValue={() => {
-                                    setOpenSettingModal(true);
-                                    setMenuVisible(false);
-                                }}
-                            />
-                            <RadioButton
-                                title={'Diversion'}
-                            />
-                            <RadioButton
-                                title={'Link'}
-                            />
-                            <RadioButton
-                                title={'Date/Time'}
-                                value={dateTimeShow}
-                                onChangeValue={() => setDateTimeShow(!dateTimeShow)}
-                            />
-                            <RadioButton
                                 title={'Name'}
                                 onChangeValue={showDialog}
                             />
                             <RadioButton
-                                title={'Save'}
-                                onChangeValue={handleSaveCase}
+                                title={'Edit'}
+                            />
+                            <RadioButton
+                                title={'Remove'}
                             />
                         </Menu>
 
@@ -374,24 +305,6 @@ const GenerateAlgorithmSection = () => {
             {/* // ** All type of Modals and Dialogs */}
             <View>
 
-                <AddItemListMenu
-                    visible={AddItemListMenuVisible}
-                    closeModal={closeMenu}
-                    AddItemListMenuName={AddItemListMenuName}
-                    ListData={AddItemListMenuName === 'Problem List' ? problemList :
-                        AddItemListMenuName === 'Dropdowns Users' ? dropdowns_users : []}
-                    setDropdowns_users={setDropdowns_users}
-                />
-
-                <SelectBranchFromMenu visible={BranchModalVisible} closeModal={setBranchModalVisible} setCaseLocation={setCaseLocation} />
-
-                <ImpressionSelectMenu
-                    visible={ImpressionSelectMenuVisible}
-                    closeModal={closeMenu}
-                    ListData={problemList}
-                    impression={impression}
-                    setImpression={setImpression}
-                />
 
                 <Portal>
                     <Dialog visible={infoPreviewDialogVisible} onDismiss={hideDialog}>
@@ -490,24 +403,6 @@ const GenerateAlgorithmSection = () => {
                         </Dialog.Actions>
                     </Dialog>
                 </Portal>
-
-
-                {/* // Setting Modal  */}
-                <SettingModal
-                    visible={openSettingModal}
-                    setVisible={setOpenSettingModal}
-                    showInfoInput={showInfoInput}
-                    setShowInfoInput={setShowInfoInput}
-                    showNoteInput={showNoteInput}
-                    setShowNoteInput={setShowNoteInput}
-                    showImpression={showImpression}
-                    setShowImpression={setShowImpression}
-                    showResultBtn={showResultBtn}
-                    setShowResultBtn={setShowResultBtn}
-                    setAddItemListMenuVisible={setAddItemListMenuVisible}
-                    setAddItemListMenuName={setAddItemListMenuName}
-                />
-
 
             </View>
 

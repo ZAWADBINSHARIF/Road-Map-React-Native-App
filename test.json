@@ -6,7 +6,7 @@ problemList: {
 
 
 1. {
-    info: "Important info",z
+    info: "Important info",
     inof_img: "image_url"
    ** question: "what is your name?", **
     note: "not me",
@@ -18,11 +18,7 @@ problemList: {
         problem lsit
     },
     video: { "video file uri"; },
-    section: "fisrt MCQ",
-    title: "Math problem"
-    heading: "",
-    sub Heading: "",
-    case: ""
+ caseLocation:""
     name: "salkdf",
     dropdowns_user: "",
     date_and_time:{
