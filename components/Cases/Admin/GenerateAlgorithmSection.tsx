@@ -45,13 +45,13 @@ const GenerateAlgorithmSection = () => {
 
     const [dateTimeModalMode, setDateTimeModalMode] = useState<'date' | 'time'>('date');
 
-    const [date, setDate] = useState<Date>(new Date());
     const [state_of_picker, set_state_of_picker] = useState<'Start Time' | 'Finish Time' | 'Date'>('Date');
     const [frequencyTime, setFrequencyTime] = useState<'Hour' | 'Day' | 'Week' | 'Month' | 'Year'>('Hour');
 
 
     // ** Generate Algorithm Section admin import values
 
+    const [date, setDate] = useState<Date>(new Date());
     const [information, setInformation] = useState<string>("");
     const [question, setQuestion] = useState<string>("");
     const [note, setNote] = useState<string>("");
@@ -154,7 +154,7 @@ const GenerateAlgorithmSection = () => {
         if (!dateTimeShow) {
             dispatch(addNewCase({
                 id,
-                information: showInfoInput ? information : '',
+                information: !showInfoInput ? information : '',
                 question,
                 note,
                 impression,
@@ -166,8 +166,8 @@ const GenerateAlgorithmSection = () => {
         } else {
             dispatch(addNewCase({
                 id,
-                date,
-                information: showInfoInput ? information : '',
+                date: date.toISOString(),
+                information: !showInfoInput ? information : '',
                 question,
                 note,
                 impression,
@@ -176,8 +176,8 @@ const GenerateAlgorithmSection = () => {
                 name,
                 frequency,
                 severity,
-                startTime,
-                finishTime,
+                startTime: startTime.toISOString(),
+                finishTime: finishTime.toISOString(),
                 dropdowns_users
             }));
         }
@@ -195,8 +195,8 @@ const GenerateAlgorithmSection = () => {
             name,
             frequency,
             severity,
-            startTime,
-            finishTime,
+            startTime: startTime.toISOString(),
+            finishTime: finishTime.toISOString(),
             dropdowns_users
         });
 
@@ -222,6 +222,8 @@ const GenerateAlgorithmSection = () => {
             time: frequencyTime
         });
 
+        closeMenu();
+        hideDialog();
 
     };
 

@@ -18,13 +18,14 @@ import SelectBranchFromMenu from './SelectBranchFromMenu';
 import AddItemListMenu from './AddItemListMenu';
 import ImpressionSelectMenu from './ImpressionSelectMenu';
 import { useDispatch, useSelector } from 'react-redux';
+import { removeCase, updateCase } from '@/store/slices/savedCaseSlice';
 
 interface SavedCase {
     id: string,
     index: number,
     information?: string,
     question: string,
-    date?: Date | null,
+    date?: Date,
     note?: string,
     impression?: String[],
     videoFile?: any,
@@ -34,8 +35,8 @@ interface SavedCase {
         time: "Hour" | "Day" | "Week" | "Month" | "Year";
     } | undefined,
     severity?: string,
-    startTime?: Date | null,
-    finishTime?: Date | null,
+    startTime?: string,
+    finishTime?: string,
     dropdowns_users?: String[];
     caseLocation: string,
 }
@@ -64,13 +65,13 @@ const SavedCaseComponent = (props: SavedCase) => {
 
     const [dateTimeModalMode, setDateTimeModalMode] = useState<'date' | 'time'>('date');
 
-    const [date, setDate] = useState<Date>(new Date());
     const [state_of_picker, set_state_of_picker] = useState<'Start Time' | 'Finish Time' | 'Date'>('Date');
     const [frequencyTime, setFrequencyTime] = useState<'Hour' | 'Day' | 'Week' | 'Month' | 'Year'>('Hour');
 
 
     // ** Generate Algorithm Section admin import values
 
+    const [date, setDate] = useState<Date>(props.date ? new Date(props?.date) : new Date());
     const [information, setInformation] = useState<string | undefined>(props.information);
     const [question, setQuestion] = useState<string>(props.question);
     const [note, setNote] = useState<string | undefined>(props.note);
@@ -83,8 +84,8 @@ const SavedCaseComponent = (props: SavedCase) => {
         time: 'Hour' | 'Day' | 'Week' | 'Month' | 'Year';
     } | undefined>(props.frequency);
     const [severity, setSeverity] = useState<string | undefined>(props.severity);
-    const [startTime, setStartTime] = useState<Date>(props.startTime || new Date());
-    const [finishTime, setFinishTime] = useState<Date>(props.finishTime || new Date());
+    const [startTime, setStartTime] = useState<Date>(props.startTime ? new Date(props.startTime) : new Date());
+    const [finishTime, setFinishTime] = useState<Date>(props.finishTime ? new Date(props.finishTime) : new Date());
     const [dropdowns_users, setDropdowns_users] = useState<String[]>(props.dropdowns_users || []);
 
     //  ** ==========================================================================
@@ -121,13 +122,14 @@ const SavedCaseComponent = (props: SavedCase) => {
 
     const hideDialog = () => {
 
+        setInfoPreviewDialogVisible(false);
+
         if (!editable)
             return;
 
         setNameDialogVisible(false);
         setFrequencyDialogVisible(false);
         setSeverityDialogVisible(false);
-        setInfoPreviewDialogVisible(false);
     };
 
     const handleOnChangeDateTime = (event: any, selectedDate: any) => {
@@ -185,95 +187,74 @@ const SavedCaseComponent = (props: SavedCase) => {
         }
     };
 
-    // const handleSaveCase = () => {
+    const handleSaveCase = () => {
 
-    //     if (!question && !caseLocation) {
-    //         ToastAndroid.show("Fill the Question input and set case location", ToastAndroid.LONG);
-    //         return;
-    //     }
+        if (!question && !caseLocation) {
+            ToastAndroid.show("Fill the Question input and set case location", ToastAndroid.LONG);
+            return;
+        }
 
-    //     const id = Crypto.randomUUID();
-    //     console.log(id);
-
-    //     if (!dateTimeShow) {
-    //         dispatch(addNewCase({
-    //             id,
-    //             information: showInfoInput ? information : '',
-    //             question,
-    //             note,
-    //             impression,
-    //             caseLocation,
-    //             videoFile,
-    //             name,
-    //             dropdowns_users
-    //         }));
-    //     } else {
-    //         dispatch(addNewCase({
-    //             id,
-    //             date,
-    //             information: showInfoInput ? information : '',
-    //             question,
-    //             note,
-    //             impression,
-    //             caseLocation,
-    //             videoFile,
-    //             name,
-    //             frequency,
-    //             severity,
-    //             startTime,
-    //             finishTime,
-    //             dropdowns_users
-    //         }));
-    //     }
+        if (!dateTimeShow) {
+            dispatch(updateCase({
+                id: props.id,
+                information: showInfoInput ? information : '',
+                question,
+                note,
+                impression,
+                caseLocation,
+                videoFile,
+                name,
+                dropdowns_users
+            }));
+        } else {
+            dispatch(updateCase({
+                id: props.id,
+                information: showInfoInput ? information : '',
+                question,
+                note,
+                impression,
+                caseLocation,
+                videoFile,
+                name,
+                frequency,
+                severity,
+                date: date.toISOString(),
+                startTime: startTime.toISOString(),
+                finishTime: finishTime.toISOString(),
+                dropdowns_users
+            }));
+        }
 
 
-    //     console.log({
-    //         id,
-    //         date,
-    //         information,
-    //         question,
-    //         note,
-    //         impression,
-    //         caseLocation,
-    //         videoFile,
-    //         name,
-    //         frequency,
-    //         severity,
-    //         startTime,
-    //         finishTime,
-    //         dropdowns_users
-    //     });
+        console.log({
+            id: props.id,
+            date,
+            information,
+            question,
+            note,
+            impression,
+            caseLocation,
+            videoFile,
+            name,
+            frequency,
+            severity,
+            startTime,
+            finishTime,
+            dropdowns_users
+        });
 
+        setEditable(false);
+    };
 
-    //     setStartTime(new Date());
-    //     setFinishTime(new Date());
-    //     setDate(new Date());
-    //     setFrequency({ number: 0, time: 'Hour' });
-    //     setInformation("");
-    //     setQuestion("");
-    //     setNote("");
-    //     setImpression([]);
-    //     setCaseLocation('');
-    //     setVideoFile("");
-    //     setName("");
-    //     setSeverity("");
-    //     setDropdowns_users([]);
-    //     setStartTime(new Date());
-    //     setFinishTime(new Date());
-    //     setDate(new Date());
-    //     setFrequency({
-    //         number: 0,
-    //         time: frequencyTime
-    //     });
-
-
-    // };
+    const handleRemoveCase = () => {
+        dispatch(removeCase({ id: props.id }));
+    };
 
     useEffect(() => {
 
         if (
-            frequency &&
-            severity &&
+            (frequency || severity) &&
+            date &&
             startTime &&
             finishTime
         ) {
@@ -281,6 +262,7 @@ const SavedCaseComponent = (props: SavedCase) => {
         }
 
     }, []);
+
 
     return (
         <View style={styles.SavedCaseComponent}>
@@ -359,6 +341,7 @@ const SavedCaseComponent = (props: SavedCase) => {
                             />
                             <RadioButton
                                 title={'Remove'}
+                                onChangeValue={handleRemoveCase}
                             />
                             {editable &&
                                 <RadioButton
@@ -399,7 +382,7 @@ const SavedCaseComponent = (props: SavedCase) => {
                             {editable &&
                                 <RadioButton
                                     title={'Save'}
-                                // onChangeValue={handleSaveCase}
+                                    onChangeValue={handleSaveCase}
                                 />}
                         </Menu>
 

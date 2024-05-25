@@ -5,7 +5,7 @@ interface SavedCase {
     id: string,
     information?: string,
     question: string,
-    date?: Date | null,
+    date?: string,
     note?: string,
     impression?: String[],
     videoFile?: any,
@@ -15,8 +15,8 @@ interface SavedCase {
         time: "Hour" | "Day" | "Week" | "Month" | "Year";
     } | null,
     severity?: string,
-    startTime?: Date | null,
-    finishTime?: Date | null,
+    startTime?: string,
+    finishTime?: string,
     dropdowns_users?: String[];
     caseLocation: string,
 }
@@ -36,11 +36,21 @@ const savedCaseSlice = createSlice({
             state.push(action.payload);
         },
         removeCase: (state, action) => {
-            return state = state.filter(item => item.id != action.payload);
+            return state = state.filter(item => item.id != action.payload.id);
+        },
+        updateCase: (state, action: {
+            payload: SavedCase;
+            type: string;
+        }) => {
+            state.map(item => {
+                if (item.id == action.payload.id) {
+                    item = action.payload;
+                }
+            });
         }
     }
 });
 
 
-export const { addNewCase, removeCase } = savedCaseSlice.actions;
+export const { addNewCase, removeCase, updateCase } = savedCaseSlice.actions;
 export default savedCaseSlice.reducer;
