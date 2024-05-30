@@ -5,7 +5,7 @@ import { defaultStyles } from '@/constants/Styles';
 import Colors from '@/constants/Colors';
 import { Entypo } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
-import { addProblem, removeProblem } from '@/store/slices/problemListSlice';
+import { addProblem, removeProblem } from '@/store/slices/caseAddingCommonPropertySlice';
 
 
 interface Props {

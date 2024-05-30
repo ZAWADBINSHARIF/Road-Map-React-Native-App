@@ -19,6 +19,7 @@ interface SavedCase {
     finishTime?: string,
     dropdowns_users?: String[];
     caseLocation: string,
+    pageNo?: number;
 }
 
 
@@ -47,10 +48,20 @@ const savedCaseSlice = createSlice({
                     item = action.payload;
                 }
             });
+        },
+        setPageNumber: (state, action: {
+            payload: { id: string, pageNo: number; };
+            type: string;
+        }) => {
+            state.map(item => {
+                if (item.id == action.payload.id) {
+                    item.pageNo = action.payload.pageNo;
+                }
+            });
         }
     }
 });
 
 
-export const { addNewCase, removeCase, updateCase } = savedCaseSlice.actions;
+export const { addNewCase, removeCase, updateCase, setPageNumber } = savedCaseSlice.actions;
 export default savedCaseSlice.reducer;

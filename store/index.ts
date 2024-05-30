@@ -5,7 +5,7 @@ import { configureStore } from "@reduxjs/toolkit";
 
 // internal import
 import userReducer from "./slices/userSlice";
-import problemListReducer from "./slices/problemListSlice";
+import commonProperty from "./slices/caseAddingCommonPropertySlice";
 import savedCaseReducer from "./slices/savedCaseSlice";
 
 
@@ -14,7 +14,7 @@ import savedCaseReducer from "./slices/savedCaseSlice";
 const store = configureStore({
     reducer: {
         userInfo: userReducer,
-        problemList: problemListReducer,
+        commonProperty: commonProperty,
         savedCase: savedCaseReducer
     }
 });

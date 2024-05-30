@@ -7,6 +7,8 @@ import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import Checkbox from 'expo-checkbox';
 import { defaultStyles } from '@/constants/Styles';
+import { useSelector } from 'react-redux';
+import { setCreateNextPage } from '@/store/slices/caseAddingCommonPropertySlice';
 
 
 interface Props {
@@ -40,10 +42,17 @@ const SettingModal = ({
     setAddItemListMenuName }: Props) => {
 
 
+    const createNextPage = useSelector((state: any) => state.commonProperty.createNextPage);
+
     const openDropdownUserItemList = () => {
         setAddItemListMenuVisible(true);
         setVisible(false);
         setAddItemListMenuName('Dropdowns Users');
+    };
+
+    const changeCreateNextPage = () => {
+        console.log('changeCreateNextPage');
+        setCreateNextPage(!createNextPage);
     };
 
     return (
@@ -109,7 +118,8 @@ const SettingModal = ({
                         <Entypo name="dot-single" size={24} color="black" />
                         <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
                             <Text>Create next page</Text>
-                            <Checkbox style={[defaultStyles.checkBox, { backgroundColor: 'white' }]} value={false} />
+                            <Checkbox style={[defaultStyles.checkBox, { backgroundColor: 'white' }]} value={createNextPage}
+                                onValueChange={changeCreateNextPage} />
                         </View>
                     </View>
 

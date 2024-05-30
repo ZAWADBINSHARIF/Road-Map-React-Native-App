@@ -5,12 +5,12 @@ import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { FlashList } from '@shopify/flash-list';
 import axios from 'axios';
+import { setCaseLocation } from '@/store/slices/caseAddingCommonPropertySlice';
 
 
 interface Props {
     visible: boolean,
     closeModal: (value: React.SetStateAction<boolean>) => void;
-    setCaseLocation: (value: React.SetStateAction<string>) => void;
 }
 
 interface Branches {
@@ -21,7 +21,7 @@ interface Branches {
 
 }
 
-const SelectBranchFromMenu = ({ visible, closeModal, setCaseLocation }: Props) => {
+const SelectBranchFromMenu = ({ visible, closeModal }: Props) => {
 
     const [branches, setBranches] = useState<Branches[]>([]);
     const [fetchError, setFetchError] = useState<boolean>(false);
@@ -78,7 +78,7 @@ const SelectBranchFromMenu = ({ visible, closeModal, setCaseLocation }: Props) =
         const location_id_array = [...backLocationId.values()];
         const current_location_id = location_id_array[backLocationId.size - 1];
 
-        setCaseLocation(current_location_id);
+        setCaseLocation({ location: current_location_id });
         closeModal(false);
     }
 

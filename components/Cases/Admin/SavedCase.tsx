@@ -76,7 +76,7 @@ const SavedCaseComponent = (props: SavedCase) => {
     const [question, setQuestion] = useState<string>(props.question);
     const [note, setNote] = useState<string | undefined>(props.note);
     const [impression, setImpression] = useState<String[]>(props.impression || []);
-    const [caseLocation, setCaseLocation] = useState<string>(props.caseLocation);
+    const caseLocation = useSelector((state: any) => state.commonProperty.caseLocation);
     const [videoFile, setVideoFile] = useState<any>(props.videoFile);
     const [name, setName] = useState<string | undefined>(props.name);
     const [frequency, setFrequency] = useState<{
@@ -92,7 +92,7 @@ const SavedCaseComponent = (props: SavedCase) => {
 
 
     const dispatch = useDispatch();
-    const problemList = useSelector((state: any) => state?.problemList);
+    const problemList = useSelector((state: any) => state?.commonProperty.problemList);
 
     const openMenu = () => setMenuVisible(true);
 
@@ -508,7 +508,7 @@ const SavedCaseComponent = (props: SavedCase) => {
                     setDropdowns_users={setDropdowns_users}
                 />
 
-                <SelectBranchFromMenu visible={BranchModalVisible} closeModal={setBranchModalVisible} setCaseLocation={setCaseLocation} />
+                <SelectBranchFromMenu visible={BranchModalVisible} closeModal={setBranchModalVisible} />
 
                 <ImpressionSelectMenu
                     visible={ImpressionSelectMenuVisible}

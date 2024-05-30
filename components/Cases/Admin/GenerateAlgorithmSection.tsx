@@ -8,6 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import * as Crypto from 'expo-crypto';
+import axios from 'axios';
 
 
 // internal import
@@ -24,7 +25,6 @@ import { addNewCase } from '@/store/slices/savedCaseSlice';
 
 
 const GenerateAlgorithmSection = () => {
-
 
     const [menuVisible, setMenuVisible] = useState<boolean>(false);
     const [nameDialogVisible, setNameDialogVisible] = useState<boolean>(false);
@@ -56,7 +56,7 @@ const GenerateAlgorithmSection = () => {
     const [question, setQuestion] = useState<string>("");
     const [note, setNote] = useState<string>("");
     const [impression, setImpression] = useState<String[]>([]);
-    const [caseLocation, setCaseLocation] = useState<string>('');
+    const caseLocation = useSelector((state: any) => state.commonProperty.caseLocation);
     const [videoFile, setVideoFile] = useState("");
     const [name, setName] = useState("");
     const [frequency, setFrequency] = useState<{
@@ -75,7 +75,7 @@ const GenerateAlgorithmSection = () => {
 
 
     const dispatch = useDispatch();
-    const problemList = useSelector((state: any) => state?.problemList);
+    const problemList = useSelector((state: any) => state?.commonProperty.problemList);
 
     const openMenu = () => setMenuVisible(true);
     const openBranchModal = () => setBranchModalVisible(true);
@@ -125,19 +125,47 @@ const GenerateAlgorithmSection = () => {
         setShowInfoInput(false);
     };
 
-    const pickVideo = async () => {
+    const videoImagePicker = async () => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-            allowsEditing: true,
-            aspect: [4, 3],
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            // allowsEditing: true,
             quality: 1,
         });
 
-        console.log(result);
-
         if (!result.canceled) {
+            const { uri, mimeType, fileName } = result?.assets[0];
+
+            const formData = new FormData();
+
+
+            try {
+
+                formData.append('file', {
+                    uri: uri,
+                    name: fileName,
+                    type: mimeType
+                } as any);
+
+                const response = await axios
+                    .post('http://192.168.1.108:4000/api/case/video ',
+                        formData, {
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }
+                    );
+
+                console.log(response.data);
+            } catch (error) {
+                console.log(error);
+
+            }
+
+
             setVideoFile(result?.assets[0]?.uri);
+
         }
     };
 
@@ -209,7 +237,6 @@ const GenerateAlgorithmSection = () => {
         setQuestion("");
         setNote("");
         setImpression([]);
-        setCaseLocation('');
         setVideoFile("");
         setName("");
         setSeverity("");
@@ -268,7 +295,7 @@ const GenerateAlgorithmSection = () => {
                                         <Ionicons name="information-circle-outline" size={20} color={Colors.focusBackground} onPress={() => setInfoPreviewDialogVisible(true)} />
                                     }
 
-                                    <MaterialCommunityIcons name="video-vintage" size={20} color={Colors.focusBackground} onPress={pickVideo} />
+                                    <MaterialCommunityIcons name="video-vintage" size={20} color={Colors.focusBackground} onPress={videoImagePicker} />
                                 </View>
 
                             </View>
@@ -356,12 +383,12 @@ const GenerateAlgorithmSection = () => {
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => setFrequencyDialogVisible(true)}>
                         <View style={styles.roundBtn}>
-                            <Text style={{ color: Colors.RoundBtnText }}>Frequency</Text>
+                            <Text style={{ color: Colors.RoundBtnText }}>{frequency.number == 0 ? 'Frequency' : `${frequency.number}/${frequency.time}`}</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => setSeverityDialogVisible(true)}>
                         <View style={[styles.roundBtn, { backgroundColor: Colors.focusBackground }]}>
-                            <Text style={{ color: "white" }}>Severity</Text>
+                            <Text style={{ color: "white" }}>{severity ? severity : 'Severity'}</Text>
                         </View>
                     </TouchableOpacity>
 
@@ -423,7 +450,7 @@ const GenerateAlgorithmSection = () => {
                     setDropdowns_users={setDropdowns_users}
                 />
 
-                <SelectBranchFromMenu visible={BranchModalVisible} closeModal={setBranchModalVisible} setCaseLocation={setCaseLocation} />
+                <SelectBranchFromMenu visible={BranchModalVisible} closeModal={setBranchModalVisible} />
 
                 <ImpressionSelectMenu
                     visible={ImpressionSelectMenuVisible}
