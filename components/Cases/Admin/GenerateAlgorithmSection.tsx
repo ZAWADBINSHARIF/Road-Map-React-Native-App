@@ -70,6 +70,7 @@ const GenerateAlgorithmSection = () => {
     const [startTime, setStartTime] = useState<Date>(new Date());
     const [finishTime, setFinishTime] = useState<Date>(new Date());
     const [dropdowns_users, setDropdowns_users] = useState<String[]>([]);
+    const pageNo: number = useSelector((state: any) => state.commonProperty.pageNo);
 
     //  ** ==========================================================================
 
@@ -171,13 +172,13 @@ const GenerateAlgorithmSection = () => {
 
     const handleSaveCase = () => {
 
-        if (!question && !caseLocation) {
+        if (!question || !caseLocation) {
             ToastAndroid.show("Fill the Question input and set case location", ToastAndroid.LONG);
             return;
         }
 
         const id = Crypto.randomUUID();
-        console.log(id);
+        console.log(pageNo);
 
         if (!dateTimeShow) {
             dispatch(addNewCase({
@@ -189,7 +190,8 @@ const GenerateAlgorithmSection = () => {
                 caseLocation,
                 videoFile,
                 name,
-                dropdowns_users
+                dropdowns_users,
+                pageNo
             }));
         } else {
             dispatch(addNewCase({
@@ -206,7 +208,8 @@ const GenerateAlgorithmSection = () => {
                 severity,
                 startTime: startTime.toISOString(),
                 finishTime: finishTime.toISOString(),
-                dropdowns_users
+                dropdowns_users,
+                pageNo
             }));
         }
 
@@ -225,7 +228,8 @@ const GenerateAlgorithmSection = () => {
             severity,
             startTime: startTime.toISOString(),
             finishTime: finishTime.toISOString(),
-            dropdowns_users
+            dropdowns_users,
+            pageNo
         });
 
 

@@ -1,11 +1,11 @@
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-import React, { SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Divider, Modal, Portal } from 'react-native-paper';
 import { defaultStyles } from '@/constants/Styles';
 import Colors from '@/constants/Colors';
 import { Entypo } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
-import { addProblem, removeProblem } from '@/store/slices/caseAddingCommonPropertySlice';
+import { addProblem, removeProblem } from '@/store/slices/commonPropertySlice';
 
 
 interface Props {

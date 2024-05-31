@@ -5,7 +5,7 @@ import { configureStore } from "@reduxjs/toolkit";
 
 // internal import
 import userReducer from "./slices/userSlice";
-import commonProperty from "./slices/caseAddingCommonPropertySlice";
+import commonProperty from "./slices/commonPropertySlice";
 import savedCaseReducer from "./slices/savedCaseSlice";
 
 

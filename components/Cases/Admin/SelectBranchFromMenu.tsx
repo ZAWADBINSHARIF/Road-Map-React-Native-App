@@ -4,8 +4,9 @@ import { Icon, List, Menu, Modal, Portal, Button } from 'react-native-paper';
 import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { FlashList } from '@shopify/flash-list';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import { setCaseLocation } from '@/store/slices/caseAddingCommonPropertySlice';
+import { setCaseLocation } from '@/store/slices/commonPropertySlice';
 
 
 interface Props {
@@ -28,6 +29,7 @@ const SelectBranchFromMenu = ({ visible, closeModal }: Props) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [backLocationId, setBackLocationId] = useState<Set<string>>(new Set(["/"]));
 
+    const dispatch = useDispatch();
 
     const fetchBranch = async (location_id: string = '/') => {
 
@@ -45,8 +47,6 @@ const SelectBranchFromMenu = ({ visible, closeModal }: Props) => {
             setBranches(response?.data?.branches);
 
             setBackLocationId(prev => new Set([...prev, location_id]));
-
-            // console.log(response.data.branches);
 
         } catch (error) {
             setFetchError(true);
@@ -78,7 +78,7 @@ const SelectBranchFromMenu = ({ visible, closeModal }: Props) => {
         const location_id_array = [...backLocationId.values()];
         const current_location_id = location_id_array[backLocationId.size - 1];
 
-        setCaseLocation({ location: current_location_id });
+        dispatch(setCaseLocation({ location: current_location_id }));
         closeModal(false);
     }
 

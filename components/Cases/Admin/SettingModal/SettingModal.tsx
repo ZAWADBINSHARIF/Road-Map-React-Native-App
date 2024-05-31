@@ -2,13 +2,13 @@ import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { Modal, Portal } from 'react-native-paper';
 import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 import Colors from '@/constants/Colors';
 import Checkbox from 'expo-checkbox';
 import { defaultStyles } from '@/constants/Styles';
-import { useSelector } from 'react-redux';
-import { setCreateNextPage } from '@/store/slices/caseAddingCommonPropertySlice';
+import { setCreateNextPage } from '@/store/slices/commonPropertySlice';
 
 
 interface Props {
@@ -43,6 +43,7 @@ const SettingModal = ({
 
 
     const createNextPage = useSelector((state: any) => state.commonProperty.createNextPage);
+    const dispatch = useDispatch();
 
     const openDropdownUserItemList = () => {
         setAddItemListMenuVisible(true);
@@ -51,8 +52,7 @@ const SettingModal = ({
     };
 
     const changeCreateNextPage = () => {
-        console.log('changeCreateNextPage');
-        setCreateNextPage(!createNextPage);
+        dispatch(setCreateNextPage(!createNextPage));
     };
 
     return (
