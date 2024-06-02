@@ -9,6 +9,7 @@ import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign, FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
+import { StoreState } from '@/store';
 
 
 interface Branches {
@@ -22,7 +23,7 @@ interface Branches {
 
 const All_Sections = () => {
 
-    const { userInfo } = useSelector((state: any) => state.userInfo);
+    const { userInfo } = useSelector((state: StoreState) => state.userInfo);
 
     const [openAddNewSectionModal, setOpenAddNewSectionModal] = useState(false);
     const [branches, setBranches] = useState<Branches[]>([]);

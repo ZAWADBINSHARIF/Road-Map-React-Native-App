@@ -19,6 +19,7 @@ import AddItemListMenu from './AddItemListMenu';
 import ImpressionSelectMenu from './ImpressionSelectMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeCase, updateCase } from '@/store/slices/savedCaseSlice';
+import { StoreState } from '@/store';
 
 interface SavedCase {
     id: string,
@@ -76,7 +77,7 @@ const SavedCaseComponent = (props: SavedCase) => {
     const [question, setQuestion] = useState<string>(props.question);
     const [note, setNote] = useState<string | undefined>(props.note);
     const [impression, setImpression] = useState<String[]>(props.impression || []);
-    const caseLocation = useSelector((state: any) => state.commonProperty.caseLocation);
+    const caseLocation = useSelector((state: StoreState) => state.commonProperty.caseLocation);
     const [videoFile, setVideoFile] = useState<any>(props.videoFile);
     const [name, setName] = useState<string | undefined>(props.name);
     const [frequency, setFrequency] = useState<{
@@ -92,7 +93,7 @@ const SavedCaseComponent = (props: SavedCase) => {
 
 
     const dispatch = useDispatch();
-    const problemList = useSelector((state: any) => state?.commonProperty.problemList);
+    const problemList = useSelector((state: StoreState) => state?.commonProperty.problemList);
 
     const openMenu = () => setMenuVisible(true);
 
@@ -189,8 +190,14 @@ const SavedCaseComponent = (props: SavedCase) => {
 
     const handleSaveCase = () => {
 
+
         if (!question && !caseLocation) {
             ToastAndroid.show("Fill the Question input and set case location", ToastAndroid.LONG);
+            return;
+        }
+
+        if (caseLocation === null) {
+            ToastAndroid.show("Set case location", ToastAndroid.LONG);
             return;
         }
 

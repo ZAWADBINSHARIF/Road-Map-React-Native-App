@@ -8,7 +8,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import * as Crypto from 'expo-crypto';
-import axios from 'axios';
 
 
 // internal import
@@ -21,6 +20,7 @@ import AddItemListMenu from './AddItemListMenu';
 import ImpressionSelectMenu from './ImpressionSelectMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewCase } from '@/store/slices/savedCaseSlice';
+import { StoreState } from '@/store';
 
 
 
@@ -42,6 +42,7 @@ const GenerateAlgorithmSection = () => {
     const [BranchModalVisible, setBranchModalVisible] = useState<boolean>(false);
     const [AddItemListMenuVisible, setAddItemListMenuVisible] = useState<boolean>(false);
     const [AddItemListMenuName, setAddItemListMenuName] = useState<'Problem List' | 'Dropdowns Users'>('Problem List');
+    const savedCasesLength: number = useSelector((state: StoreState): number => state?.savedCase.length as number);
 
     const [dateTimeModalMode, setDateTimeModalMode] = useState<'date' | 'time'>('date');
 
@@ -56,7 +57,7 @@ const GenerateAlgorithmSection = () => {
     const [question, setQuestion] = useState<string>("");
     const [note, setNote] = useState<string>("");
     const [impression, setImpression] = useState<String[]>([]);
-    const caseLocation = useSelector((state: any) => state.commonProperty.caseLocation);
+    const caseLocation = useSelector((state: StoreState) => state.commonProperty.caseLocation);
     const [videoFile, setVideoFile] = useState("");
     const [name, setName] = useState("");
     const [frequency, setFrequency] = useState<{
@@ -70,13 +71,13 @@ const GenerateAlgorithmSection = () => {
     const [startTime, setStartTime] = useState<Date>(new Date());
     const [finishTime, setFinishTime] = useState<Date>(new Date());
     const [dropdowns_users, setDropdowns_users] = useState<String[]>([]);
-    const pageNo: number = useSelector((state: any) => state.commonProperty.pageNo);
+    const pageNo: number = useSelector((state: StoreState) => state.commonProperty.pageNo);
 
     //  ** ==========================================================================
 
 
     const dispatch = useDispatch();
-    const problemList = useSelector((state: any) => state?.commonProperty.problemList);
+    const problemList = useSelector((state: StoreState) => state?.commonProperty.problemList);
 
     const openMenu = () => setMenuVisible(true);
     const openBranchModal = () => setBranchModalVisible(true);
@@ -130,45 +131,18 @@ const GenerateAlgorithmSection = () => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
-            // allowsEditing: true,
+            allowsEditing: true,
             quality: 1,
         });
 
         if (!result.canceled) {
             const { uri, mimeType, fileName } = result?.assets[0];
 
-            const formData = new FormData();
-
-
-            try {
-
-                formData.append('file', {
-                    uri: uri,
-                    name: fileName,
-                    type: mimeType
-                } as any);
-
-                const response = await axios
-                    .post('http://192.168.1.108:4000/api/case/video ',
-                        formData, {
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    }
-                    );
-
-                console.log(response.data);
-            } catch (error) {
-                console.log(error);
-
-            }
-
-
-            setVideoFile(result?.assets[0]?.uri);
+            setVideoFile(uri);
 
         }
     };
+
 
     const handleSaveCase = () => {
 
@@ -291,7 +265,7 @@ const GenerateAlgorithmSection = () => {
                             <View style={{ gap: 10, flex: 1, }}>
 
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 15 }}>
-                                    <Text style={{ paddingLeft: 5 }}>4.</Text>
+                                    <Text style={{ paddingLeft: 5 }}>{savedCasesLength + 1}.</Text>
                                     <AntDesign name="upsquare" size={20} color={Colors.focusBackground} onPress={openBranchModal} />
                                 </View>
                                 <View style={{ flexDirection: (!showInfoInput && information) ? 'row' : 'row-reverse', justifyContent: 'space-between', gap: 10 }}>

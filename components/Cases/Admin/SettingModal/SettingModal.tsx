@@ -9,6 +9,7 @@ import Colors from '@/constants/Colors';
 import Checkbox from 'expo-checkbox';
 import { defaultStyles } from '@/constants/Styles';
 import { setCreateNextPage } from '@/store/slices/commonPropertySlice';
+import { StoreState } from '@/store';
 
 
 interface Props {
@@ -42,7 +43,7 @@ const SettingModal = ({
     setAddItemListMenuName }: Props) => {
 
 
-    const createNextPage = useSelector((state: any) => state.commonProperty.createNextPage);
+    const createNextPage = useSelector((state: StoreState) => state.commonProperty.createNextPage);
     const dispatch = useDispatch();
 
     const openDropdownUserItemList = () => {

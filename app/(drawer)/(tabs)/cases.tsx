@@ -6,13 +6,14 @@ import { useSelector } from 'react-redux';
 // internal import
 import AdminCases from '@/components/Cases/AdminCases';
 import UserCases from '@/components/Cases/UserCases';
+import { StoreState } from '@/store';
 
 
 
 const cases = () => {
 
 
-    const { userInfo } = useSelector((state: any) => state.userInfo);
+    const { userInfo } = useSelector((state: StoreState) => state.userInfo);
     console.log(userInfo?.rule);
 
     const CheckUserRule = (): React.JSX.Element => {

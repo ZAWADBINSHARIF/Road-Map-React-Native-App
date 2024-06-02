@@ -6,13 +6,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import useSecureStore from '@/hooks/useSecureStore';
 import { removeLocalStorageThunk } from '@/store/slices/userSlice';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { StoreState } from '@/store';
 
 
 const index = () => {
 
 
     const dispatch = useDispatch();
-    const { userInfo } = useSelector((state: any) => state.userInfo);
+    const { userInfo } = useSelector((state: StoreState) => state.userInfo);
     const { removeToken } = useSecureStore();
 
 
