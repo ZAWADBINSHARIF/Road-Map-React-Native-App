@@ -20,6 +20,14 @@ interface Branches {
 
 }
 
+interface CaseContainer {
+    _id: string;
+    caseContainerName: string;
+    cases: Array<string>;
+    caseContainerLocation: string;
+    problemList: Array<string>;
+}
+
 
 const All_Sections = () => {
 
@@ -32,6 +40,7 @@ const All_Sections = () => {
     const [addSectionError, setAddSectionError] = useState<boolean>(false);
     const [backLocationId, setBackLocationId] = useState<Set<String>>(new Set(["/"]));
     const [sectionName, setSectionName] = useState("");
+    const [caseContainers, setCaseContainers] = useState<CaseContainer[]>([]);
 
     const handleNewSectionModal = async () => {
 
@@ -82,6 +91,7 @@ const All_Sections = () => {
             });
 
             setBranches(response?.data?.branches);
+            setCaseContainers(response?.data?.caseContainers);
 
             setBackLocationId(prev => new Set([...prev, location_id]));
 
@@ -145,16 +155,35 @@ const All_Sections = () => {
                         estimatedItemSize={71}
                         renderItem={({ item }) => {
                             const branch_length = item?.branches?.length;
-                            const case_length = item?.caseContainers?.length;
-                            const icon_name = branch_length > 0 && case_length > 0 ? 'source-branch-check' : branch_length <= 0 && case_length <= 0 ? 'source-branch-remove' : branch_length <= 0 && case_length > 0 ? 'folder-text' : 'source-branch';
+                            const case_containers_length = item?.caseContainers?.length;
+                            const icon_name = branch_length > 0 && case_containers_length > 0 ? 'source-branch-check' : branch_length <= 0 && case_containers_length <= 0 ? 'source-branch-remove' : branch_length <= 0 && case_containers_length > 0 ? 'folder-text' : 'source-branch';
 
                             return (
                                 <TouchableOpacity onPress={() => fetchBranch(item._id)}>
 
                                     <List.Item
                                         title={item.name}
-                                        description={`Branch ${branch_length} Case ${case_length}`}
+                                        description={`Branch ${branch_length} Case ${case_containers_length}`}
                                         left={props => <List.Icon {...props} icon={icon_name} />}
+                                    />
+
+                                </TouchableOpacity>
+                            );
+                        }}
+                    />
+                    <FlashList
+                        data={caseContainers}
+                        estimatedItemSize={71}
+                        renderItem={({ item }) => {
+                            const case_lenght = item.cases.length;
+
+                            return (
+                                <TouchableOpacity onPress={() => console.log(item?._id)}>
+
+                                    <List.Item
+                                        title={item?.caseContainerName}
+                                        description={`Component ${case_lenght}`}
+                                        left={props => <List.Icon {...props} icon='server' />}
                                     />
 
                                 </TouchableOpacity>

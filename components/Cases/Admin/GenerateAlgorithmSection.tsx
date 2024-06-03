@@ -21,7 +21,6 @@ import ImpressionSelectMenu from './ImpressionSelectMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewCase } from '@/store/slices/savedCaseSlice';
 import { StoreState } from '@/store';
-import axios from 'axios';
 import { setCaseContainerName } from '@/store/slices/commonPropertySlice';
 
 
@@ -150,34 +149,14 @@ const GenerateAlgorithmSection = () => {
                 name: fileName as string
             });
 
-            // const formData = new FormData();
-            // formData.append("case_file", {
-            //     uri,
-            //     type: mimeType,
-            //     name: fileName
-            // } as any);
-
-            // try {
-            //     const res = await axios.post("http://192.168.1.107:4000/api/case/video", formData,
-            //         {
-            //             headers: {
-            //                 'Content-Type': 'multipart/form-data',
-            //             },
-            //         }
-            //     );
-            //     console.log(res.data);
-            // } catch (error) {
-            //     console.log(error);
-            // }
-
         }
     };
 
 
     const handleSaveCase = () => {
 
-        if (!question || !caseLocation) {
-            ToastAndroid.show("Fill the Question input and set case location", ToastAndroid.LONG);
+        if (!question || !caseLocation || !name) {
+            ToastAndroid.show("Fill the Question input, set case location and set the case name", ToastAndroid.LONG);
             return;
         }
 
