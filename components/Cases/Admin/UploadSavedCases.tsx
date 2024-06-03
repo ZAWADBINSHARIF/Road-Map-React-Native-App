@@ -1,28 +1,82 @@
 import { View, Text, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Button, MD3Colors, ProgressBar } from 'react-native-paper';
+import { ActivityIndicator, Button, MD3Colors, ProgressBar } from 'react-native-paper';
 import Colors from '@/constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 import { SavedCase } from '@/interfaces/interfaces';
 import { StoreState } from '@/store';
+import axios from 'axios';
 
 const UploadSavedCases = () => {
 
     const allSavedCases: SavedCase[] = useSelector((state: StoreState) => state.savedCase);
-    const totalTask = 7 | allSavedCases.length;
+    const { caseContainerName, caseLocation, problemList } = useSelector((state: StoreState) => state.commonProperty);
+
+    const totalTask = allSavedCases.length;
     const [taskDone, setTaskDone] = useState(0);
     const [progress, setProgress] = useState(0);
+    const [uploading, setUploading] = useState(false);
 
-    const handleUploadCases = () => {
-        setTaskDone(prev => ++prev);
+    const handleUploadCases = async () => {
+
+        let caseContainerId;
+
+        try {
+            const response = await axios.post('/');
+        } catch (error) {
+            console.log(error);
+            return;
+        }
+
+
+        for (const index in allSavedCases) {
+            const formData = new FormData();
+            const obj = allSavedCases[index];
+
+            for (let key in obj) {
+
+                if (obj.hasOwnProperty(key)) {
+
+                    if (key == 'videoFile' && obj.videoFile?.uri) {
+                        formData.append("case_file", {
+                            uri: obj.videoFile.uri,
+                            name: obj.videoFile.name,
+                            type: obj.videoFile.type
+                        } as any);
+                    } else {
+                        formData.append(key, (obj as any)[key]);
+                    }
+                }
+            }
+
+            try {
+
+                setUploading(true);
+
+                const response = await axios.post("/case/video", formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+
+                console.log(response.data);
+                setTaskDone(prev => ++prev);
+
+            } catch (error) {
+                console.log(error);
+            }
+
+            setUploading(false);
+
+        }
+
     };
 
     useEffect(() => {
 
         const percentage = ((100 / totalTask) * taskDone) / 100;
         setProgress(percentage);
-
     }, [taskDone]);
 
     return (
@@ -31,15 +85,17 @@ const UploadSavedCases = () => {
         >
 
             <View style={{ flex: 1 }}>
-                <ProgressBar
-                    progress={progress}
-                    color={Colors.SecondBackground}
-                    style={{
-                        height: 25,
-                        borderRadius: 12
-                    }}
-                />
-                <Text>{Math.round(progress * 100)}%</Text>
+                <View style={{ gap: 5 }}>
+                    <ProgressBar
+                        progress={progress}
+                        color={Colors.SecondBackground}
+                        style={{
+                            height: 25,
+                            borderRadius: 12
+                        }}
+                    />
+                    <Text>Cases has uploaded {Math.round(progress * 100)}%</Text>
+                </View>
             </View>
 
 
@@ -58,10 +114,13 @@ const UploadSavedCases = () => {
                     </Button>
                 </TouchableOpacity>
                 <TouchableOpacity>
-                    <Button mode='outlined'
+                    <Button
+                        mode='outlined'
                         onPress={handleUploadCases}
                         style={styles.buttonStyle}
-                        labelStyle={{ color: Colors.SecondBackground }}>
+                        labelStyle={{ color: Colors.SecondBackground }}
+                        disabled={uploading || progress >= 1}
+                    >
                         Save
                     </Button>
                 </TouchableOpacity>

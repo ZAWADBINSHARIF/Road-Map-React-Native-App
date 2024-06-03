@@ -5,8 +5,11 @@ export interface SavedCase {
     date?: string,
     note?: string,
     impression?: String[],
-    videoFile?: any,
-    name?: string,
+    videoFile?: {
+        uri: string,
+        type: string,
+        name: string;
+    } | null,
     frequency?: {
         number: Number;
         time: "Hour" | "Day" | "Week" | "Month" | "Year";

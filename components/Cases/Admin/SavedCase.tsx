@@ -20,6 +20,7 @@ import ImpressionSelectMenu from './ImpressionSelectMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeCase, updateCase } from '@/store/slices/savedCaseSlice';
 import { StoreState } from '@/store';
+import { setCaseContainerName } from '@/store/slices/commonPropertySlice';
 
 interface SavedCase {
     id: string,
@@ -79,7 +80,7 @@ const SavedCaseComponent = (props: SavedCase) => {
     const [impression, setImpression] = useState<String[]>(props.impression || []);
     const caseLocation = useSelector((state: StoreState) => state.commonProperty.caseLocation);
     const [videoFile, setVideoFile] = useState<any>(props.videoFile);
-    const [name, setName] = useState<string | undefined>(props.name);
+    const name = useSelector((state: StoreState) => state.commonProperty.caseContainerName);
     const [frequency, setFrequency] = useState<{
         number: Number,
         time: 'Hour' | 'Day' | 'Week' | 'Month' | 'Year';
@@ -184,7 +185,13 @@ const SavedCaseComponent = (props: SavedCase) => {
         console.log(result);
 
         if (!result.canceled) {
-            setVideoFile(result?.assets[0]?.uri);
+            const { uri, mimeType, fileName } = result?.assets[0];
+
+            setVideoFile({
+                uri,
+                type: mimeType as string,
+                name: fileName as string
+            });
         }
     };
 
@@ -210,7 +217,6 @@ const SavedCaseComponent = (props: SavedCase) => {
                 impression,
                 caseLocation,
                 videoFile,
-                name,
                 dropdowns_users
             }));
         } else {
@@ -222,7 +228,6 @@ const SavedCaseComponent = (props: SavedCase) => {
                 impression,
                 caseLocation,
                 videoFile,
-                name,
                 frequency,
                 severity,
                 date: date.toISOString(),
@@ -251,10 +256,12 @@ const SavedCaseComponent = (props: SavedCase) => {
         });
 
         setEditable(false);
+        closeMenu();
     };
 
     const handleRemoveCase = () => {
         dispatch(removeCase({ id: props.id }));
+        closeMenu();
     };
 
     useEffect(() => {
@@ -554,7 +561,7 @@ const SavedCaseComponent = (props: SavedCase) => {
                                 style={defaultStyles.defaultInputField}
                                 placeholder='Name'
                                 value={name}
-                                onChangeText={setName}
+                                onChangeText={(e) => dispatch(setCaseContainerName(e))}
                             />
                         </Dialog.Content>
                         <Dialog.Actions>

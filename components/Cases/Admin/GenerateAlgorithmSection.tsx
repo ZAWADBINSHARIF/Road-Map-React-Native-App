@@ -21,6 +21,8 @@ import ImpressionSelectMenu from './ImpressionSelectMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewCase } from '@/store/slices/savedCaseSlice';
 import { StoreState } from '@/store';
+import axios from 'axios';
+import { setCaseContainerName } from '@/store/slices/commonPropertySlice';
 
 
 
@@ -58,8 +60,12 @@ const GenerateAlgorithmSection = () => {
     const [note, setNote] = useState<string>("");
     const [impression, setImpression] = useState<String[]>([]);
     const caseLocation = useSelector((state: StoreState) => state.commonProperty.caseLocation);
-    const [videoFile, setVideoFile] = useState("");
-    const [name, setName] = useState("");
+    const [videoFile, setVideoFile] = useState<{
+        uri: string,
+        type: string,
+        name: string;
+    }>();
+    const name = useSelector((state: StoreState) => state.commonProperty.caseContainerName);
     const [frequency, setFrequency] = useState<{
         number: Number,
         time: 'Hour' | 'Day' | 'Week' | 'Month' | 'Year';
@@ -138,7 +144,31 @@ const GenerateAlgorithmSection = () => {
         if (!result.canceled) {
             const { uri, mimeType, fileName } = result?.assets[0];
 
-            setVideoFile(uri);
+            setVideoFile({
+                uri,
+                type: mimeType as string,
+                name: fileName as string
+            });
+
+            // const formData = new FormData();
+            // formData.append("case_file", {
+            //     uri,
+            //     type: mimeType,
+            //     name: fileName
+            // } as any);
+
+            // try {
+            //     const res = await axios.post("http://192.168.1.107:4000/api/case/video", formData,
+            //         {
+            //             headers: {
+            //                 'Content-Type': 'multipart/form-data',
+            //             },
+            //         }
+            //     );
+            //     console.log(res.data);
+            // } catch (error) {
+            //     console.log(error);
+            // }
 
         }
     };
@@ -163,7 +193,6 @@ const GenerateAlgorithmSection = () => {
                 impression,
                 caseLocation,
                 videoFile,
-                name,
                 dropdowns_users,
                 pageNo
             }));
@@ -177,7 +206,6 @@ const GenerateAlgorithmSection = () => {
                 impression,
                 caseLocation,
                 videoFile,
-                name,
                 frequency,
                 severity,
                 startTime: startTime.toISOString(),
@@ -215,8 +243,7 @@ const GenerateAlgorithmSection = () => {
         setQuestion("");
         setNote("");
         setImpression([]);
-        setVideoFile("");
-        setName("");
+        setVideoFile(undefined);
         setSeverity("");
         setDropdowns_users([]);
         setStartTime(new Date());
@@ -467,7 +494,7 @@ const GenerateAlgorithmSection = () => {
                                 style={defaultStyles.defaultInputField}
                                 placeholder='Name'
                                 value={name}
-                                onChangeText={setName}
+                                onChangeText={(e) => dispatch(setCaseContainerName(e))}
                             />
                         </Dialog.Content>
                         <Dialog.Actions>

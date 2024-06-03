@@ -16,7 +16,7 @@ interface Branches {
     _id: String,
     name: String,
     branches: String[] | Branches[],
-    cases: String[],
+    caseContainers: any[],
 
 }
 
@@ -145,7 +145,7 @@ const All_Sections = () => {
                         estimatedItemSize={71}
                         renderItem={({ item }) => {
                             const branch_length = item?.branches?.length;
-                            const case_length = item?.cases?.length;
+                            const case_length = item?.caseContainers?.length;
                             const icon_name = branch_length > 0 && case_length > 0 ? 'source-branch-check' : branch_length <= 0 && case_length <= 0 ? 'source-branch-remove' : branch_length <= 0 && case_length > 0 ? 'folder-text' : 'source-branch';
 
                             return (

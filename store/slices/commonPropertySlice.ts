@@ -5,6 +5,7 @@ interface InitialState {
     problemList: string[];
     caseLocation: string | null;
     pageNo: number;
+    caseContainerName: string;
     createNextPage: boolean;
 }
 
@@ -12,7 +13,8 @@ let initialState: InitialState = {
     problemList: [],
     caseLocation: null,
     createNextPage: false,
-    pageNo: 1
+    caseContainerName: '',
+    pageNo: 1,
 };
 
 
@@ -40,9 +42,12 @@ const commonPropertySlice = createSlice({
             type: string;
         }) => {
             state.pageNo = action.payload;
+        },
+        setCaseContainerName: (state, action: { payload: string; }) => {
+            state.caseContainerName = action.payload;
         }
     }
 });
 
-export const { addProblem, removeProblem, setCaseLocation, setCreateNextPage, setPageNumber } = commonPropertySlice.actions;
+export const { addProblem, removeProblem, setCaseLocation, setCreateNextPage, setPageNumber, setCaseContainerName } = commonPropertySlice.actions;
 export default commonPropertySlice.reducer;
