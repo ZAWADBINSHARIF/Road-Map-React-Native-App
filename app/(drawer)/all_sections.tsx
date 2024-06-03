@@ -95,8 +95,6 @@ const All_Sections = () => {
 
             setBackLocationId(prev => new Set([...prev, location_id]));
 
-            // console.log(response.data.branches);
-
         } catch (error) {
             setFetchError(true);
             console.log(error);
@@ -148,53 +146,59 @@ const All_Sections = () => {
             }
 
 
-            {branches.length > 0 && !isLoading && !fetchError &&
+            {(branches?.length > 0 || caseContainers?.length > 0) && !isLoading && !fetchError &&
                 <ScrollView>
-                    <FlashList
-                        data={branches}
-                        estimatedItemSize={71}
-                        renderItem={({ item }) => {
-                            const branch_length = item?.branches?.length;
-                            const case_containers_length = item?.caseContainers?.length;
-                            const icon_name = branch_length > 0 && case_containers_length > 0 ? 'source-branch-check' : branch_length <= 0 && case_containers_length <= 0 ? 'source-branch-remove' : branch_length <= 0 && case_containers_length > 0 ? 'folder-text' : 'source-branch';
 
-                            return (
-                                <TouchableOpacity onPress={() => fetchBranch(item._id)}>
+                    {branches &&
+                        <FlashList
+                            data={branches}
+                            estimatedItemSize={71}
+                            renderItem={({ item }) => {
+                                const branch_length = item?.branches?.length;
+                                const case_containers_length = item?.caseContainers?.length;
+                                const icon_name = branch_length > 0 && case_containers_length > 0 ? 'source-branch-check' : branch_length <= 0 && case_containers_length <= 0 ? 'source-branch-remove' : branch_length <= 0 && case_containers_length > 0 ? 'source-branch' : 'source-branch';
 
-                                    <List.Item
-                                        title={item.name}
-                                        description={`Branch ${branch_length} Case ${case_containers_length}`}
-                                        left={props => <List.Icon {...props} icon={icon_name} />}
-                                    />
+                                return (
+                                    <TouchableOpacity onPress={() => fetchBranch(item._id)}>
 
-                                </TouchableOpacity>
-                            );
-                        }}
-                    />
-                    <FlashList
-                        data={caseContainers}
-                        estimatedItemSize={71}
-                        renderItem={({ item }) => {
-                            const case_lenght = item.cases.length;
+                                        <List.Item
+                                            title={item.name}
+                                            description={`Branch ${branch_length} Case ${case_containers_length}`}
+                                            left={props => <List.Icon {...props} icon={icon_name} />}
+                                        />
 
-                            return (
-                                <TouchableOpacity onPress={() => console.log(item?._id)}>
+                                    </TouchableOpacity>
+                                );
+                            }}
+                        />
+                    }
 
-                                    <List.Item
-                                        title={item?.caseContainerName}
-                                        description={`Component ${case_lenght}`}
-                                        left={props => <List.Icon {...props} icon='server' />}
-                                    />
+                    {caseContainers &&
+                        <FlashList
+                            data={caseContainers}
+                            estimatedItemSize={71}
+                            renderItem={({ item }) => {
+                                const case_lenght = item.cases.length;
 
-                                </TouchableOpacity>
-                            );
-                        }}
-                    />
+                                return (
+                                    <TouchableOpacity onPress={() => console.log(item?._id)}>
+
+                                        <List.Item
+                                            title={item?.caseContainerName}
+                                            description={`Component ${case_lenght}`}
+                                            left={props => <List.Icon {...props} icon='server' />}
+                                        />
+
+                                    </TouchableOpacity>
+                                );
+                            }}
+                        />
+                    }
                 </ScrollView>
             }
 
 
-            {branches.length == 0 && !isLoading && !fetchError &&
+            {(branches?.length == 0 || caseContainers?.length == 0) && !isLoading && !fetchError &&
                 <View style={{
                     flex: 1,
                     'justifyContent': 'center',
