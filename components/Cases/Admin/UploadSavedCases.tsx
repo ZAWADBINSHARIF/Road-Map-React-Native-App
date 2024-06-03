@@ -17,22 +17,31 @@ const UploadSavedCases = () => {
     const [taskDone, setTaskDone] = useState(0);
     const [progress, setProgress] = useState(0);
     const [uploading, setUploading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string>();
 
     const handleUploadCases = async () => {
 
         let caseContainerId;
 
         try {
-            const response = await axios.post('/');
+            const response = await axios.post('/caseContainer', {
+                caseContainerName,
+                caseContainerLocation: caseLocation,
+                problemList
+            });
+            caseContainerId = response.data.caseContainerId;
+            setErrorMessage(undefined);
         } catch (error) {
             console.log(error);
-            return;
+            setErrorMessage("Something was wrong");
         }
 
 
         for (const index in allSavedCases) {
             const formData = new FormData();
             const obj = allSavedCases[index];
+
+            formData.append('caseContainerId', caseContainerId);
 
             for (let key in obj) {
 
@@ -54,7 +63,7 @@ const UploadSavedCases = () => {
 
                 setUploading(true);
 
-                const response = await axios.post("/case/video", formData, {
+                const response = await axios.post("/case", formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
@@ -62,9 +71,10 @@ const UploadSavedCases = () => {
 
                 console.log(response.data);
                 setTaskDone(prev => ++prev);
-
+                setErrorMessage(undefined);
             } catch (error) {
                 console.log(error);
+                setErrorMessage("Something was wrong!");
             }
 
             setUploading(false);
@@ -95,6 +105,7 @@ const UploadSavedCases = () => {
                         }}
                     />
                     <Text>Cases has uploaded {Math.round(progress * 100)}%</Text>
+                    <Text style={{ color: 'red' }}>{errorMessage}</Text>
                 </View>
             </View>
 

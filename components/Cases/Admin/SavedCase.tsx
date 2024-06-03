@@ -40,7 +40,6 @@ interface SavedCase {
     startTime?: string,
     finishTime?: string,
     dropdowns_users?: String[];
-    caseLocation: string,
 }
 
 
