@@ -28,10 +28,13 @@ const savedCaseSlice = createSlice({
                     item = action.payload;
                 }
             });
+        },
+        setSavedCasesEmpty: (state) => {
+            return state = [];
         }
     }
 });
 
 
-export const { addNewCase, removeCase, updateCase } = savedCaseSlice.actions;
+export const { addNewCase, removeCase, updateCase, setSavedCasesEmpty } = savedCaseSlice.actions;
 export default savedCaseSlice.reducer;

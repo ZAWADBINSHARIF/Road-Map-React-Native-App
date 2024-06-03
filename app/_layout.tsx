@@ -93,9 +93,9 @@ function RootLayoutNav() {
   }, [isError, isLoading]);
 
 
-  useEffect(() => {
-    router.push("/(drawer)/(tabs)/cases");
-  });
+  // useEffect(() => {
+  //   router.push("/(drawer)/(tabs)/cases");
+  // });
 
 
   return (

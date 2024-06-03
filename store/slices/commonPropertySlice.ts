@@ -45,9 +45,18 @@ const commonPropertySlice = createSlice({
         },
         setCaseContainerName: (state, action: { payload: string; }) => {
             state.caseContainerName = action.payload;
+        },
+        setCommonPropertyDefault: (state) => {
+            return state = {
+                problemList: [],
+                caseLocation: null,
+                createNextPage: false,
+                caseContainerName: '',
+                pageNo: 1,
+            };
         }
     }
 });
 
-export const { addProblem, removeProblem, setCaseLocation, setCreateNextPage, setPageNumber, setCaseContainerName } = commonPropertySlice.actions;
+export const { addProblem, removeProblem, setCaseLocation, setCreateNextPage, setPageNumber, setCaseContainerName, setCommonPropertyDefault } = commonPropertySlice.actions;
 export default commonPropertySlice.reducer;

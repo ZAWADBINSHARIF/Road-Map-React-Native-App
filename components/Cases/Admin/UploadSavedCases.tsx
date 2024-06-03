@@ -115,7 +115,7 @@ const UploadSavedCases = () => {
             >
 
                 <TouchableOpacity>
-                    <Button mode='outlined' onPress={() => setTaskDone(0)} style={styles.buttonStyle} labelStyle={{ color: Colors.SecondBackground }}>
+                    <Button mode='outlined' onPress={() => console.log('delete')} style={styles.buttonStyle} labelStyle={{ color: Colors.SecondBackground }}>
                         Delete
                     </Button>
                 </TouchableOpacity>
