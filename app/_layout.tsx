@@ -1,6 +1,5 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { RootSiblingParent } from 'react-native-root-siblings';
 import { useFonts } from 'expo-font';
 import { router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -13,7 +12,7 @@ import { PaperProvider, MD3LightTheme } from 'react-native-paper';
 import GlobalProvider, { useGlobalContext } from '@/context/GlobalContext';
 
 
-axios.defaults.baseURL = process.env.EXPO_PUBLIC_API_BASE_URL;
+axios.defaults.baseURL = process.env.EXPO_PUBLIC_API_BASE_URL || "http://135.181.24.166/api";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -46,17 +45,17 @@ export default function RootLayout() {
     return null;
   }
 
+  if (loaded) {
+    SplashScreen.hideAsync();
+  }
+
   return (
     <Provider store={store}>
       <GlobalProvider>
 
         <PaperProvider theme={MD3LightTheme}>
 
-          <RootSiblingParent>
-
-            <RootLayoutNav />
-
-          </RootSiblingParent >
+          <RootLayoutNav />
 
         </PaperProvider>
 
@@ -66,31 +65,6 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-
-  const { isError, isLoading, isConnected }: any = useGlobalContext();
-
-
-  useEffect(() => {
-    if (!isLoading) {
-      SplashScreen.hideAsync();
-    }
-  }, [isLoading]);
-
-  useEffect(() => {
-
-
-    if (isLoading)
-      return;
-
-    if (isError) {
-      router.push("/(error_page)");
-    }
-
-    if (!isError) {
-      router.push("/(drawer)/(tabs)");
-    }
-
-  }, [isError, isLoading]);
 
 
   // useEffect(() => {

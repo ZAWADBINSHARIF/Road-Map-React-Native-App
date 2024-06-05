@@ -1,5 +1,5 @@
 // external import
-import { View, TextInput, StyleSheet, TouchableOpacity, Platform, ToastAndroid } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import React, { useState } from 'react';
 import { Dialog, Text, Menu, Button, Portal } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -8,6 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import * as Crypto from 'expo-crypto';
+import Toast from 'react-native-simple-toast';
 
 
 // internal import
@@ -156,7 +157,7 @@ const GenerateAlgorithmSection = () => {
     const handleSaveCase = () => {
 
         if (!question || !caseLocation || !name) {
-            ToastAndroid.show("Fill the Question input, set case location and set the case name", ToastAndroid.LONG);
+            Toast.show("Fill the Question input, set case location and set the case name", Toast.LONG);
             return;
         }
 

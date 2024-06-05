@@ -1,5 +1,5 @@
 // external import
-import { View, TextInput, StyleSheet, TouchableOpacity, Platform, ToastAndroid } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Dialog, Text, Menu, Button, Portal } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -7,6 +7,7 @@ import { AntDesign, Entypo, Fontisto, Ionicons, MaterialCommunityIcons } from '@
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import Toast from 'react-native-simple-toast';
 
 
 // internal import
@@ -198,12 +199,12 @@ const SavedCaseComponent = (props: SavedCase) => {
 
 
         if (!question && !caseLocation) {
-            ToastAndroid.show("Fill the Question input and set case location", ToastAndroid.LONG);
+            Toast.show("Fill the Question input and set case location", Toast.LONG);
             return;
         }
 
         if (caseLocation === null) {
-            ToastAndroid.show("Set case location", ToastAndroid.LONG);
+            Toast.show("Set case location", Toast.LONG);
             return;
         }
 

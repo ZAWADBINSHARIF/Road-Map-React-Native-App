@@ -1,13 +1,13 @@
+// external import
 import { useNetInfo } from '@react-native-community/netinfo';
 import axios from 'axios';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useDispatch, UseSelector } from 'react-redux';
 
 
+// internal import
 import useSecureStore from '@/hooks/useSecureStore';
 import { removeLocalStorageThunk, setLocalStorageThunk } from '@/store/slices/userSlice';
-
-
 
 
 
@@ -53,6 +53,7 @@ const GlobalProvider = ({ children }: any) => {
 
             } catch (error) {
                 setIsError(true);
+                console.log(error);
             }
 
             setIsLoading(false);
@@ -91,7 +92,7 @@ const GlobalProvider = ({ children }: any) => {
             }
         };
 
-        fetchUserInfo();
+        // fetchUserInfo();
 
     }, []);
 

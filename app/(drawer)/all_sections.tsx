@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Button, Dialog, FAB, Icon, List, Portal } from 'react-native-paper';
 import Colors from '@/constants/Colors';
@@ -10,6 +10,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign, FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { StoreState } from '@/store';
+import Toast from 'react-native-simple-toast';
 
 
 interface Branches {
@@ -49,7 +50,8 @@ const All_Sections = () => {
         const current_location_id = location_id_array[backLocationId.size - 1];
 
         if (!sectionName || sectionName.trim() === '' || !current_location_id) {
-            ToastAndroid.show("Write a proper section", ToastAndroid.SHORT);
+            Toast.show("Write section name", Toast.SHORT);
+
             return;
         }
 
@@ -64,7 +66,7 @@ const All_Sections = () => {
 
             setAddSectionError(false);
 
-            ToastAndroid.show("New section has been created", ToastAndroid.SHORT);
+            Toast.show("New section has been created", Toast.SHORT);
 
         } catch (error) {
             setAddSectionError(true);

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView, ActivityIndicator } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import React, { useState } from 'react';
 import { router } from 'expo-router';
@@ -19,6 +19,7 @@ const login = () => {
     const [secureTextEntry] = useState(true);
     const [isRemember, setIsRemember] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { saveToken } = useSecureStore();
@@ -27,6 +28,9 @@ const login = () => {
 
     const handleLogin = async () => {
 
+        if (isLoading)
+            return;
+
         if (!email && !password) {
 
             setErrorMsg('Fill up email and password');
@@ -34,6 +38,9 @@ const login = () => {
         }
 
         try {
+
+            setIsLoading(true);
+
             const response = await axios.post(`/login`, {
                 email,
                 password
@@ -54,6 +61,8 @@ const login = () => {
             setErrorMsg('Email and Password are wrong');
             console.log(error);
         }
+
+        setIsLoading(false);
 
     };
 
@@ -121,9 +130,14 @@ const login = () => {
 
 
                             <TouchableOpacity style={[defaultStyles.btn, { backgroundColor: Colors.focusBackground }]} onPress={handleLogin}>
-                                <Text style={{ color: 'white' }}>
-                                    Log in
-                                </Text>
+                                {
+                                    isLoading ?
+                                        (<ActivityIndicator size={'small'} animating={true} />) :
+                                        (<Text style={{ color: 'white' }}>
+                                            Log in
+                                        </Text>)
+                                }
+
                             </TouchableOpacity>
 
 

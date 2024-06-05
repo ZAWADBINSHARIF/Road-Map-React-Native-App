@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, ScrollView, TouchableOpacity, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Toast from 'react-native-simple-toast';
 import { defaultStyles } from '@/constants/Styles';
 import GenerateAlgorithmSection from './Admin/GenerateAlgorithmSection';
 import { AntDesign } from '@expo/vector-icons';
@@ -24,7 +25,7 @@ const adminCases = () => {
     const nextPage = () => {
 
         if (savedCases.length == 0) {
-            ToastAndroid.show("At list you have to create on case in the first page", ToastAndroid.LONG);
+            Toast.show("At list you have to create on case in the first page", Toast.LONG);
             return;
         }
 
