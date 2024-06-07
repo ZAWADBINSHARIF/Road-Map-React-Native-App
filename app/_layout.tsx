@@ -13,6 +13,7 @@ import GlobalProvider, { useGlobalContext } from '@/context/GlobalContext';
 
 
 axios.defaults.baseURL = process.env.EXPO_PUBLIC_API_BASE_URL || "http://135.181.24.166/api";
+axios.defaults.timeout = 1000 * 5;
 
 export {
   // Catch any errors thrown by the Layout component.

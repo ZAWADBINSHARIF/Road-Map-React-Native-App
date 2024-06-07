@@ -4,14 +4,14 @@ import React, { useState } from 'react';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 // internal import
 import { defaultStyles } from '@/constants/Styles';
 import Colors from '@/constants/Colors';
 import useSecureStore from '@/hooks/useSecureStore';
 import BackBtn from '@/components/BackBtn';
-import { removeLocalStorageThunk, setLocalStorageThunk } from '@/store/slices/userSlice';
+import { removeLocalStorageThunk, setLocalStorageThunk, setUserInfo } from '@/store/slices/userSlice';
 
 
 const login = () => {
@@ -45,20 +45,29 @@ const login = () => {
                 email,
                 password
             });
+            console.log(response.data?.userInfo);
 
             if (isRemember) {
                 const userInfoString = JSON.stringify(response.data?.userInfo);
-
                 await saveToken("token", response.data.token);
                 dispatch(removeLocalStorageThunk('@userInfo') as any);
 
                 dispatch(setLocalStorageThunk('@userInfo', userInfoString) as any);
+            } else {
+                dispatch(setUserInfo(response.data?.userInfo));
             }
 
             router.push('/(drawer)/(tabs)/');
 
-        } catch (error) {
-            setErrorMsg('Email and Password are wrong');
+        } catch (e) {
+
+            const error = e as AxiosError;
+
+            if (error.code === 'ERR_NETWORK') {
+                setErrorMsg(error?.message);
+            } else {
+                setErrorMsg('Email and Password are wrong');
+            }
             console.log(error);
         }
 

@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, router, usePathname } from 'expo-router';
 import { useDispatch, useSelector } from 'react-redux';
 import useSecureStore from '@/hooks/useSecureStore';
@@ -14,14 +14,11 @@ const index = () => {
     const dispatch = useDispatch();
     const { userInfo } = useSelector((state: StoreState) => state.userInfo);
     const { removeToken } = useSecureStore();
-
-
     const handleLogout = async () => {
         await removeToken('token');
         dispatch(removeLocalStorageThunk('@userInfo') as any);
     };
 
-    console.log(pathname);
     BackHandler.addEventListener('hardwareBackPress', function () {
         if ('/' === pathname)
             BackHandler.exitApp();
@@ -32,6 +29,7 @@ const index = () => {
 
     return (
         <View>
+            
             <StatusBar style='dark' />
 
             <Text style={{ fontSize: 32 }}>{userInfo?.email}</Text>

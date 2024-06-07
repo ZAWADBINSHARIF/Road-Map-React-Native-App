@@ -8,6 +8,7 @@ import { FlashList } from '@shopify/flash-list';
 import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign, FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
+// import Toast from 'react-native-toast-message';
 import { StatusBar } from 'expo-status-bar';
 import { StoreState } from '@/store';
 import Toast from 'react-native-simple-toast';
@@ -44,7 +45,7 @@ const All_Sections = () => {
     const [caseContainers, setCaseContainers] = useState<CaseContainer[]>([]);
 
     const handleNewSectionModal = async () => {
-
+        console.log("new data");
 
         const location_id_array = [...backLocationId.values()];
         const current_location_id = location_id_array[backLocationId.size - 1];
@@ -67,6 +68,7 @@ const All_Sections = () => {
             setAddSectionError(false);
 
             Toast.show("New section has been created", Toast.SHORT);
+
 
         } catch (error) {
             setAddSectionError(true);

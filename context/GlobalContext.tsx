@@ -7,7 +7,8 @@ import { useDispatch, UseSelector } from 'react-redux';
 
 // internal import
 import useSecureStore from '@/hooks/useSecureStore';
-import { removeLocalStorageThunk, setLocalStorageThunk } from '@/store/slices/userSlice';
+import { getLocalStorageThunk, removeLocalStorageThunk, setLocalStorageThunk } from '@/store/slices/userSlice';
+import LocalStorage from '@/app/utilities/LocalStorage';
 
 
 
@@ -19,7 +20,7 @@ const GlobalProvider = ({ children }: any) => {
 
     const dispatch = useDispatch();
     const { getToken } = useSecureStore();
-    const token = async () => await getToken('token');
+    const [token] = useState(async () => await getToken('token'));
     const [isError, setIsError] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const { isConnected } = useNetInfo();
@@ -27,74 +28,24 @@ const GlobalProvider = ({ children }: any) => {
 
     axios.interceptors.request.use(async config => {
 
-        if (await token()) {
-            config.headers.Authorization = `Bearer ${await token()}`;
+        if (await token) {
+            config.headers.Authorization = `Bearer ${await token}`;
         }
 
         return config;
     });
 
-    const handleReload = async () => {
+    useEffect(() => {
 
-        if (await token()) {
-            try {
-                setIsLoading(true);
-                const response = await axios.get('/verify');
-
-                if (!response) {
-                    setIsError(true);
-                    throw new Error("Connection lost");
-                }
-
-                const userInfoString = JSON.stringify(response.data?.userInfo);
-
-                dispatch(removeLocalStorageThunk('@userInfo') as any);
-                dispatch(setLocalStorageThunk('@userInfo', userInfoString) as any);
-
-            } catch (error) {
-                setIsError(true);
-                console.log(error);
+        async function getUserInfo() {
+            if (await token) {
+                dispatch(getLocalStorageThunk('@userInfo') as any);
             }
-
-            setIsLoading(false);
-
-        } else {
-            setIsLoading(false);
         }
 
-    };
+        getUserInfo();
 
-    useEffect(() => {
-        const fetchUserInfo = async () => {
-            if (await token()) {
-                try {
-                    setIsLoading(true);
-                    const response = await axios.get('/verify');
-
-                    if (!response) {
-                        setIsError(true);
-                        throw new Error("Connection lost");
-                    }
-
-                    const userInfoString = JSON.stringify(response.data?.userInfo);
-
-                    dispatch(removeLocalStorageThunk('@userInfo') as any);
-                    dispatch(setLocalStorageThunk('@userInfo', userInfoString) as any);
-
-                } catch (error) {
-                    setIsError(true);
-                }
-
-                setIsLoading(false);
-
-            } else {
-                setIsLoading(false);
-            }
-        };
-
-        // fetchUserInfo();
-
-    }, []);
+    }, [token]);
 
 
 
@@ -105,8 +56,7 @@ const GlobalProvider = ({ children }: any) => {
             value={{
                 isError,
                 isLoading,
-                isConnected,
-                handleReload
+                isConnected
             } as any}
         >
             {children}
