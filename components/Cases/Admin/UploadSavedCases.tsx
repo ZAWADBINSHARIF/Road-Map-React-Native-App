@@ -19,6 +19,24 @@ const UploadSavedCases = () => {
     const [uploading, setUploading] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>();
 
+    const uplaodCasesDebounce = (func: Function, timeout = 500) => {
+
+        if (uploading)
+            return;
+
+        let timer: NodeJS.Timeout;
+
+        return () => {
+            if (timer) {
+                clearTimeout(timer);
+            }
+
+            timer = setTimeout(() => {
+                func();
+            }, timeout);
+        };
+    };
+
     const handleUploadCases = async () => {
 
         let caseContainerId;
@@ -47,12 +65,16 @@ const UploadSavedCases = () => {
 
                 if (obj.hasOwnProperty(key)) {
 
-                    if (key == 'videoFile' && obj.videoFile?.uri) {
-                        formData.append("case_file", {
-                            uri: obj.videoFile.uri,
-                            name: obj.videoFile.name,
-                            type: obj.videoFile.type
-                        } as any);
+                    if (key == 'mediaFiles' && obj.mediaFiles && obj.mediaFiles?.length > 0) {
+                        console.log(obj.mediaFiles);
+                        for (let index in obj.mediaFiles) {
+                            formData.append(`case_file${index + 1}`, {
+                                uri: obj.mediaFiles[index].uri,
+                                name: obj.mediaFiles[index].name,
+                                type: obj.mediaFiles[index].type
+                            } as any);
+                        }
+
                     } else {
                         formData.append(key, (obj as any)[key]);
                     }
@@ -111,7 +133,7 @@ const UploadSavedCases = () => {
 
 
             <View
-                style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}
+                style={{ flexDirection: 'row', gap: 10 }}
             >
 
                 <TouchableOpacity>
@@ -127,7 +149,7 @@ const UploadSavedCases = () => {
                 <TouchableOpacity>
                     <Button
                         mode='outlined'
-                        onPress={handleUploadCases}
+                        onPress={uplaodCasesDebounce(handleUploadCases)}
                         style={styles.buttonStyle}
                         labelStyle={{ color: Colors.SecondBackground }}
                         disabled={uploading || progress >= 1}

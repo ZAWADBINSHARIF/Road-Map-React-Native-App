@@ -156,7 +156,7 @@ const All_Sections = () => {
                     {branches &&
                         <FlashList
                             data={branches}
-                            estimatedItemSize={71}
+                            estimatedItemSize={200}
                             renderItem={({ item }) => {
                                 const branch_length = item?.branches?.length;
                                 const case_containers_length = item?.caseContainers?.length;
@@ -180,7 +180,7 @@ const All_Sections = () => {
                     {caseContainers &&
                         <FlashList
                             data={caseContainers}
-                            estimatedItemSize={71}
+                            estimatedItemSize={200}
                             renderItem={({ item }) => {
                                 const case_lenght = item.cases.length;
 
@@ -202,7 +202,7 @@ const All_Sections = () => {
             }
 
 
-            {(branches?.length == 0 || caseContainers?.length == 0) && !isLoading && !fetchError &&
+            {(branches?.length == 0 && caseContainers?.length == 0) && !isLoading && !fetchError &&
                 <View style={{
                     flex: 1,
                     'justifyContent': 'center',

@@ -31,7 +31,11 @@ interface SavedCase {
     date?: Date,
     note?: string,
     impression?: String[],
-    videoFile?: any,
+    mediaFiles?: {
+        uri: string,
+        type: string,
+        name: string;
+    }[],
     name?: string,
     frequency?: {
         number: Number;
@@ -79,7 +83,11 @@ const SavedCaseComponent = (props: SavedCase) => {
     const [note, setNote] = useState<string | undefined>(props.note);
     const [impression, setImpression] = useState<String[]>(props.impression || []);
     const caseLocation = useSelector((state: StoreState) => state.commonProperty.caseLocation);
-    const [videoFile, setVideoFile] = useState<any>(props.videoFile);
+    const [mediaFiles, setMediaFiles] = useState<{
+        uri: string,
+        type: string,
+        name: string;
+    }[] | undefined>(props?.mediaFiles);
     const name = useSelector((state: StoreState) => state.commonProperty.caseContainerName);
     const [frequency, setFrequency] = useState<{
         number: Number,
@@ -176,22 +184,30 @@ const SavedCaseComponent = (props: SavedCase) => {
 
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-            allowsEditing: true,
-            aspect: [4, 3],
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
             quality: 1,
+            allowsMultipleSelection: true,
+            selectionLimit: 2,
+            videoMaxDuration: 120,
         });
 
-        console.log(result);
-
         if (!result.canceled) {
-            const { uri, mimeType, fileName } = result?.assets[0];
 
-            setVideoFile({
-                uri,
-                type: mimeType as string,
-                name: fileName as string
-            });
+            setMediaFiles([]);
+
+            for (let index in result?.assets) {
+                const { uri, mimeType, fileName } = result?.assets[index];
+
+                setMediaFiles((prev: any) => {
+                    prev[index] = {
+                        uri,
+                        type: mimeType as string,
+                        name: fileName as string
+                    };
+                    return prev;
+                });
+            }
+
         }
     };
 
@@ -216,7 +232,7 @@ const SavedCaseComponent = (props: SavedCase) => {
                 note,
                 impression,
                 caseLocation,
-                videoFile,
+                mediaFiles,
                 dropdowns_users
             }));
         } else {
@@ -227,7 +243,7 @@ const SavedCaseComponent = (props: SavedCase) => {
                 note,
                 impression,
                 caseLocation,
-                videoFile,
+                mediaFiles,
                 frequency,
                 severity,
                 date: date.toISOString(),
@@ -246,7 +262,7 @@ const SavedCaseComponent = (props: SavedCase) => {
             note,
             impression,
             caseLocation,
-            videoFile,
+            mediaFiles,
             name,
             frequency,
             severity,

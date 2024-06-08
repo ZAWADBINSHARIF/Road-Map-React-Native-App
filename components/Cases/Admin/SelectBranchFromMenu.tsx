@@ -123,7 +123,7 @@ const SelectBranchFromMenu = ({ visible, closeModal }: Props) => {
 
                         <FlashList
                             data={branches}
-                            estimatedItemSize={71}
+                            estimatedItemSize={200}
                             renderItem={({ item }) => {
                                 const branch_length = item?.branches?.length;
                                 const case_length = item?.caseContainers?.length;
