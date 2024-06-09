@@ -125,8 +125,8 @@ const SelectBranchFromMenu = ({ visible, closeModal }: Props) => {
                             data={branches}
                             estimatedItemSize={200}
                             renderItem={({ item }) => {
-                                const branch_length = item?.branches?.length;
-                                const case_length = item?.caseContainers?.length;
+                                const branch_length = item?.branches?.length || 0;
+                                const case_length = item?.caseContainers?.length || 0;
                                 const icon_name = branch_length > 0 && case_length > 0 ? 'source-branch-check' : branch_length <= 0 && case_length <= 0 ? 'source-branch-remove' : branch_length <= 0 && case_length > 0 ? 'folder-text' : 'source-branch';
 
                                 return (

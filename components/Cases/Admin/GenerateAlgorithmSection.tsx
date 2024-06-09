@@ -9,6 +9,7 @@ import { Picker } from '@react-native-picker/picker';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import * as Crypto from 'expo-crypto';
 import Toast from 'react-native-simple-toast';
+import * as Haptics from 'expo-haptics';
 
 
 // internal import
@@ -164,6 +165,11 @@ const GenerateAlgorithmSection = () => {
     };
 
 
+    const previewUploadedImage = () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    };
+
+
     const handleSaveCase = () => {
 
         if (!question || !caseLocation || !name) {
@@ -290,7 +296,9 @@ const GenerateAlgorithmSection = () => {
                                         <Ionicons name="information-circle-outline" size={20} color={Colors.focusBackground} onPress={() => setInfoPreviewDialogVisible(true)} />
                                     }
 
-                                    <MaterialCommunityIcons name="video-vintage" size={20} color={Colors.focusBackground} onPress={videoImagePicker} />
+                                    <MaterialCommunityIcons name="video-vintage" size={20} color={Colors.focusBackground}
+                                        onPress={videoImagePicker}
+                                        onLongPress={previewUploadedImage} />
                                 </View>
 
                             </View>

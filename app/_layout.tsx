@@ -3,7 +3,7 @@ import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { ClerkProvider } from "@clerk/clerk-expo";
 import axios from 'axios';
 import { Provider } from 'react-redux';
@@ -46,9 +46,9 @@ export default function RootLayout() {
     return null;
   }
 
-  if (loaded) {
-    SplashScreen.hideAsync();
-  }
+  // if (loaded) {
+  //   SplashScreen.hideAsync();
+  // }
 
   return (
     <Provider store={store}>
@@ -67,10 +67,17 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
 
+  const { isLoading } = useGlobalContext();
 
-  // useEffect(() => {
-  //   router.push("/(drawer)/(tabs)/cases");
-  // });
+  useEffect(() => {
+    if (!isLoading) {
+      SplashScreen.hideAsync();
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    router.push("/(drawer)/(tabs)/cases");
+  });
 
 
   return (

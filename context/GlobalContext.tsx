@@ -12,7 +12,19 @@ import LocalStorage from '@/app/utilities/LocalStorage';
 
 
 
-const GlobalContext = createContext(null);
+interface GlobalState {
+    isError: boolean,
+    isLoading: boolean,
+    isConnected: boolean | null;
+}
+
+const globalState: GlobalState = {
+    isError: false,
+    isLoading: true,
+    isConnected: null
+};
+
+const GlobalContext = createContext(globalState);
 export const useGlobalContext = () => useContext(GlobalContext);
 
 
@@ -41,6 +53,8 @@ const GlobalProvider = ({ children }: any) => {
             if (await token) {
                 dispatch(getLocalStorageThunk('@userInfo') as any);
             }
+
+            setIsLoading(false);
         }
 
         getUserInfo();
@@ -57,7 +71,7 @@ const GlobalProvider = ({ children }: any) => {
                 isError,
                 isLoading,
                 isConnected
-            } as any}
+            }}
         >
             {children}
         </GlobalContext.Provider >

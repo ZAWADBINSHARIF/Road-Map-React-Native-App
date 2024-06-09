@@ -158,8 +158,8 @@ const All_Sections = () => {
                             data={branches}
                             estimatedItemSize={200}
                             renderItem={({ item }) => {
-                                const branch_length = item?.branches?.length;
-                                const case_containers_length = item?.caseContainers?.length;
+                                const branch_length = item?.branches?.length || 0;
+                                const case_containers_length = item?.caseContainers?.length || 0;
                                 const icon_name = branch_length > 0 && case_containers_length > 0 ? 'source-branch-check' : branch_length <= 0 && case_containers_length <= 0 ? 'source-branch-remove' : branch_length <= 0 && case_containers_length > 0 ? 'source-branch' : 'source-branch';
 
                                 return (
