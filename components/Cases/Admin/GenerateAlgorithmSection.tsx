@@ -16,7 +16,7 @@ import * as Haptics from 'expo-haptics';
 import { defaultStyles } from '@/constants/Styles';
 import Colors from '@/constants/Colors';
 import RadioButton from '@/components/RadioButton/RadioButton';
-import SettingModal from './SettingModal/SettingModal';
+import SettingModal from './Modals/SettingModal/SettingModal';
 import SelectBranchFromMenu from './SelectBranchFromMenu';
 import AddItemListMenu from './AddItemListMenu';
 import ImpressionSelectMenu from './ImpressionSelectMenu';
@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addNewCase } from '@/store/slices/savedCaseSlice';
 import { StoreState } from '@/store';
 import { setCaseContainerName } from '@/store/slices/commonPropertySlice';
+import MediaPreviewModal from './Modals/MediaPreviewModal/MediaPreviewModal';
 
 
 
@@ -46,6 +47,7 @@ const GenerateAlgorithmSection = () => {
     const [AddItemListMenuVisible, setAddItemListMenuVisible] = useState<boolean>(false);
     const [AddItemListMenuName, setAddItemListMenuName] = useState<'Problem List' | 'Dropdowns Users'>('Problem List');
     const savedCasesLength: number = useSelector((state: StoreState): number => state?.savedCase.length as number);
+    const [mediaPreviewModalVisible, setMediaPreviewModalVisible] = useState<boolean>(false);
 
     const [dateTimeModalMode, setDateTimeModalMode] = useState<'date' | 'time'>('date');
 
@@ -94,6 +96,7 @@ const GenerateAlgorithmSection = () => {
         setBranchModalVisible(false);
         setAddItemListMenuVisible(false);
         setImpressionSelectMenuVisible(false);
+        setMediaPreviewModalVisible(false);
     };
 
     const showDialog = () => {
@@ -167,6 +170,7 @@ const GenerateAlgorithmSection = () => {
 
     const previewUploadedImage = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        setMediaPreviewModalVisible(true);
     };
 
 
@@ -443,6 +447,12 @@ const GenerateAlgorithmSection = () => {
 
             {/* // ** All type of Modals and Dialogs */}
             <View>
+
+                <MediaPreviewModal
+                    visible={mediaPreviewModalVisible}
+                    setVisible={setMediaPreviewModalVisible}
+                    mediaFiles={mediaFiles}
+                />
 
                 <AddItemListMenu
                     visible={AddItemListMenuVisible}

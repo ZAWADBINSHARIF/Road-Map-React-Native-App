@@ -14,7 +14,7 @@ import Toast from 'react-native-simple-toast';
 import { defaultStyles } from '@/constants/Styles';
 import Colors from '@/constants/Colors';
 import RadioButton from '@/components/RadioButton/RadioButton';
-import SettingModal from './SettingModal/SettingModal';
+import SettingModal from './Modals/SettingModal/SettingModal';
 import SelectBranchFromMenu from './SelectBranchFromMenu';
 import AddItemListMenu from './AddItemListMenu';
 import ImpressionSelectMenu from './ImpressionSelectMenu';
