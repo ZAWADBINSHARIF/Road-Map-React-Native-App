@@ -1,0 +1,5 @@
+.expo
+.vscode
+android
+dist
+node_modules

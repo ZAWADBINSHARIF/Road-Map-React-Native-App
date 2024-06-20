@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import store from '@/store';
 import { PaperProvider, MD3LightTheme } from 'react-native-paper';
 import GlobalProvider, { useGlobalContext } from '@/context/GlobalContext';
-
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 axios.defaults.baseURL = process.env.EXPO_PUBLIC_API_BASE_URL || "http://135.181.24.166/api";
 axios.defaults.timeout = 1000 * 5;
@@ -54,11 +54,15 @@ export default function RootLayout() {
     <Provider store={store}>
       <GlobalProvider>
 
-        <PaperProvider theme={MD3LightTheme}>
+        <GestureHandlerRootView>
 
-          <RootLayoutNav />
+          <PaperProvider theme={MD3LightTheme}>
 
-        </PaperProvider>
+            <RootLayoutNav />
+
+          </PaperProvider>
+
+        </GestureHandlerRootView>
 
       </GlobalProvider>
     </Provider>

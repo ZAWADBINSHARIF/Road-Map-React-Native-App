@@ -8,6 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Toast from 'react-native-simple-toast';
+import * as Haptics from 'expo-haptics';
 
 
 // internal import
@@ -22,6 +23,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { removeCase, updateCase } from '@/store/slices/savedCaseSlice';
 import { StoreState } from '@/store';
 import { setCaseContainerName } from '@/store/slices/commonPropertySlice';
+import MediaPreviewModal from './Modals/MediaPreviewModal/MediaPreviewModal';
 
 interface SavedCase {
     id: string,
@@ -68,6 +70,8 @@ const SavedCaseComponent = (props: SavedCase) => {
     const [BranchModalVisible, setBranchModalVisible] = useState<boolean>(false);
     const [AddItemListMenuVisible, setAddItemListMenuVisible] = useState<boolean>(false);
     const [AddItemListMenuName, setAddItemListMenuName] = useState<'Problem List' | 'Dropdowns Users'>('Problem List');
+    const [mediaPreviewModalVisible, setMediaPreviewModalVisible] = useState<boolean>(false);
+
 
     const [dateTimeModalMode, setDateTimeModalMode] = useState<'date' | 'time'>('date');
 
@@ -117,6 +121,7 @@ const SavedCaseComponent = (props: SavedCase) => {
         setBranchModalVisible(false);
         setAddItemListMenuVisible(false);
         setImpressionSelectMenuVisible(false);
+        setMediaPreviewModalVisible(false);
     };
 
     const showDialog = () => {
@@ -209,6 +214,11 @@ const SavedCaseComponent = (props: SavedCase) => {
             }
 
         }
+    };
+
+    const previewUploadedImage = () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        setMediaPreviewModalVisible(true);
     };
 
     const handleSaveCase = () => {
@@ -336,7 +346,9 @@ const SavedCaseComponent = (props: SavedCase) => {
                                         <Ionicons name="information-circle-outline" size={20} color={Colors.focusBackground} onPress={() => setInfoPreviewDialogVisible(true)} />
                                     }
 
-                                    <MaterialCommunityIcons name="video-vintage" size={20} color={Colors.focusBackground} onPress={pickVideo} />
+                                    <MaterialCommunityIcons name="video-vintage" size={20} color={Colors.focusBackground}
+                                        onPress={pickVideo}
+                                        onLongPress={previewUploadedImage} />
                                 </View>
 
                             </View>
@@ -528,6 +540,14 @@ const SavedCaseComponent = (props: SavedCase) => {
 
             {/* // ** All type of Modals and Dialogs */}
             <View>
+
+                {mediaFiles &&
+                    <MediaPreviewModal
+                        visible={mediaPreviewModalVisible}
+                        setVisible={setMediaPreviewModalVisible}
+                        mediaFiles={mediaFiles}
+                    />
+                }
 
                 <AddItemListMenu
                     visible={AddItemListMenuVisible}

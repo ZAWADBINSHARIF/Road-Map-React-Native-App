@@ -33,8 +33,8 @@ interface CaseContainer {
 
 const All_Sections = () => {
 
-    const { userInfo } = useSelector((state: StoreState) => state.userInfo);
-
+    const userInfo = useSelector((state: StoreState) => state.userInfo.userInfo);
+    console.log(userInfo);
     const [openAddNewSectionModal, setOpenAddNewSectionModal] = useState(false);
     const [branches, setBranches] = useState<Branches[]>([]);
     const [fetchError, setFetchError] = useState<boolean>(false);

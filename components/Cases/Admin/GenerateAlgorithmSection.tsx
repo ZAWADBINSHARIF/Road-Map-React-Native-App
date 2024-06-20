@@ -25,6 +25,7 @@ import { addNewCase } from '@/store/slices/savedCaseSlice';
 import { StoreState } from '@/store';
 import { setCaseContainerName } from '@/store/slices/commonPropertySlice';
 import MediaPreviewModal from './Modals/MediaPreviewModal/MediaPreviewModal';
+import useFileExtension from '@/hooks/useFileExtension';
 
 
 
@@ -151,8 +152,16 @@ const GenerateAlgorithmSection = () => {
 
             setMediaFiles([]);
 
+
             for (let index in result?.assets) {
+
                 const { uri, mimeType, fileName } = result?.assets[index];
+
+                const ext = useFileExtension(uri);
+
+                if (!ext) {
+                    return;
+                }
 
                 setMediaFiles((prev: any) => {
                     prev[index] = {
