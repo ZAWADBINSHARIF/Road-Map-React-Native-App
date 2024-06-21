@@ -3,15 +3,25 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Button, MD3Colors, ProgressBar } from 'react-native-paper';
 import Colors from '@/constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SavedCase } from '@/interfaces/interfaces';
 import { StoreState } from '@/store';
 import axios from 'axios';
+import Toast from 'react-native-simple-toast';
+import { router } from 'expo-router';
+import { setCommonPropertyDefault } from '@/store/slices/commonPropertySlice';
+import { setSavedCasesEmpty } from '@/store/slices/savedCaseSlice';
 
-const UploadSavedCases = () => {
+
+interface Props {
+    setShowUploadComponent: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const UploadSavedCases = ({ setShowUploadComponent }: Props) => {
 
     const allSavedCases: SavedCase[] = useSelector((state: StoreState) => state.savedCase);
     const { caseContainerName, caseLocation, problemList } = useSelector((state: StoreState) => state.commonProperty);
+    const dispatch = useDispatch();
 
     const totalTask = allSavedCases.length;
     const [taskDone, setTaskDone] = useState(0);
@@ -35,6 +45,12 @@ const UploadSavedCases = () => {
                 func();
             }, timeout);
         };
+    };
+
+    const handleRemoveData = () => {
+        dispatch(setCommonPropertyDefault());
+        dispatch(setSavedCasesEmpty());
+        setShowUploadComponent(false);
     };
 
     const handleUploadCases = async () => {
@@ -109,7 +125,17 @@ const UploadSavedCases = () => {
 
         const percentage = ((100 / totalTask) * taskDone) / 100;
         setProgress(percentage);
+
     }, [taskDone]);
+
+    useEffect(() => {
+        if (progress >= 1) {
+            router.push("/");
+            handleRemoveData();
+            Toast.show("Case has been uploaded", Toast.LONG);
+        }
+    }, [progress]);
+
 
     return (
         <View
@@ -137,7 +163,7 @@ const UploadSavedCases = () => {
             >
 
                 <TouchableOpacity>
-                    <Button mode='outlined' onPress={() => console.log('delete')} style={styles.buttonStyle} labelStyle={{ color: Colors.SecondBackground }}>
+                    <Button mode='outlined' onPress={handleRemoveData} style={styles.buttonStyle} labelStyle={{ color: Colors.SecondBackground }}>
                         Delete
                     </Button>
                 </TouchableOpacity>

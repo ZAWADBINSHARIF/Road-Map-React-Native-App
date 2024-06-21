@@ -1,7 +1,7 @@
 // external import
 import { View, TextInput, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Dialog, Text, Menu, Button, Portal } from 'react-native-paper';
+import { Dialog, Text, Menu, Button, Portal, Badge } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AntDesign, Entypo, Fontisto, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -345,10 +345,20 @@ const SavedCaseComponent = (props: SavedCase) => {
                                     {(!showInfoInput && information) &&
                                         <Ionicons name="information-circle-outline" size={20} color={Colors.focusBackground} onPress={() => setInfoPreviewDialogVisible(true)} />
                                     }
-
-                                    <MaterialCommunityIcons name="video-vintage" size={20} color={Colors.focusBackground}
-                                        onPress={pickVideo}
-                                        onLongPress={previewUploadedImage} />
+                                    <View>
+                                        {mediaFiles && mediaFiles?.length > 0 &&
+                                            <Badge
+                                                size={14}
+                                                style={{ position: 'absolute', top: -5, right: -5, zIndex: 1 }}
+                                            >
+                                                {mediaFiles?.length || 0}
+                                            </Badge>
+                                        }
+                                        <MaterialCommunityIcons name="video-vintage" size={20}
+                                            color={(mediaFiles && mediaFiles?.length > 0 && !editable) ? Colors.focusBackground : 'gray'}
+                                            onPress={pickVideo}
+                                            onLongPress={previewUploadedImage} />
+                                    </View>
                                 </View>
 
                             </View>

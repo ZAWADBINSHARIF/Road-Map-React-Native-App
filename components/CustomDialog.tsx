@@ -1,39 +1,54 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 import { Button, Dialog, Portal, Text } from 'react-native-paper';
 
 
 interface Props {
-    title: string,
+    title?: string,
     body: string,
-    actionBtnTitle?: string;
+    visible: boolean,
+    setVisible: React.Dispatch<React.SetStateAction<boolean>>,
+    agreeActionBtnTitle?: string,
+    disagreeActionBtnTitle?: string,
+    agreeActionBtn?: () => void,
+    disagreeActionBtn?: () => void;
+    style?: ViewStyle;
 }
 
 
-const CustomDialog = (props: Props) => {
+const CustomDialog = (
+    {
+        visible,
+        setVisible,
+        title,
+        body,
+        agreeActionBtnTitle,
+        disagreeActionBtnTitle,
+        agreeActionBtn,
+        disagreeActionBtn = () => setVisible(false),
+        style
+    }: Props) => {
 
-    const [visible, setVisible] = React.useState(true);
-
-    const showDialog = () => setVisible(true);
 
     const hideDialog = () => setVisible(false);
 
     return (
         <View>
             <Portal>
-                <Dialog visible={visible} >
-                    <Dialog.Title>{props.title}</Dialog.Title>
+                <Dialog visible={visible} onDismiss={hideDialog} style={style}>
+                    {title && <Dialog.Title>{title}</Dialog.Title>}
                     <Dialog.Content>
-                        <Text variant="bodyMedium">{props.body}</Text>
+                        <Text variant="bodyMedium">{body}</Text>
                     </Dialog.Content>
-                    {props.actionBtnTitle &&
+                    {agreeActionBtnTitle &&
                         <Dialog.Actions>
-                            <Button onPress={hideDialog}>{props.actionBtnTitle}</Button>
+                            <Button onPress={disagreeActionBtn}>{disagreeActionBtnTitle}</Button>
+                            <Button onPress={agreeActionBtn}>{agreeActionBtnTitle}</Button>
                         </Dialog.Actions>
                     }
                 </Dialog>
             </Portal>
-        </View>
+        </View >
     );
 };
 

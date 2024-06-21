@@ -30,15 +30,11 @@ const adminCases = () => {
         }
 
         if (createNextPage && pageNo == 1) {
-            console.log(pageNo);
-            console.log("second page");
             dispatch(setPageNumber(pageNo + 1));
             return;
         }
 
         setShowUploadComponent(true);
-        console.log("save page");
-
     };
 
     const previousPage = () => {
@@ -72,7 +68,7 @@ const adminCases = () => {
 
                         showUploadComponent ?
                             (
-                                <UploadSavedCases />
+                                <UploadSavedCases setShowUploadComponent={setShowUploadComponent} />
                             )
                             :
 
