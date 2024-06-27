@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Button, Dialog, FAB, Icon, List, Portal } from 'react-native-paper';
+import { ActivityIndicator, Button, Dialog, Divider, FAB, Icon, List, Menu, Portal } from 'react-native-paper';
 import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
 import { useSelector } from 'react-redux';
@@ -8,10 +8,11 @@ import { FlashList } from '@shopify/flash-list';
 import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign, FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
-// import Toast from 'react-native-toast-message';
 import { StatusBar } from 'expo-status-bar';
 import { StoreState } from '@/store';
 import Toast from 'react-native-simple-toast';
+import RadioButton from '@/components/RadioButton/RadioButton';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 
 interface Branches {
@@ -34,7 +35,7 @@ interface CaseContainer {
 const All_Sections = () => {
 
     const userInfo = useSelector((state: StoreState) => state.userInfo.userInfo);
-    console.log(userInfo);
+
     const [openAddNewSectionModal, setOpenAddNewSectionModal] = useState(false);
     const [branches, setBranches] = useState<Branches[]>([]);
     const [fetchError, setFetchError] = useState<boolean>(false);
@@ -43,6 +44,7 @@ const All_Sections = () => {
     const [backLocationId, setBackLocationId] = useState<Set<String>>(new Set(["/"]));
     const [sectionName, setSectionName] = useState("");
     const [caseContainers, setCaseContainers] = useState<CaseContainer[]>([]);
+
 
     const handleNewSectionModal = async () => {
         console.log("new data");
@@ -130,6 +132,52 @@ const All_Sections = () => {
         setBackLocationId(new Set());
     }
 
+
+    const CaseItemRenderer = ({ item, Props }: { item: CaseContainer; Props?: TouchableOpacity['props']; }) => {
+        const case_lenght = item.cases.length;
+
+        const [visible, setVisible] = React.useState(false);
+
+        const openMenu = () => setVisible(true);
+
+        const closeMenu = () => setVisible(false);
+        console.log(visible);
+        return (
+
+            <Menu
+                visible={visible}
+                onDismiss={closeMenu}
+                contentStyle={{
+                    left: wp(65),
+                    borderRadius: 12,
+                    backgroundColor: 'white',
+                }}
+                anchor={
+                    <List.Item
+                        title={item?.caseContainerName}
+                        description={`Component ${case_lenght}`}
+                        left={props => <List.Icon {...props} icon='server' />}
+                        onPress={openMenu}
+                    />
+                }
+                anchorPosition={'bottom'}
+            >
+                <RadioButton
+                    title={'Edit'}
+                />
+                <RadioButton
+                    title={'Remove'}
+                />
+                <RadioButton
+                    title={'Publish'}
+                />
+
+            </Menu>
+
+
+        );
+    };
+
     useEffect(() => {
         if (backLocationId.size <= 1)
             fetchBranch();
@@ -181,28 +229,15 @@ const All_Sections = () => {
                         <FlashList
                             data={caseContainers}
                             estimatedItemSize={200}
-                            renderItem={({ item }) => {
-                                const case_lenght = item.cases.length;
-
-                                return (
-                                    <TouchableOpacity onPress={() => console.log(item?._id)}>
-
-                                        <List.Item
-                                            title={item?.caseContainerName}
-                                            description={`Component ${case_lenght}`}
-                                            left={props => <List.Icon {...props} icon='server' />}
-                                        />
-
-                                    </TouchableOpacity>
-                                );
-                            }}
+                            renderItem={({ item }) => <CaseItemRenderer item={item} />}
                         />
                     }
+
                 </ScrollView>
             }
 
 
-            {(branches?.length == 0 && caseContainers?.length == 0) && !isLoading && !fetchError &&
+            {(branches?.length == 0 && (caseContainers?.length == 0 || !caseContainers)) && !isLoading && !fetchError &&
                 <View style={{
                     flex: 1,
                     'justifyContent': 'center',
@@ -257,11 +292,11 @@ const All_Sections = () => {
             }
 
 
-            {/* Modal Portal  */}
+            {/* Menu and Dialog Portal  */}
             <View>
 
+                {/* // ** Add new section modal  */}
                 <Portal>
-
                     <Dialog visible={openAddNewSectionModal} onDismiss={() => setOpenAddNewSectionModal(false)} style={{ backgroundColor: "white", }}>
                         <Dialog.Title>Add New Section</Dialog.Title>
                         <Dialog.Content>
@@ -282,13 +317,23 @@ const All_Sections = () => {
                             <Button onPress={handleNewSectionModal}>ADD</Button>
                         </Dialog.Actions>
                     </Dialog>
-
                 </Portal>
+
+
+
+                {/* // ** case options Menu */}
+
+
+
 
             </View>
 
+
+
+
+
             <StatusBar style='dark' />
-        </View>
+        </View >
     );
 };
 

@@ -1,8 +1,9 @@
-import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { Modal, Portal } from 'react-native-paper';
 import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
+import { Text } from 'react-native-paper';
 
 
 import Colors from '@/constants/Colors';
