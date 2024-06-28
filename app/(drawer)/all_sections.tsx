@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Button, Dialog, Divider, FAB, Icon, List, Menu, Portal } from 'react-native-paper';
 import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FlashList } from '@shopify/flash-list';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign, FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
@@ -13,6 +13,8 @@ import { StoreState } from '@/store';
 import Toast from 'react-native-simple-toast';
 import RadioButton from '@/components/RadioButton/RadioButton';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { importCases } from '@/store/slices/savedCaseSlice';
+import { router } from 'expo-router';
 
 
 interface Branches {
@@ -45,6 +47,7 @@ const All_Sections = () => {
     const [sectionName, setSectionName] = useState("");
     const [caseContainers, setCaseContainers] = useState<CaseContainer[]>([]);
 
+    const dispatch = useDispatch();
 
     const handleNewSectionModal = async () => {
         console.log("new data");
@@ -109,6 +112,20 @@ const All_Sections = () => {
         setIsLoading(false);
     };
 
+    async function fetchCases(caseContainerId: string) {
+        console.log(`/api/case/${caseContainerId}`);
+        try {
+            const response = await axios.get(`/case/${caseContainerId}`);
+
+            dispatch(importCases(response.data.cases));
+            router.push("/cases");
+            console.log(response.data.cases);
+        } catch (e) {
+            const error = e as AxiosError;
+            console.log(error.message);
+        }
+    };
+
     function backPreviousBranch() {
 
         const location_id_array = [...backLocationId.values()];
@@ -133,15 +150,13 @@ const All_Sections = () => {
     }
 
 
-    const CaseItemRenderer = ({ item, Props }: { item: CaseContainer; Props?: TouchableOpacity['props']; }) => {
+    const CaseItemRenderer = ({ item }: { item: CaseContainer; }) => {
         const case_lenght = item.cases.length;
-
         const [visible, setVisible] = React.useState(false);
 
         const openMenu = () => setVisible(true);
-
         const closeMenu = () => setVisible(false);
-        console.log(visible);
+
         return (
 
             <Menu
@@ -157,7 +172,8 @@ const All_Sections = () => {
                         title={item?.caseContainerName}
                         description={`Component ${case_lenght}`}
                         left={props => <List.Icon {...props} icon='server' />}
-                        onPress={openMenu}
+                        onPress={() => fetchCases(item._id)}
+                        onLongPress={openMenu}
                     />
                 }
                 anchorPosition={'bottom'}

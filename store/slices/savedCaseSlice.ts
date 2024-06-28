@@ -10,6 +10,9 @@ const savedCaseSlice = createSlice({
     name: 'saved_case',
     initialState,
     reducers: {
+        importCases: (state, action) => {
+            return state = action.payload;
+        },
         addNewCase: (state, action: {
             payload: SavedCase;
             type: string;
@@ -36,5 +39,5 @@ const savedCaseSlice = createSlice({
 });
 
 
-export const { addNewCase, removeCase, updateCase, setSavedCasesEmpty } = savedCaseSlice.actions;
+export const { addNewCase, removeCase, updateCase, setSavedCasesEmpty, importCases } = savedCaseSlice.actions;
 export default savedCaseSlice.reducer;

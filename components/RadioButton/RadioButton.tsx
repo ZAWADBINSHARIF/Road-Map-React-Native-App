@@ -7,7 +7,7 @@ import { Text } from 'react-native-paper';
 
 interface Props {
     title: string,
-    value?: false,
+    value?: boolean,
     onChangeValue?: () => void;
 }
 

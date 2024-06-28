@@ -7,6 +7,10 @@ interface InitialState {
     pageNo: number;
     caseContainerName: string;
     createNextPage: boolean;
+    caseContainerEditMode?: {
+        state: boolean,
+        caseContainerId: string;
+    };
 }
 
 let initialState: InitialState = {
@@ -15,6 +19,10 @@ let initialState: InitialState = {
     createNextPage: false,
     caseContainerName: '',
     pageNo: 1,
+    caseContainerEditMode: {
+        state: false,
+        caseContainerId: ''
+    }
 };
 
 
