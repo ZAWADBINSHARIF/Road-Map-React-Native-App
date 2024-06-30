@@ -26,6 +26,7 @@ import { setCaseContainerName } from '@/store/slices/commonPropertySlice';
 import MediaPreviewModal from './Modals/MediaPreviewModal/MediaPreviewModal';
 
 interface SavedCase {
+    _id?: string;
     id: string,
     index: number,
     information?: string,
@@ -38,6 +39,7 @@ interface SavedCase {
         type: string,
         name: string;
     }[],
+    case_files_name?: string[];
     name?: string,
     frequency?: {
         number: Number;
@@ -51,7 +53,6 @@ interface SavedCase {
 
 
 const SavedCaseComponent = (props: SavedCase) => {
-
 
     const [editable, setEditable] = useState<boolean>(false);
     const [menuVisible, setMenuVisible] = useState<boolean>(false);
@@ -202,7 +203,6 @@ const SavedCaseComponent = (props: SavedCase) => {
 
             for (let index in result?.assets) {
                 const { uri, mimeType, fileName } = result?.assets[index];
-
                 setMediaFiles((prev: any) => {
                     prev[index] = {
                         uri,
@@ -292,17 +292,14 @@ const SavedCaseComponent = (props: SavedCase) => {
 
     useEffect(() => {
 
-        if (
-            (frequency || severity) &&
+        if ((frequency || severity) &&
             date &&
             startTime &&
-            finishTime
-        ) {
+            finishTime) {
             setDateTimeShow(true);
         }
 
     }, []);
-
 
     return (
         <View style={styles.SavedCaseComponent}>
@@ -355,7 +352,7 @@ const SavedCaseComponent = (props: SavedCase) => {
                                             </Badge>
                                         }
                                         <MaterialCommunityIcons name="video-vintage" size={20}
-                                            color={(mediaFiles && mediaFiles?.length > 0 && !editable) ? Colors.focusBackground : 'gray'}
+                                            color={(mediaFiles && mediaFiles?.length > 0) ? Colors.focusBackground : 'gray'}
                                             onPress={pickVideo}
                                             onLongPress={previewUploadedImage} />
                                     </View>

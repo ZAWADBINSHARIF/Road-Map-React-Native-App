@@ -1,19 +1,20 @@
+import { CommonProperty } from "@/interfaces/interfaces";
 import { createSlice } from "@reduxjs/toolkit";
 
 
-interface InitialState {
-    problemList: string[];
-    caseLocation: string | null;
-    pageNo: number;
-    caseContainerName: string;
-    createNextPage: boolean;
-    caseContainerEditMode?: {
-        state: boolean,
-        caseContainerId: string;
-    };
-}
+const default_initialState: CommonProperty = {
+    problemList: [],
+    caseLocation: null,
+    createNextPage: false,
+    caseContainerName: '',
+    pageNo: 1,
+    caseContainerEditMode: {
+        state: false,
+        caseContainerId: ''
+    }
+};
 
-let initialState: InitialState = {
+let initialState: CommonProperty = {
     problemList: [],
     caseLocation: null,
     createNextPage: false,
@@ -55,16 +56,13 @@ const commonPropertySlice = createSlice({
             state.caseContainerName = action.payload;
         },
         setCommonPropertyDefault: (state) => {
-            return state = {
-                problemList: [],
-                caseLocation: null,
-                createNextPage: false,
-                caseContainerName: '',
-                pageNo: 1,
-            };
+            return state = default_initialState;
+        },
+        setCommonProperty: (state, action: { payload: CommonProperty; }) => {
+            return state = action.payload;
         }
     }
 });
 
-export const { addProblem, removeProblem, setCaseLocation, setCreateNextPage, setPageNumber, setCaseContainerName, setCommonPropertyDefault } = commonPropertySlice.actions;
+export const { addProblem, removeProblem, setCaseLocation, setCreateNextPage, setPageNumber, setCaseContainerName, setCommonPropertyDefault, setCommonProperty } = commonPropertySlice.actions;
 export default commonPropertySlice.reducer;

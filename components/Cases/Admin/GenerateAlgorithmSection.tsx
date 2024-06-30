@@ -49,6 +49,7 @@ const GenerateAlgorithmSection = () => {
     const [AddItemListMenuName, setAddItemListMenuName] = useState<'Problem List' | 'Dropdowns Users'>('Problem List');
     const savedCasesLength: number = useSelector((state: StoreState): number => state?.savedCase.length as number);
     const [mediaPreviewModalVisible, setMediaPreviewModalVisible] = useState<boolean>(false);
+    // const caseContainerEditMode: boolean = useSelector((state: StoreState) => state.commonProperty.caseContainerEditMode);
 
     const [dateTimeModalMode, setDateTimeModalMode] = useState<'date' | 'time'>('date');
 

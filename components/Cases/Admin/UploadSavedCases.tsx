@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Button, MD3Colors, ProgressBar } from 'react-native-paper';
+import { Button, ProgressBar } from 'react-native-paper';
 import Colors from '@/constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,6 +21,7 @@ const UploadSavedCases = ({ setShowUploadComponent }: Props) => {
 
     const allSavedCases: SavedCase[] = useSelector((state: StoreState) => state.savedCase);
     const { caseContainerName, caseLocation, problemList } = useSelector((state: StoreState) => state.commonProperty);
+    const createNextPage = useSelector((state: StoreState) => state.commonProperty.createNextPage);
     const dispatch = useDispatch();
 
     const totalTask = allSavedCases.length;
@@ -61,7 +62,8 @@ const UploadSavedCases = ({ setShowUploadComponent }: Props) => {
             const response = await axios.post('/caseContainer', {
                 caseContainerName,
                 caseContainerLocation: caseLocation,
-                problemList
+                problemList,
+                createNextPage
             });
             caseContainerId = response.data.caseContainerId;
             setErrorMessage(undefined);

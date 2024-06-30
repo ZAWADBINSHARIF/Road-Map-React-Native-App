@@ -21,3 +21,15 @@ export interface SavedCase {
     caseLocation: string,
     pageNo?: number;
 }
+
+export interface CommonProperty {
+    problemList: string[];
+    caseLocation: string | null;
+    pageNo: number;
+    caseContainerName: string;
+    createNextPage: boolean;
+    caseContainerEditMode?: {
+        state: boolean,
+        caseContainerId: string;
+    };
+}

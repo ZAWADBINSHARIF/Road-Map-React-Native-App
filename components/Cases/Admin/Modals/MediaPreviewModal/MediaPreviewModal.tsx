@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Modal, Portal } from 'react-native-paper';
+import { Text, Modal, Portal } from 'react-native-paper';
 import { Image } from 'expo-image';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Video, ResizeMode } from 'expo-av';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { heightPercentageToDP } from 'react-native-responsive-screen';
 
 
 
@@ -22,32 +23,73 @@ interface Props {
 const MediaPreviewModal = ({
     visible,
     setVisible,
-    mediaFiles
+    mediaFiles,
 }: Props) => {
 
-
+    const API_BASE_URI = process.env.EXPO_PUBLIC_API_BASE_URL;
     const video = React.useRef(null);
     const [isPlay, setIsPlay] = useState<boolean>(false);
+    const [videoLoadingError, setVideoLoadingError] = useState<boolean>(false);
+    const [imageLoadingError, setImageLoadingError] = useState<boolean>(false);
     const firstFile = (mediaFiles as any)[0];
     const secondFile = (mediaFiles as any)[1];
 
-    const VideoRender = ({ uri }: { uri: any; }) => (
-        <Video
-            ref={video}
-            style={styles.video}
-            source={{ uri }}
-            useNativeControls
-            resizeMode={ResizeMode.CONTAIN}
-            shouldPlay={isPlay}
-        />
-    );
+    function uriModifier(uri: string): string {
+        uri = uri.startsWith("file:///") ? uri : `${API_BASE_URI}${uri}`;
+        return uri;
+    }
 
-    const ImageRender = ({ uri }: { uri: string; }) => (
-        <Image
-            source={uri}
-            style={{ width: '100%', height: '100%' }}
-        />
-    );
+    const VideoRender = ({ uri }: { uri: string; }) => {
+        uri = uriModifier(uri);
+        return (
+            <>
+                {videoLoadingError &&
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <MaterialIcons name="error" size={heightPercentageToDP(7)} color="white" />
+                        <Text style={{ color: 'white' }}>Something was wrong</Text>
+                    </View>
+                }
+                {!videoLoadingError &&
+                    <Video
+                        ref={video}
+                        style={styles.video}
+                        source={{ uri }}
+                        resizeMode={ResizeMode.CONTAIN}
+                        shouldPlay={isPlay}
+                        onError={(e) => {
+                            console.log(e);
+                            setVideoLoadingError(true);
+                        }}
+                        useNativeControls
+                    />
+                }
+            </>
+        );
+    };
+
+    const ImageRender = ({ uri }: { uri: string; }) => {
+        uri = uriModifier(uri);
+        return (
+            <>
+                {imageLoadingError &&
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <MaterialIcons name="error" size={heightPercentageToDP(7)} color="white" />
+                        <Text style={{ color: 'white' }}>Something was wrong</Text>
+                    </View>
+                }
+                {!imageLoadingError &&
+                    <Image
+                        source={uri}
+                        style={{ width: '100%', height: '100%' }}
+                        onError={(e) => {
+                            console.log(e);
+                            setImageLoadingError(true);
+                        }}
+                    />
+                }
+            </>
+        );
+    };
 
     const renderRightActions = () => {
         if (mediaFiles?.length != 2)

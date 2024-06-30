@@ -15,6 +15,8 @@ import RadioButton from '@/components/RadioButton/RadioButton';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { importCases } from '@/store/slices/savedCaseSlice';
 import { router } from 'expo-router';
+import { setCaseContainerName, setCaseLocation, setCommonProperty } from '@/store/slices/commonPropertySlice';
+import { CommonProperty } from '@/interfaces/interfaces';
 
 
 interface Branches {
@@ -25,12 +27,10 @@ interface Branches {
 
 }
 
-interface CaseContainer {
+interface CaseContainer extends CommonProperty {
     _id: string;
-    caseContainerName: string;
     cases: Array<string>;
-    caseContainerLocation: string;
-    problemList: Array<string>;
+    publish: boolean;
 }
 
 
@@ -113,13 +113,27 @@ const All_Sections = () => {
     };
 
     async function fetchCases(caseContainerId: string) {
-        console.log(`/api/case/${caseContainerId}`);
         try {
             const response = await axios.get(`/case/${caseContainerId}`);
+            const response_CaseContainerInfo = response?.data;
+            const response_cases = response_CaseContainerInfo?.cases;
+            const caseContainerInformation = {
+                problemList: response_CaseContainerInfo?.problemList,
+                caseLocation: response_CaseContainerInfo?.caseContainerLocation,
+                createNextPage: response_CaseContainerInfo?.createNextPage,
+                caseContainerName: response_CaseContainerInfo?.caseContainerName,
+                pageNo: 1,
+                caseContainerEditMode: {
+                    state: true,
+                    caseContainerId: response_CaseContainerInfo?._id
+                }
+            };
 
-            dispatch(importCases(response.data.cases));
+            dispatch(importCases(response_cases));
+            dispatch(setCommonProperty(caseContainerInformation));
+
             router.push("/cases");
-            console.log(response.data.cases);
+            console.log(response.data);
         } catch (e) {
             const error = e as AxiosError;
             console.log(error.message);
@@ -156,7 +170,7 @@ const All_Sections = () => {
 
         const openMenu = () => setVisible(true);
         const closeMenu = () => setVisible(false);
-
+        console.log(item);
         return (
 
             <Menu
@@ -185,7 +199,8 @@ const All_Sections = () => {
                     title={'Remove'}
                 />
                 <RadioButton
-                    title={'Publish'}
+                    title={item?.publish ? 'Published' : 'Publish'}
+                    value={item?.publish}
                 />
 
             </Menu>
